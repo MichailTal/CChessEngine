@@ -146,7 +146,18 @@ enum
     whiteQueenCastle = 2,
     blackKingCastle = 4,
     blackQueenCastle = 8
-}
+};
+
+// Undo moves
+typedef struct
+{
+    int move;
+    int castlePermission;
+    int enPassant;
+    int fiftyMoveRule;
+    U64 posKey;
+} S_UNDO;
+
 
 typedef struct
 {
@@ -171,15 +182,4 @@ typedef struct
 
     S_UNDO moveHistory[MAXGAMEHALFMOVES];
 } board_representation;
-
-// Undo moves
-typedef struct
-{
-    int move;
-    int castlePermission;
-    int enPassant;
-    int fiftyMoveRule;
-    U64 posKey;
-} S_UNDO;
-
 #endif
