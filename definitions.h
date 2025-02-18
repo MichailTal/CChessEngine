@@ -5,6 +5,7 @@ typedef unsigned long long U64;
 
 #define NAME "CCHESS v1.0"
 #define BRD_SQ_NUM 120
+#define MAXGAMEHALFMOVES 2048
 
 // Piece Definitions
 
@@ -139,11 +140,19 @@ enum
     TRUE
 };
 
+enum
+{
+    whiteKingCastle = 1,
+    whiteQueenCastle = 2,
+    blackKingCastle = 4,
+    blackQueenCastle = 8
+}
+
 typedef struct
 {
     int pieces[BRD_SQ_NUM];
-    U64 pawns[3];  // stores the pawn positions on the respective rank
-    int kingSQ[2]; // positions of the two kings, this is safe as kings are always present
+    U64 pawns[3];      // stores the pawn positions on the respective rank
+    int kingSquare[2]; // positions of the two kings, this is safe as kings are always present
 
     int side;          // which side to move
     int enPassant;     // fields on which En Passant is possible
@@ -157,6 +166,20 @@ typedef struct
     int nonPawnPieces[3];
     int majorPieces[3]; // Rooks and Queen(s)
     int minorPieces[3]; // Bishops and Knights
+
+    int castlePermission;
+
+    S_UNDO moveHistory[MAXGAMEHALFMOVES];
 } board_representation;
+
+// Undo moves
+typedef struct
+{
+    int move;
+    int castlePermission;
+    int enPassant;
+    int fiftyMoveRule;
+    U64 posKey;
+} S_UNDO;
 
 #endif
