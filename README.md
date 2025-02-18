@@ -1,2 +1,2 @@
 # CChessEngine
-Simple Chess Engine in C
+Simple Chess Engine in C.
