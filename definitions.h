@@ -138,4 +138,25 @@ enum
     FALSE,
     TRUE
 };
+
+typedef struct
+{
+    int pieces[BRD_SQ_NUM];
+    U64 pawns[3];  // stores the pawn positions on the respective rank
+    int kingSQ[2]; // positions of the two kings, this is safe as kings are always present
+
+    int side;          // which side to move
+    int enPassant;     // fields on which En Passant is possible
+    int fiftyMoveRule; // keeps track of the fifty move rule
+    int ply;           // number of 'half moves'
+    int histPly;       // number of half moves made for determining a repetition
+
+    U64 posKey; // unique key for each position
+
+    int pieceNumber[13]; // Number of pieces on the board
+    int nonPawnPieces[3];
+    int majorPieces[3]; // Rooks and Queen(s)
+    int minorPieces[3]; // Bishops and Knights
+} board_representation;
+
 #endif
