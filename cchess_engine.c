@@ -1,29 +1,26 @@
-#include <stdio.h>
 #include "definitions.h"
-#include "macros.h"
 #include "globals.h"
 #include "init.h"
+#include "macros.h"
+#include <stdio.h>
 
-int main()
-{
-    AllInit();
+int main() {
+  AllInit();
 
-    U64 playBitBoard = 0LL;
+  U64 playBitBoard = 0LL; // unsigned 64 bit
 
-    printf("Start: \n\n");
-    PrintBitBoard(playBitBoard);
+  printf("Start: \n\n");
+  PrintBitBoard(playBitBoard);
 
+  playBitBoard |= (1ULL << SQUARE120TOSQUARE64[A2]);
 
-    playBitBoard |= (1ULL << SQUARE120TOSQUARE64[A2]);
+  printf("A2 added: \n\n");
+  PrintBitBoard(playBitBoard);
 
-    printf("A2 added: \n\n");
-    PrintBitBoard(playBitBoard);
+  playBitBoard |= (1ULL << SQUARE120TOSQUARE64[G7]);
 
-    playBitBoard |= (1ULL << SQUARE120TOSQUARE64[G7]);
+  printf("G7 added: \n\n");
+  PrintBitBoard(playBitBoard);
 
-    printf("G7 added: \n\n");
-    PrintBitBoard(playBitBoard);
-
-
-    return 0;
+  return 0;
 }
