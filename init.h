@@ -3,5 +3,6 @@
 
 void InitSquare120ToSquare64();
 void AllInit();
+void PrintBitBoard(U64 bb);
 
 #endif // INIT_H

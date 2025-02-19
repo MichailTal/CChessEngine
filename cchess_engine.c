@@ -8,31 +8,22 @@ int main()
 {
     AllInit();
 
-    int index = 0;
+    U64 playBitBoard = 0LL;
 
-    // Print SQUARE120TOSQUARE64
-    for (index = 0; index < BRD_SQ_NUM; index++)
-    {
-        if (index % 10 == 0)
-        {
-            printf("\n");
-        }
-        printf("%5d", SQUARE120TOSQUARE64[index]);
-    }
+    printf("Start: \n\n");
+    PrintBitBoard(playBitBoard);
 
-    printf("\n\n");
 
-    // Print SQUARE64TOSQUARE120
-    for (index = 0; index < 64; index++)
-    {
-        if (index % 8 == 0)
-        {
-            printf("\n");
-        }
-        printf("%5d", SQUARE64TOSQUARE120[index]);
-    }
+    playBitBoard |= (1ULL << SQUARE120TOSQUARE64[A2]);
 
-    printf("\n");
+    printf("A2 added: \n\n");
+    PrintBitBoard(playBitBoard);
+
+    playBitBoard |= (1ULL << SQUARE120TOSQUARE64[G7]);
+
+    printf("G7 added: \n\n");
+    PrintBitBoard(playBitBoard);
+
 
     return 0;
 }
