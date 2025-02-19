@@ -181,5 +181,9 @@ typedef struct
     int castlePermission;
 
     S_UNDO moveHistory[MAXGAMEHALFMOVES];
+
+    
+    int pieceList[13][10]; // piece list
+
 } board_representation;
 #endif
