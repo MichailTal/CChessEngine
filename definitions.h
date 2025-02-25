@@ -108,6 +108,7 @@ enum {
   G8,
   H8,
   NO_SQ,
+  OFFBOARD,
 };
 
 // Python Defintion of Bool

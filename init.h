@@ -12,5 +12,6 @@ void ClearBit(U64 *bb, U64 square);
 void SetBit(U64 *bb, U64 square);
 U64 Rand_64();
 U64 GeneratePosKey(const board_representation *pos);
+void ResetBoard(board_representation *pos);
 
 #endif // INIT_H
