@@ -6,20 +6,11 @@
 
 int main() {
   AllInit();
+  U64 playBitBoard = 0ULL; // unsigned 64 bit
 
-  U64 playBitBoard = 0LL; // unsigned 64 bit
-
-  printf("Start: \n\n");
-  PrintBitBoard(playBitBoard);
-
-  playBitBoard |= (1ULL << SQUARE120TOSQUARE64[A2]);
-
-  printf("A2 added: \n\n");
-  PrintBitBoard(playBitBoard);
-
-  playBitBoard |= (1ULL << SQUARE120TOSQUARE64[G7]);
-
-  printf("G7 added: \n\n");
+  printf("%llu\n", playBitBoard);
+  SetBit(&playBitBoard, 31);
+  printf("%llu\n", playBitBoard);
   PrintBitBoard(playBitBoard);
 
   return 0;

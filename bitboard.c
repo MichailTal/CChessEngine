@@ -25,6 +25,16 @@ int CountBits(U64 bit) {
   return r;
 }
 
+void ClearBit(U64 *bb, U64 square) {
+  extern U64 SetMask[64];
+  (*bb) &= ClearMask[(square)];
+}
+
+void SetBit(U64 *bb, U64 square) {
+  extern U64 ClearMask[64];
+  (*bb) |= SetMask[(square)];
+}
+
 void PrintBitBoard(U64 bb) {
   U64 shiftMe = 1ULL;
 

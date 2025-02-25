@@ -7,6 +7,22 @@
 // Define the global variables here
 int SQUARE120TOSQUARE64[BRD_SQ_NUM];
 int SQUARE64TOSQUARE120[64];
+U64 SetMask[64];
+U64 ClearMask[64];
+
+void InitBitMask() {
+  int index = 0;
+
+  for (index = 0; index < 64; index++) {
+    SetMask[index] = 0ULL;
+    ClearMask[index] = 0ULL;
+  }
+
+  for (index = 0; index < 64; index++) {
+    SetMask[index] |= (1ULL << index);
+    ClearMask[index] = ~SetMask[index];
+  }
+}
 
 void InitSquare120ToSquare64() {
   int index = 0;
@@ -33,4 +49,7 @@ void InitSquare120ToSquare64() {
   }
 }
 
-void AllInit() { InitSquare120ToSquare64(); }
+void AllInit() {
+  InitSquare120ToSquare64();
+  InitBitMask();
+}
