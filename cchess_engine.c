@@ -2,7 +2,7 @@
 #include "globals.h"
 #include "init.h"
 #include "macros.h"
-#include <stdio.h>
+#include "stdio.h"
 
 int main() {
   AllInit();

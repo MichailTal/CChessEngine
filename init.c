@@ -2,7 +2,7 @@
 #include "definitions.h"
 #include "globals.h"
 #include "macros.h"
-#include <stdio.h>
+#include "stdio.h"
 
 // Define the global variables here
 int SQUARE120TOSQUARE64[BRD_SQ_NUM];

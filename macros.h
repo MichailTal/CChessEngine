@@ -1,7 +1,7 @@
 #ifndef MACRO_H
 #define MACRO_H
 
-#include <stdlib.h>
+#include "stdlib.h"
 
 #define DEBUG
 
@@ -19,6 +19,6 @@
   }
 #endif
 
-#define FILERANK2SQUARE(file, rank) ((21 + (file)) + ((rank) * 10))
+#define FILERANK2SQUARE(file, rank) ((21 + (file)) + ((rank)*10))
 
 #endif
