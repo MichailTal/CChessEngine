@@ -9,6 +9,26 @@ int SQUARE120TOSQUARE64[BRD_SQ_NUM];
 int SQUARE64TOSQUARE120[64];
 U64 SetMask[64];
 U64 ClearMask[64];
+U64 PieceKey[13][120];
+U64 SideKey;
+U64 CastleKeys[16];
+
+void InitHashKeys() {
+
+  int index_pieces = 0;
+  int index_squares = 0;
+  int index_castling = 0;
+
+  for (index_pieces = 0; index_pieces < 13; index_pieces++) {
+    for (index_squares = 0; index_squares < 120; index_squares++) {
+      PieceKey[index_pieces][index_squares] = Rand_64();
+    }
+  }
+  SideKey = Rand_64();
+  for (index_castling = 0; index_castling < 16; index_castling++) {
+    CastleKeys[index_castling] = Rand_64();
+  }
+}
 
 void InitBitMask() {
   int index = 0;
@@ -52,4 +72,5 @@ void InitSquare120ToSquare64() {
 void AllInit() {
   InitSquare120ToSquare64();
   InitBitMask();
+  InitHashKeys();
 }

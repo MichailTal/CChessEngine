@@ -8,4 +8,8 @@ extern int SQUARE64TOSQUARE120[64];
 extern U64 SetMask[64];
 extern U64 ClearMask[64];
 
+extern U64 PieceKey[13][120]; //[Pieces][Square]
+extern U64 SideKey;
+extern U64 CastleKeys[16]; // 0 0 0 0
+
 #endif

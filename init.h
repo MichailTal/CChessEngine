@@ -10,5 +10,7 @@ int PopBit(U64 *bb);
 int CountBits(U64 bit);
 void ClearBit(U64 *bb, U64 square);
 void SetBit(U64 *bb, U64 square);
+U64 Rand_64();
+U64 GeneratePosKey(const board_representation *pos);
 
 #endif // INIT_H
