@@ -12,4 +12,9 @@ extern U64 PieceKey[13][120]; //[Pieces][Square]
 extern U64 SideKey;
 extern U64 CastleKeys[16]; // 0 0 0 0
 
+extern char PieceCharacter[];
+extern char SideCharacter[];
+extern char RankCharacter[];
+extern char FileCharacter[];
+
 #endif

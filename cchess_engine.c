@@ -7,12 +7,12 @@
 
 int main() {
   AllInit();
-  U64 playBitBoard = 0ULL; // unsigned 64 bit
 
-  printf("%llu\n", playBitBoard);
-  SetBit(&playBitBoard, 31);
-  printf("%llu\n", playBitBoard);
-  PrintBitBoard(playBitBoard);
+  board_representation board[1];
+
+  ParseFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
+           board);
+  PrintBoard(board);
 
   return 0;
 }

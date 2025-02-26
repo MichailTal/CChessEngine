@@ -109,7 +109,7 @@ enum {
   G8,
   H8,
   NO_SQ,
-  OFFBOARD,
+  OFFBOARD
 };
 
 // Python Defintion of Bool
@@ -146,9 +146,9 @@ typedef struct {
   U64 posKey; // unique key for each position
 
   int pieceNumber[13]; // Number of pieces on the board
-  int nonPawnPieces[3];
-  int majorPieces[3]; // Rooks and Queen(s)
-  int minorPieces[3]; // Bishops and Knights
+  int nonPawnPieces[2];
+  int majorPieces[2]; // Rooks and Queen(s)
+  int minorPieces[2]; // Bishops and Knights
 
   int castlePermission;
 

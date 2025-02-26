@@ -6,8 +6,8 @@
 #include "stdlib.h"
 
 U64 Rand_64() {
-  return ((U64)rand() + ((U64)rand() << 15) + ((U64)rand() << 30) +
-          ((U64)rand() << 45) + (((U64)rand() & 0xf) << 60));
+  return ((U64)rand() | ((U64)rand() << 15) | ((U64)rand() << 30) |
+          ((U64)rand() << 45) | (((U64)rand() & 0xf) << 60));
 }
 
 U64 GeneratePosKey(const board_representation *pos) {
@@ -19,7 +19,7 @@ U64 GeneratePosKey(const board_representation *pos) {
   // pieces
   for (square = 0; square < BRD_SQ_NUM; square++) {
     piece = pos->pieces[square];
-    if (piece != NO_SQ && piece != EMPTY) {
+    if (piece != NO_SQ && piece != EMPTY && piece != OFFBOARD) {
       ASSERT(piece >= wP && piece <= bN);
       finalKey ^= PieceKey[piece][square];
     }

@@ -5,18 +5,18 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-int Parse_FEN(char *fen, board_representation *pos) {
+int ParseFen(char *fen, board_representation *pos) {
 
   ASSERT(fen != NULL);
   ASSERT(pos != NULL);
 
-  int rank = RANK_8; // see how FEN is structured
+  int rank = RANK_8;
   int file = FILE_A;
   int piece = 0;
   int count = 0;
-  int index = 0;
-  int square64 = 0;
-  int square120 = 0;
+  int i = 0;
+  int sq64 = 0;
+  int sq120 = 0;
 
   ResetBoard(pos);
 
@@ -35,11 +35,11 @@ int Parse_FEN(char *fen, board_representation *pos) {
     case 'b':
       piece = bB;
       break;
-    case 'q':
-      piece = bQ;
-      break;
     case 'k':
       piece = bK;
+      break;
+    case 'q':
+      piece = bQ;
       break;
     case 'P':
       piece = wP;
@@ -53,11 +53,11 @@ int Parse_FEN(char *fen, board_representation *pos) {
     case 'B':
       piece = wB;
       break;
-    case 'Q':
-      piece = wQ;
-      break;
     case 'K':
       piece = wK;
+      break;
+    case 'Q':
+      piece = wQ;
       break;
 
     case '1':
@@ -80,32 +80,30 @@ int Parse_FEN(char *fen, board_representation *pos) {
       continue;
 
     default:
-      printf("FEN Error ");
+      printf("FEN error \n");
       return -1;
     }
 
-    for (index = 0; index < count; index++) {
-      square64 = rank * 8 + file;
-      square120 = SQUARE64TOSQUARE120[square64];
+    for (i = 0; i < count; i++) {
+      sq64 = rank * 8 + file;
+      sq120 = SQUARE64TOSQUARE120[sq64];
       if (piece != EMPTY) {
-        pos->pieces[square120] = piece;
+        pos->pieces[sq120] = piece;
       }
       file++;
     }
     fen++;
   }
 
-  ASSERT(*fen == 'w' || *fen == 'b'); // Assert whether we are at the expected
-                                      // FEN char telling us the side to move
+  ASSERT(*fen == 'w' || *fen == 'b');
 
   pos->side = (*fen == 'w') ? WHITE : BLACK;
   fen += 2;
 
-  for (index = 0; index < 4; index++) {
+  for (i = 0; i < 4; i++) {
     if (*fen == ' ') {
       break;
     }
-
     switch (*fen) {
     case 'K':
       pos->castlePermission |= whiteKingCastle;
@@ -144,24 +142,28 @@ int Parse_FEN(char *fen, board_representation *pos) {
 }
 
 void ResetBoard(board_representation *pos) {
+
   int index = 0;
 
-  for (index = 0; index < BRD_SQ_NUM; index++) {
+  for (index = 0; index < BRD_SQ_NUM; ++index) {
     pos->pieces[index] = OFFBOARD;
   }
 
-  for (index = 0; index < 64; index++) {
+  for (index = 0; index < 64; ++index) {
     pos->pieces[SQUARE64TOSQUARE120[index]] = EMPTY;
   }
 
-  for (index = 0; index < 3; index++) {
+  for (index = 0; index < 2; ++index) {
+    pos->nonPawnPieces[index] = 0;
     pos->majorPieces[index] = 0;
     pos->minorPieces[index] = 0;
-    pos->nonPawnPieces[index] = 0;
+  }
+
+  for (index = 0; index < 3; ++index) {
     pos->pawns[index] = 0ULL;
   }
 
-  for (index = 0; index < 13; index++) {
+  for (index = 0; index < 13; ++index) {
     pos->pieceNumber[index] = 0;
   }
 
@@ -176,5 +178,36 @@ void ResetBoard(board_representation *pos) {
 
   pos->castlePermission = 0;
 
-  pos->posKey = 0;
+  pos->posKey = 0ULL;
+}
+
+void PrintBoard(const board_representation *pos) {
+
+  int sq, file, rank, piece;
+
+  printf("\nGame Board:\n\n");
+
+  for (rank = RANK_8; rank >= RANK_1; rank--) {
+    printf("%d  ", rank + 1);
+    for (file = FILE_A; file <= FILE_H; file++) {
+      sq = FILERANK2SQUARE(file, rank);
+      piece = pos->pieces[sq];
+      printf("%3c", PieceCharacter[piece]);
+    }
+    printf("\n");
+  }
+
+  printf("\n   ");
+  for (file = FILE_A; file <= FILE_H; file++) {
+    printf("%3c", 'a' + file);
+  }
+  printf("\n");
+  printf("side:%c\n", SideCharacter[pos->side]);
+  printf("enPas:%d\n", pos->enPassant);
+  printf("castle:%c%c%c%c\n",
+         pos->castlePermission & whiteKingCastle ? 'K' : '-',
+         pos->castlePermission & whiteQueenCastle ? 'Q' : '-',
+         pos->castlePermission & blackKingCastle ? 'k' : '-',
+         pos->castlePermission & blackQueenCastle ? 'q' : '-');
+  printf("PosKey:%llX\n", pos->posKey);
 }

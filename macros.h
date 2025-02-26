@@ -21,4 +21,7 @@
 
 #define FILERANK2SQUARE(file, rank) ((21 + (file)) + ((rank)*10))
 
+#define SQ64(sq120) (SQUARE120TOSQUARE64[(sq120)])
+#define SQ120(sq64) (SQUARE64TOSQUARE120[(sq64)])
+
 #endif
