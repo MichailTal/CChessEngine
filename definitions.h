@@ -6,6 +6,7 @@ typedef unsigned long long U64;
 #define NAME "CCHESS v1.0"
 #define BRD_SQ_NUM 120
 #define MAXGAMEHALFMOVES 2048
+#define START_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 // Piece Definitions
 
