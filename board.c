@@ -92,8 +92,55 @@ int Parse_FEN(char *fen, board_representation *pos) {
       }
       file++;
     }
+    fen++;
+  }
+
+  ASSERT(*fen == 'w' || *fen == 'b'); // Assert whether we are at the expected
+                                      // FEN char telling us the side to move
+
+  pos->side = (*fen == 'w') ? WHITE : BLACK;
+  fen += 2;
+
+  for (index = 0; index < 4; index++) {
+    if (*fen == ' ') {
+      break;
+    }
+
+    switch (*fen) {
+    case 'K':
+      pos->castlePermission |= whiteKingCastle;
+      break;
+    case 'Q':
+      pos->castlePermission |= whiteQueenCastle;
+      break;
+    case 'k':
+      pos->castlePermission |= blackKingCastle;
+      break;
+    case 'q':
+      pos->castlePermission |= blackQueenCastle;
+      break;
+    default:
+      break;
+    }
+    fen++;
   }
   fen++;
+
+  ASSERT(pos->castlePermission >= 0 && pos->castlePermission <= 15);
+
+  if (*fen != '-') {
+    file = fen[0] - 'a';
+    rank = fen[1] - '1';
+
+    ASSERT(file >= FILE_A && file <= FILE_H);
+    ASSERT(rank >= RANK_1 && rank <= RANK_8);
+
+    pos->enPassant = FILERANK2SQUARE(file, rank);
+  }
+
+  pos->posKey = GeneratePosKey(pos);
+
+  return 0;
 }
 
 void ResetBoard(board_representation *pos) {
