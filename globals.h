@@ -17,4 +17,10 @@ extern char SideCharacter[];
 extern char RankCharacter[];
 extern char FileCharacter[];
 
+extern int PieceBig[13];
+extern int PieceMajor[13];
+extern int PieceMinor[13];
+extern int PieceValue[13];
+extern int PieceColour[13];
+
 #endif

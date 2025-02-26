@@ -5,6 +5,36 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+void UpdateListMaterial(board_representation *pos) {
+  int square, piece, index, colour;
+
+  for (index = 0; index < BRD_SQ_NUM; index++) {
+    square = index;
+    piece = pos->pieces[index];
+    if (piece != OFFBOARD && piece != EMPTY) {
+      colour = PieceColour[piece];
+      if (PieceBig[piece] == TRUE)
+        pos->nonPawnPieces[colour]++;
+      if (PieceMajor[piece] == TRUE)
+        pos->majorPieces[colour]++;
+      if (PieceMinor[piece] == TRUE)
+        pos->minorPieces[colour]++;
+
+      pos->material[colour] += PieceValue[piece];
+
+      // Piece List
+      // PieceList[wP][0] = a1
+      pos->pieceList[piece][pos->pieceNumber[piece]] = square;
+      pos->pieceNumber[piece]++;
+
+      if (piece == wK)
+        pos->kingSquare[WHITE] = square;
+      if (piece == bK)
+        pos->kingSquare[BLACK] = square;
+    }
+  }
+}
+
 int ParseFen(char *fen, board_representation *pos) {
 
   ASSERT(fen != NULL);

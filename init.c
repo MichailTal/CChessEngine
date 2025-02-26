@@ -16,6 +16,11 @@ char PieceCharacter[];
 char SideCharacter[];
 char RankCharacter[];
 char FileCharacter[];
+int PieceBig[13];
+int PieceMajor[13];
+int PieceMinor[13];
+int PieceValue[13];
+int PieceColour[13];
 
 void InitHashKeys() {
 

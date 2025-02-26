@@ -149,6 +149,7 @@ typedef struct {
   int nonPawnPieces[2];
   int majorPieces[2]; // Rooks and Queen(s)
   int minorPieces[2]; // Bishops and Knights
+  int material[2];
 
   int castlePermission;
 
