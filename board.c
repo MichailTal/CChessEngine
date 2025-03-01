@@ -5,6 +5,99 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+int CheckBoard(board_representation *pos) {
+
+  int t_pceNum[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  int t_bigPce[2] = {0, 0};
+  int t_majPce[2] = {0, 0};
+  int t_minPce[2] = {0, 0};
+  int t_material[2] = {0, 0};
+
+  int square64, t_piece, t_pce_num, square120, colour, pcount;
+
+  U64 t_pawns[3] = {0ULL, 0ULL, 0ULL};
+
+  t_pawns[WHITE] = pos->pawns[WHITE];
+  t_pawns[BLACK] = pos->pawns[BLACK];
+  t_pawns[BOTH] = pos->pawns[BOTH];
+
+  // check piece list
+  for (t_piece = wP; t_piece <= bN; t_piece++) {
+    for (t_pce_num = 0; t_pce_num < pos->pieceNumber[t_piece]; t_pce_num++) {
+      square120 = pos->pieceList[t_piece][t_pce_num];
+      ASSERT(pos->pieces[square120] == t_piece);
+    }
+  }
+
+  // check piece counter
+  for (square64 = 0; square64 < 64; square64++) {
+    square120 = SQ120(square64);
+    t_piece = pos->pieces[square120];
+    t_pceNum[t_piece]++;
+    colour = PieceColour[t_piece];
+    if (PieceBig[t_piece] == TRUE)
+      t_bigPce[colour]++;
+    if (PieceMajor[t_piece] == TRUE)
+      t_majPce[colour]++;
+    if (PieceMinor[t_piece] == TRUE)
+      t_minPce[colour]++;
+
+    t_material[colour] += PieceValue[t_piece];
+  }
+
+  for (t_piece = wP; t_piece <= bK; ++t_piece) {
+    ASSERT(t_pceNum[t_piece] == pos->pieceNumber[t_piece]);
+  }
+
+  // check bitboard count
+  pcount = CountBits(t_pawns[WHITE]);
+  ASSERT(pcount == pos->pieceNumber[wP]);
+  pcount = CountBits(t_pawns[BLACK]);
+  ASSERT(pcount == pos->pieceNumber[bP]);
+  pcount = CountBits(t_pawns[BOTH]);
+  ASSERT(pcount == (pos->pieceNumber[wP] + pos->pieceNumber[bP]));
+
+  // check bitboards squares
+  while (t_pawns[WHITE]) {
+    square64 = PopBit(&t_pawns[WHITE]);
+    ASSERT(pos->pieces[SQ120(square64)] == wP);
+  }
+
+  while (t_pawns[BLACK]) {
+    square64 = PopBit(&t_pawns[BLACK]);
+    ASSERT(pos->pieces[SQ120(square64)] == bP);
+  }
+
+  while (t_pawns[BOTH]) {
+    square64 = PopBit(&t_pawns[BOTH]);
+    ASSERT((pos->pieces[SQ120(square64)] == bP) ||
+           (pos->pieces[SQ120(square64)] == wP));
+  }
+
+  ASSERT(t_material[WHITE] == pos->material[WHITE] &&
+         t_material[BLACK] == pos->material[BLACK]);
+  ASSERT(t_minPce[WHITE] == pos->minorPieces[WHITE] &&
+         t_minPce[BLACK] == pos->minorPieces[BLACK]);
+  ASSERT(t_majPce[WHITE] == pos->majorPieces[WHITE] &&
+         t_majPce[BLACK] == pos->majorPieces[BLACK]);
+  ASSERT(t_bigPce[WHITE] == pos->nonPawnPieces[WHITE] &&
+         t_bigPce[BLACK] == pos->nonPawnPieces[BLACK]);
+
+  ASSERT(pos->side == WHITE || pos->side == BLACK);
+  ASSERT(GeneratePosKey(pos) == pos->posKey);
+
+  ASSERT(pos->enPassant == NO_SQ ||
+         (RanksBrd[pos->enPassant] == RANK_6 && pos->side == WHITE) ||
+         (RanksBrd[pos->enPassant] == RANK_3 && pos->side == BLACK));
+
+  ASSERT(pos->pieces[pos->kingSquare[WHITE]] == wK);
+  ASSERT(pos->pieces[pos->kingSquare[BLACK]] == bK);
+
+  ASSERT(pos->castlePermission >= 0 && pos->castlePermission <= 15);
+
+  return TRUE;
+}
+
 void UpdateListMaterial(board_representation *pos) {
   int square, piece, index, colour;
 

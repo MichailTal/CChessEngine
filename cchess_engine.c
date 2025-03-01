@@ -16,5 +16,7 @@ int main() {
 
   PrintBitBoard(board->pawns[WHITE]);
 
+  ASSERT(CheckBoard(board));
+
   return 0;
 }

@@ -14,5 +14,6 @@ void ResetBoard(board_representation *pos);
 int ParseFen(char *fen, board_representation *pos);
 void PrintBoard(const board_representation *pos);
 void UpdateListMaterial(board_representation *pos);
+int CheckBoard(board_representation *pos);
 
 #endif // INIT_H
