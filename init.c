@@ -22,6 +22,30 @@ int PieceMinor[13];
 int PieceValue[13];
 int PieceColour[13];
 
+int FilesBoard[BRD_SQ_NUM];
+int RanksBoard[BRD_SQ_NUM];
+
+void InitFilesRankBoard() {
+  int index = 0;
+  int file = FILE_A;
+  int rank = RANK_1;
+  int square = A1;
+  int square64 = 0;
+
+  for (index = 0; index < BRD_SQ_NUM; index++) {
+    FilesBoard[square] = OFFBOARD;
+    RanksBoard[square] = OFFBOARD;
+  }
+
+  for (rank = RANK_1; rank <= RANK_8; rank++) {
+    for (file = FILE_A; file <= FILE_H; file++) {
+      square = FILERANK2SQUARE(file, rank);
+      FilesBoard[square] = file;
+      RanksBoard[square] = rank;
+    }
+  }
+}
+
 void InitHashKeys() {
 
   int index_pieces = 0;
@@ -82,4 +106,5 @@ void AllInit() {
   InitSq120To64();
   InitBitMask();
   InitHashKeys();
+  InitFilesRankBoard();
 }

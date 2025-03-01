@@ -23,4 +23,7 @@ extern int PieceMinor[13];
 extern int PieceValue[13];
 extern int PieceColour[13];
 
+extern int FilesBoard[BRD_SQ_NUM];
+extern int RanksBoard[BRD_SQ_NUM];
+
 #endif
