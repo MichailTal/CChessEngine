@@ -27,23 +27,23 @@ int RanksBrd[BRD_SQ_NUM];
 
 void InitFilesRanksBrd() {
 
-	int index = 0;
-	int file = FILE_A;
-	int rank = RANK_1;
-	int sq = A1;
+  int index = 0;
+  int file = FILE_A;
+  int rank = RANK_1;
+  int sq = A1;
 
-	for(index = 0; index < BRD_SQ_NUM; ++index) {
-		FilesBrd[index] = OFFBOARD;
-		RanksBrd[index] = OFFBOARD;
-	}
+  for (index = 0; index < BRD_SQ_NUM; ++index) {
+    FilesBrd[index] = OFFBOARD;
+    RanksBrd[index] = OFFBOARD;
+  }
 
-	for(rank = RANK_1; rank <= RANK_8; ++rank) {
-		for(file = FILE_A; file <= FILE_H; ++file) {
-			sq = FILERANK2SQUARE(file,rank);
-			FilesBrd[sq] = file;
-			RanksBrd[sq] = rank;
-		}
-	}
+  for (rank = RANK_1; rank <= RANK_8; ++rank) {
+    for (file = FILE_A; file <= FILE_H; ++file) {
+      sq = FILERANK2SQUARE(file, rank);
+      FilesBrd[sq] = file;
+      RanksBrd[sq] = rank;
+    }
+  }
 }
 
 void InitHashKeys() {
