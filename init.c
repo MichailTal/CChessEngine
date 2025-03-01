@@ -44,6 +44,7 @@ void InitFilesRanksBrd() {
 			RanksBrd[sq] = rank;
 		}
 	}
+}
 
 void InitHashKeys() {
 
