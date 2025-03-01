@@ -31,6 +31,14 @@ void UpdateListMaterial(board_representation *pos) {
         pos->kingSquare[WHITE] = square;
       if (piece == bK)
         pos->kingSquare[BLACK] = square;
+
+      if (piece == wP) {
+        SETBIT(pos->pawns[WHITE], SQ64(square));
+        SETBIT(pos->pawns[BOTH], SQ64(square));
+      } else if (piece == bP) {
+        SETBIT(pos->pawns[BLACK], SQ64(square));
+        SETBIT(pos->pawns[BOTH], SQ64(square));
+      }
     }
   }
 }
@@ -167,6 +175,8 @@ int ParseFen(char *fen, board_representation *pos) {
   }
 
   pos->posKey = GeneratePosKey(pos);
+
+  UpdateListMaterial(pos);
 
   return 0;
 }

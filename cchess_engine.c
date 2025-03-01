@@ -14,5 +14,7 @@ int main() {
            board);
   PrintBoard(board);
 
+  PrintBitBoard(board->pawns[WHITE]);
+
   return 0;
 }

@@ -8,6 +8,9 @@ typedef unsigned long long U64;
 #define MAXGAMEHALFMOVES 2048
 #define START_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
+#define CLRBIT(bb, sq) ((bb) &= ClearMask[(sq)])
+#define SETBIT(bb, sq) ((bb) |= SetMask[(sq)])
+
 // Piece Definitions
 
 enum { EMPTY, wP, wQ, wK, wR, wB, wN, bP, bQ, bK, bR, bB, bN };

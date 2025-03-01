@@ -8,8 +8,6 @@ void AllInit();
 void PrintBitBoard(U64 bb);
 int PopBit(U64 *bb);
 int CountBits(U64 bit);
-void ClearBit(U64 *bb, U64 square);
-void SetBit(U64 *bb, U64 square);
 U64 Rand_64();
 U64 GeneratePosKey(const board_representation *pos);
 void ResetBoard(board_representation *pos);
