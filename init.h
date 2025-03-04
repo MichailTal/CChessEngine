@@ -17,5 +17,6 @@ void UpdateListMaterial(board_representation *pos);
 int CheckBoard(board_representation *pos);
 int SqAttacked(const int square, const int side,
                const board_representation *pos);
-
+char *PrintSquare(const int square);
+char *PrintMove(const int move);
 #endif // INIT_H

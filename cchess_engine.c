@@ -15,17 +15,18 @@ int main() {
   ASSERT(CheckBoard(board));
 
   int move = 0;
-  int from = 6;
-  int to = 12;
+  int from = A2;
+  int to = H7;
   int cap = wR;
-  int promoted = bR;
+  int promoted = bQ;
 
   move = (( from ) | (to << 7 ) | (cap << 14) | (promoted << 20));
 
-  printf("\ndec: %d hex:%X\n", move, move);
+  printf("from: %d, to: %d, cap: %d, prom: %d\n", FROMSQ(move), TOSQ(move), CAPTURED(move), PROMOTED(move));
 
-  printf("from: %d to: %d cap: %d prom: %d", FROMSQ(move), TOSQ(move), CAPTURED(move), PROMOTED(move));
-
+  printf("Algebraic Notation from: %s\n", PrintSquare(from));
+  printf("Algebraic Notation to: %s\n", PrintSquare(to));
+  printf("Algebraic Notation move: %s\n", PrintMove(move));
 
   return 0;
 }
