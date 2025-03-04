@@ -13,7 +13,7 @@ typedef unsigned long long U64;
 
 // Piece Definitions
 
-enum { EMPTY, wP, wQ, wK, wR, wB, wN, bP, bQ, bK, bR, bB, bN };
+enum { EMPTY, wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK  };
 
 // File Definition
 

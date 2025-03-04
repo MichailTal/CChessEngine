@@ -10,13 +10,12 @@ int main() {
 
   board_representation board[1];
 
-  ParseFen("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
-           board);
+  ParseFen("8/8/8/8/3Q4/8/8/8 w - - 0 1", board);
   PrintBoard(board);
 
-  PrintBitBoard(board->pawns[WHITE]);
+  printf("\n\nWhite Attacking: \n");
 
-  ASSERT(CheckBoard(board));
+  // ASSERT(CheckBoard(board));
 
   return 0;
 }

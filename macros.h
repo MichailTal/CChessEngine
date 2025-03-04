@@ -24,4 +24,9 @@
 #define SQ64(sq120) (SQUARE120TOSQUARE64[(sq120)])
 #define SQ120(sq64) (SQUARE64TOSQUARE120[(sq64)])
 
+#define IsBQ(p) (PieceBishopQueen[(p)])
+#define IsRQ(p) (PieceRookQueen[(p)])
+#define IsKn(p) (PieceKnight[(p)])
+#define IsKi(p) (PieceKing[(p)])
+
 #endif

@@ -26,4 +26,9 @@ extern int PieceColour[13];
 extern int FilesBrd[BRD_SQ_NUM];
 extern int RanksBrd[BRD_SQ_NUM];
 
+extern int PieceKnight[13];
+extern int PieceKing[13];
+extern int PieceRookQueen[13];
+extern int PieceBishopQueen[13];
+
 #endif
