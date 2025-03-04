@@ -10,12 +10,22 @@ int main() {
 
   board_representation board[1];
 
-  ParseFen("8/8/8/8/3Q4/8/8/8 w - - 0 1", board);
+  ParseFen(START_FEN, board);
   PrintBoard(board);
+  ASSERT(CheckBoard(board));
 
-  printf("\n\nWhite Attacking: \n");
+  int move = 0;
+  int from = 6;
+  int to = 12;
+  int cap = wR;
+  int promoted = bR;
 
-  // ASSERT(CheckBoard(board));
+  move = (( from ) | (to << 7 ) | (cap << 14) | (promoted << 20));
+
+  printf("\ndec: %d hex:%X\n", move, move);
+
+  printf("from: %d to: %d cap: %d prom: %d", FROMSQ(move), TOSQ(move), CAPTURED(move), PROMOTED(move));
+
 
   return 0;
 }

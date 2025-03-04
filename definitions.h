@@ -161,4 +161,10 @@ typedef struct {
   int pieceList[13][10]; // piece list
 
 } board_representation;
+
+typedef struct {
+  int move;
+  int score;
+} move_representation;
+
 #endif

@@ -22,7 +22,7 @@ int CheckBoard(board_representation *pos) {
   t_pawns[BOTH] = pos->pawns[BOTH];
 
   // check piece list
-  for (t_piece = wP; t_piece <= bN; t_piece++) {
+  for (t_piece = wP; t_piece <= bK; t_piece++) {
     for (t_pce_num = 0; t_pce_num < pos->pieceNumber[t_piece]; t_pce_num++) {
       square120 = pos->pieceList[t_piece][t_pce_num];
       ASSERT(pos->pieces[square120] == t_piece);

@@ -20,7 +20,7 @@ U64 GeneratePosKey(const board_representation *pos) {
   for (square = 0; square < BRD_SQ_NUM; square++) {
     piece = pos->pieces[square];
     if (piece != NO_SQ && piece != EMPTY && piece != OFFBOARD) {
-      ASSERT(piece >= wP && piece <= bN);
+      ASSERT(piece >= wP && piece <= bK);
       finalKey ^= PieceKey[piece][square];
     }
   }
