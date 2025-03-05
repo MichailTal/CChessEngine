@@ -5,7 +5,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-int CheckBoard(board_representation *pos) {
+int CheckBoard(const board_representation *pos) {
 
   int t_pceNum[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
   int t_bigPce[2] = {0, 0};
