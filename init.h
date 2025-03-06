@@ -23,5 +23,7 @@ int SqOnBoard(const int square);
 int SideValid(const int side);
 int FileRankValid(const int filerank);
 int PieceValidEmpty(const int piece);
-int PieceValid(const int piece); 
+int PieceValid(const int piece);
+void PrintMoveList(const move_list *list);
+void GenerateAllMoves(const board_representation *pos, move_list *list);
 #endif // INIT_H

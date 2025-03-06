@@ -9,24 +9,14 @@ int main() {
   AllInit();
 
   board_representation board[1];
-
-  ParseFen(START_FEN, board);
+  ParseFen("8/8/3n1k2/4P3/8/8/8/8 w - - 0 1", board);
   PrintBoard(board);
-  ASSERT(CheckBoard(board));
 
-  int move = 0;
-  int from = A2;
-  int to = H7;
-  int cap = wR;
-  int promoted = bQ;
+  move_list list[1];
 
-  move = (( from ) | (to << 7 ) | (cap << 14) | (promoted << 20));
+  GenerateAllMoves(board, list);
 
-  printf("from: %d, to: %d, cap: %d, prom: %d\n", FROMSQ(move), TOSQ(move), CAPTURED(move), PROMOTED(move));
-
-  printf("Algebraic Notation from: %s\n", PrintSquare(from));
-  printf("Algebraic Notation to: %s\n", PrintSquare(to));
-  printf("Algebraic Notation move: %s\n", PrintMove(move));
+  PrintMoveList(list);
 
   return 0;
 }

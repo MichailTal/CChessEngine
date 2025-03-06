@@ -14,7 +14,7 @@ typedef unsigned long long U64;
 
 // Piece Definitions
 
-enum { EMPTY, wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK  };
+enum { EMPTY, wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK };
 
 // File Definition
 
@@ -168,11 +168,9 @@ typedef struct {
   int score;
 } move_representation;
 
-typedef struct
-{
+typedef struct {
   move_representation moves[MAXPOSITIONMOVES];
   int count;
 } move_list;
-
 
 #endif

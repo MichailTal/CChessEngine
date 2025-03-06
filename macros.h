@@ -34,14 +34,14 @@
 /*
 0000 0000 0000 0000 0000 0111 1111 -> From which square came the Move (0x7F)
 0000 0000 0000 0011 1111 0000 0000 -> To which square goes the move (>>7, 0x7F)
-0000 0000 0011 1100 0000 0000 0000 -> Which (if any) piece we capture (>>14, 0xF)
-0000 0000 0100 0000 0000 0000 0000 -> Is it En Passant Move (0x40000)
-0000 0000 1000 0000 0000 0000 0000 -> Is it the first move a pawn did? (0x80000)
-0000 1111 0000 0000 0000 0000 0000 -> if promoted to which piece? (>>20, 0xF)
-0001 0000 0000 0000 0000 0000 0000 -> Did we castle? (0x1000000)
+0000 0000 0011 1100 0000 0000 0000 -> Which (if any) piece we capture (>>14,
+0xF) 0000 0000 0100 0000 0000 0000 0000 -> Is it En Passant Move (0x40000) 0000
+0000 1000 0000 0000 0000 0000 -> Is it the first move a pawn did? (0x80000) 0000
+1111 0000 0000 0000 0000 0000 -> if promoted to which piece? (>>20, 0xF) 0001
+0000 0000 0000 0000 0000 0000 -> Did we castle? (0x1000000)
 */
 
-#define FROMSQ(m) ((m) & 0x7F)
+#define FROMSQ(m) ((m)&0x7F)
 #define TOSQ(m) (((m) >> 7) & 0x7F)
 #define CAPTURED(m) (((m) >> 14) & 0xF)
 #define PROMOTED(m) (((m) >> 20) & 0xF)
@@ -50,7 +50,7 @@
 #define MOVEFLAGPAWNSTART 0x8000
 #define MOVEFLAGECASTLE 0x1000000
 
-#define MOVEFLAGCAPTURE 0x7C000 
+#define MOVEFLAGCAPTURE 0x7C000
 #define MOVEFLAGPROMOTION 0xF00000
 
-#endif 
+#endif
