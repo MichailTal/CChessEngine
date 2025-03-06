@@ -22,6 +22,7 @@ extern int PieceMajor[13];
 extern int PieceMinor[13];
 extern int PieceValue[13];
 extern int PieceColour[13];
+extern int PieceSlides[13];
 
 extern int FilesBrd[BRD_SQ_NUM];
 extern int RanksBrd[BRD_SQ_NUM];

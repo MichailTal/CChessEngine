@@ -7,7 +7,7 @@ typedef unsigned long long U64;
 #define BRD_SQ_NUM 120
 #define MAXGAMEHALFMOVES 2048
 #define MAXPOSITIONMOVES 256
-#define START_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+#define START_FEN "rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR b KQkq - 0 1"
 
 #define CLRBIT(bb, sq) ((bb) &= ClearMask[(sq)])
 #define SETBIT(bb, sq) ((bb) |= SetMask[(sq)])
