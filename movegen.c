@@ -56,6 +56,31 @@ void AddWhitePawnMove(const board_representation *pos, const int from,
   }
 }
 
+void AddBlackPawnCaptureMove(const board_representation *pos, const int from,
+                             const int to, const int cap, move_list *list) {
+  if (RanksBrd[from] == RANK_2) {
+    AddCaptureMove(pos, MOVE(from, to, cap, bQ, 0), list);
+    AddCaptureMove(pos, MOVE(from, to, cap, bR, 0), list);
+    AddCaptureMove(pos, MOVE(from, to, cap, bB, 0), list);
+    AddCaptureMove(pos, MOVE(from, to, cap, bN, 0), list);
+  } else {
+    AddCaptureMove(pos, MOVE(from, to, cap, EMPTY, 0), list);
+  }
+}
+
+void AddBlackPawnMove(const board_representation *pos, const int from,
+                      const int to, move_list *list) {
+
+  if (RanksBrd[from] == RANK_2) {
+    AddQuietMove(pos, MOVE(from, to, EMPTY, bQ, 0), list);
+    AddQuietMove(pos, MOVE(from, to, EMPTY, bR, 0), list);
+    AddQuietMove(pos, MOVE(from, to, EMPTY, bB, 0), list);
+    AddQuietMove(pos, MOVE(from, to, EMPTY, bN, 0), list);
+  } else {
+    AddQuietMove(pos, MOVE(from, to, EMPTY, EMPTY, 0), list);
+  }
+}
+
 void GenerateAllMoves(const board_representation *pos, move_list *list) {
 
   // ASSERT(CheckBoard(pos));
@@ -104,6 +129,43 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
               list);
         }
         if (square + 11 == pos->enPassant) {
+          AddEnPassantMove(
+              pos, MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
+              list);
+        }
+      }
+    }
+  } else {
+    for (pieceNumber = 0; pieceNumber < pos->pieceNumber[bP]; ++pieceNumber) {
+      square = pos->pieceList[bP][pieceNumber];
+      ASSERT(SqOnBoard(square));
+
+      if (pos->pieces[square - 10] == EMPTY) {
+        AddBlackPawnMove(pos, square, square - 10, list);
+        if (RanksBrd[square] == RANK_7 && pos->pieces[square - 20] == EMPTY) {
+          AddQuietMove(
+              pos, MOVE(square, (square - 20), EMPTY, EMPTY, MOVEFLAGPAWNSTART),
+              list);
+        }
+      }
+      if (!SQOFFBOARD(square - 9) &&
+          PieceColour[pos->pieces[square - 9]] == WHITE) {
+        AddBlackPawnCaptureMove(pos, square, square - 9,
+                                pos->pieces[square - 9], list);
+      }
+      if (!SQOFFBOARD(square - 11) &&
+          PieceColour[pos->pieces[square - 11]] == WHITE) {
+        AddBlackPawnCaptureMove(pos, square, square - 11,
+                                pos->pieces[square - 11], list);
+      }
+
+      if (pos->enPassant != NO_SQ) {
+        if (square - 9 == pos->enPassant) {
+          AddEnPassantMove(
+              pos, MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
+              list);
+        }
+        if (square - 11 == pos->enPassant) {
           AddEnPassantMove(
               pos, MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
               list);
