@@ -3,7 +3,6 @@
 
 #include "definitions.h"
 
-void InitSquare120ToSquare64();
 void AllInit();
 void PrintBitBoard(U64 bb);
 int PopBit(U64 *bb);

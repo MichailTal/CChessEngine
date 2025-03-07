@@ -283,17 +283,17 @@ void ResetBoard(board_representation *pos) {
   }
 
   for (index = 0; index < 64; ++index) {
-    pos->pieces[SQUARE64TOSQUARE120[index]] = EMPTY;
+    pos->pieces[SQ120(index)] = EMPTY;
   }
 
   for (index = 0; index < 2; ++index) {
     pos->nonPawnPieces[index] = 0;
     pos->majorPieces[index] = 0;
     pos->minorPieces[index] = 0;
+    pos->material[index] = 0;
   }
 
   for (index = 0; index < 3; ++index) {
-    pos->material[index] = 0;
     pos->pawns[index] = 0ULL;
   }
 

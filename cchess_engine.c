@@ -5,12 +5,13 @@
 #include "stdio.h"
 #include "stdlib.h"
 
+#define TEST "5k2/1n6/4n3/6N1/8/3N4/8/5K2 w - - 0 1"
+
 int main() {
   AllInit();
 
   board_representation board[1];
-  ParseFen("rnbqkb1r/5pPp/8/2p1pP2/1P1P3P/3P4/P1P1P3/RNBQKBNR w - - 0 1",
-           board);
+  ParseFen("2k5/8/8/8/8/8/8/4K3 b - - 0 1", board);
   PrintBoard(board);
 
   move_list list[1];
