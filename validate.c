@@ -8,7 +8,7 @@
 int SqOnBoard(const int square) { return FilesBrd[square] == OFFBOARD ? 0 : 1; }
 
 int SideValid(const int side) {
-  return (side == WHITE || side == BLACK) ? 0 : 1;
+  return (side == WHITE || side == BLACK) ? 1 : 0;
 }
 
 int FileRankValid(const int filerank) {

@@ -141,25 +141,49 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
         AddWhitePawnMove(pos, square, square + 10, list);
         if (RanksBrd[square] == RANK_2 && pos->pieces[square + 20] == EMPTY) {
           AddQuietMove(
-              pos, MOVE(square, (square + 20), EMPTY, EMPTY, MOVEFLAGPAWNSTART), list);
+              pos, MOVE(square, (square + 20), EMPTY, EMPTY, MOVEFLAGPAWNSTART),
+              list);
         }
       }
 
-      if (!SQOFFBOARD(square + 9) && PieceColour[pos->pieces[square + 9]] == BLACK) {
-        AddWhitePawnCapMove(pos, square, square + 9, pos->pieces[square + 9], list);
+      if (!SQOFFBOARD(square + 9) &&
+          PieceColour[pos->pieces[square + 9]] == BLACK) {
+        AddWhitePawnCapMove(pos, square, square + 9, pos->pieces[square + 9],
+                            list);
       }
-      if (!SQOFFBOARD(square + 11) && PieceColour[pos->pieces[square + 11]] == BLACK) {
-        AddWhitePawnCapMove(pos, square, square + 11, pos->pieces[square + 11], list);
+      if (!SQOFFBOARD(square + 11) &&
+          PieceColour[pos->pieces[square + 11]] == BLACK) {
+        AddWhitePawnCapMove(pos, square, square + 11, pos->pieces[square + 11],
+                            list);
       }
 
       if (pos->enPassant != NO_SQ) {
         if (square + 9 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
+              pos, MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
+              list);
         }
         if (square + 11 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
+              pos, MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
+              list);
+        }
+      }
+    }
+
+    if (pos->castlePermission & whiteKingCastle) {
+      if (pos->pieces[F1] == EMPTY && pos->pieces[G1] == EMPTY) {
+        if (!SqAttacked(E1, BLACK, pos) && !SqAttacked(F1, BLACK, pos)) {
+          printf("WKCA Move Gen\n");
+        }
+      }
+    }
+
+    if (pos->castlePermission & whiteQueenCastle) {
+      if (pos->pieces[D1] == EMPTY && pos->pieces[C1] == EMPTY &&
+          pos->pieces[B1] == EMPTY) {
+        if (!SqAttacked(E1, BLACK, pos) && !SqAttacked(D1, BLACK, pos)) {
+          printf("WQCA Move Gen\n");
         }
       }
     }
@@ -174,59 +198,83 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
         AddBlackPawnMove(pos, square, square - 10, list);
         if (RanksBrd[square] == RANK_7 && pos->pieces[square - 20] == EMPTY) {
           AddQuietMove(
-              pos, MOVE(square, (square - 20), EMPTY, EMPTY, MOVEFLAGPAWNSTART), list);
+              pos, MOVE(square, (square - 20), EMPTY, EMPTY, MOVEFLAGPAWNSTART),
+              list);
         }
       }
 
-      if (!SQOFFBOARD(square - 9) && PieceColour[pos->pieces[square - 9]] == WHITE) {
-        AddBlackPawnCapMove(pos, square, square - 9, pos->pieces[square - 9], list);
+      if (!SQOFFBOARD(square - 9) &&
+          PieceColour[pos->pieces[square - 9]] == WHITE) {
+        AddBlackPawnCapMove(pos, square, square - 9, pos->pieces[square - 9],
+                            list);
       }
 
-      if (!SQOFFBOARD(square - 11) && PieceColour[pos->pieces[square - 11]] == WHITE) {
-        AddBlackPawnCapMove(pos, square, square - 11, pos->pieces[square - 11], list);
+      if (!SQOFFBOARD(square - 11) &&
+          PieceColour[pos->pieces[square - 11]] == WHITE) {
+        AddBlackPawnCapMove(pos, square, square - 11, pos->pieces[square - 11],
+                            list);
       }
       if (pos->enPassant != NO_SQ) {
         if (square - 9 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square - 9, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
+              pos, MOVE(square, square - 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
+              list);
         }
         if (square - 11 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square - 11, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
+              pos, MOVE(square, square - 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
+              list);
+        }
+      }
+    }
+    if (pos->castlePermission & blackKingCastle) {
+      if (pos->pieces[F8] == EMPTY && pos->pieces[G8] == EMPTY) {
+        if (!SqAttacked(E8, WHITE, pos) && !SqAttacked(F8, WHITE, pos)) {
+          printf("BKCA Move Gen\n");
         }
       }
     }
 
-    /* Loop for slide pieces */
-    pieceIndex = LoopSlideIndex[side];
-    piece = LoopSlidePiece[pieceIndex++];
-    while (piece != 0) {
-      ASSERT(PieceValid(piece));
-
-      for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
-        square = pos->pieceList[piece][pieceNumber];
-        ASSERT(SqOnBoard(square));
-
-        for (index = 0; index < NumDir[piece]; ++index) {
-          direction = PceDir[piece][index];
-          target_square = square + direction;
-
-          while (!SQOFFBOARD(target_square)) {
-            // BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
-            if (pos->pieces[target_square] != EMPTY) {
-              if (PieceColour[pos->pieces[target_square]] == (side ^ 1)) {
-                AddCaptureMove(pos, MOVE(square, target_square, pos->pieces[target_square], EMPTY, 0),
-                               list);
-              }
-              break;
-            }
-            AddQuietMove(pos, MOVE(square, target_square, EMPTY, EMPTY, 0), list);
-            target_square += direction;
-          }
+    if (pos->castlePermission & blackQueenCastle) {
+      if (pos->pieces[D8] == EMPTY && pos->pieces[C8] == EMPTY &&
+          pos->pieces[B8] == EMPTY) {
+        if (!SqAttacked(E8, WHITE, pos) && !SqAttacked(D8, WHITE, pos)) {
+          printf("BQCA Move Gen\n");
         }
       }
+    }
+  }
 
-      piece = LoopSlidePiece[pieceIndex++];
+  /* Loop for slide pieces */
+  pieceIndex = LoopSlideIndex[side];
+  piece = LoopSlidePiece[pieceIndex++];
+  while (piece != 0) {
+    ASSERT(PieceValid(piece));
+
+    for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece];
+         ++pieceNumber) {
+      square = pos->pieceList[piece][pieceNumber];
+      ASSERT(SqOnBoard(square));
+
+      for (index = 0; index < NumDir[piece]; ++index) {
+        direction = PceDir[piece][index];
+        target_square = square + direction;
+
+        while (!SQOFFBOARD(target_square)) {
+          // BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+          if (pos->pieces[target_square] != EMPTY) {
+            if (PieceColour[pos->pieces[target_square]] == (side ^ 1)) {
+              AddCaptureMove(pos,
+                             MOVE(square, target_square,
+                                  pos->pieces[target_square], EMPTY, 0),
+                             list);
+            }
+            break;
+          }
+          AddQuietMove(pos, MOVE(square, target_square, EMPTY, EMPTY, 0), list);
+          target_square += direction;
+        }
+      }
     }
 
     /* Loop for non slide */
@@ -236,7 +284,8 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
     while (piece != 0) {
       ASSERT(PieceValid(piece));
 
-      for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+      for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece];
+           ++pieceNumber) {
         square = pos->pieceList[piece][pieceNumber];
         ASSERT(SqOnBoard(square));
 
@@ -251,7 +300,9 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
           // BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
           if (pos->pieces[target_square] != EMPTY) {
             if (PieceColour[pos->pieces[target_square]] == (side ^ 1)) {
-              AddCaptureMove(pos, MOVE(square, target_square, pos->pieces[target_square], EMPTY, 0),
+              AddCaptureMove(pos,
+                             MOVE(square, target_square,
+                                  pos->pieces[target_square], EMPTY, 0),
                              list);
             }
             continue;
