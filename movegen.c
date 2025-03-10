@@ -174,7 +174,7 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
     if (pos->castlePermission & whiteKingCastle) {
       if (pos->pieces[F1] == EMPTY && pos->pieces[G1] == EMPTY) {
         if (!SqAttacked(E1, BLACK, pos) && !SqAttacked(F1, BLACK, pos)) {
-          printf("WKCA Move Gen\n");
+          AddQuietMove(pos, MOVE(E1, G1, EMPTY, EMPTY, MOVEFLAGECASTLE), list);
         }
       }
     }
@@ -183,7 +183,7 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
       if (pos->pieces[D1] == EMPTY && pos->pieces[C1] == EMPTY &&
           pos->pieces[B1] == EMPTY) {
         if (!SqAttacked(E1, BLACK, pos) && !SqAttacked(D1, BLACK, pos)) {
-          printf("WQCA Move Gen\n");
+          AddQuietMove(pos, MOVE(E1, C1, EMPTY, EMPTY, MOVEFLAGECASTLE), list);
         }
       }
     }
@@ -230,7 +230,8 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
     if (pos->castlePermission & blackKingCastle) {
       if (pos->pieces[F8] == EMPTY && pos->pieces[G8] == EMPTY) {
         if (!SqAttacked(E8, WHITE, pos) && !SqAttacked(F8, WHITE, pos)) {
-          printf("BKCA Move Gen\n");
+          AddQuietMove(pos, MOVE(E8, G8, EMPTY, EMPTY, MOVEFLAGECASTLE), list);
+          ;
         }
       }
     }
@@ -239,7 +240,8 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
       if (pos->pieces[D8] == EMPTY && pos->pieces[C8] == EMPTY &&
           pos->pieces[B8] == EMPTY) {
         if (!SqAttacked(E8, WHITE, pos) && !SqAttacked(D8, WHITE, pos)) {
-          printf("BQCA Move Gen\n");
+          AddQuietMove(pos, MOVE(E8, C8, EMPTY, EMPTY, MOVEFLAGECASTLE), list);
+          ;
         }
       }
     }
@@ -276,42 +278,42 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
         }
       }
     }
+    piece = LoopSlidePiece[pieceIndex++];
+  }
+  /* Loop for non slide */
+  pieceIndex = LoopNonSlideIndex[side];
+  piece = LoopNonSlidePiece[pieceIndex++];
 
-    /* Loop for non slide */
-    pieceIndex = LoopNonSlideIndex[side];
-    piece = LoopNonSlidePiece[pieceIndex++];
+  while (piece != 0) {
+    ASSERT(PieceValid(piece));
 
-    while (piece != 0) {
-      ASSERT(PieceValid(piece));
+    for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece];
+         ++pieceNumber) {
+      square = pos->pieceList[piece][pieceNumber];
+      ASSERT(SqOnBoard(square));
 
-      for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece];
-           ++pieceNumber) {
-        square = pos->pieceList[piece][pieceNumber];
-        ASSERT(SqOnBoard(square));
+      for (index = 0; index < NumDir[piece]; ++index) {
+        direction = PceDir[piece][index];
+        target_square = square + direction;
 
-        for (index = 0; index < NumDir[piece]; ++index) {
-          direction = PceDir[piece][index];
-          target_square = square + direction;
-
-          if (SQOFFBOARD(target_square)) {
-            continue;
-          }
-
-          // BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
-          if (pos->pieces[target_square] != EMPTY) {
-            if (PieceColour[pos->pieces[target_square]] == (side ^ 1)) {
-              AddCaptureMove(pos,
-                             MOVE(square, target_square,
-                                  pos->pieces[target_square], EMPTY, 0),
-                             list);
-            }
-            continue;
-          }
-          AddQuietMove(pos, MOVE(square, target_square, EMPTY, EMPTY, 0), list);
+        if (SQOFFBOARD(target_square)) {
+          continue;
         }
-      }
 
-      piece = LoopNonSlidePiece[pieceIndex++];
+        // BLACK ^ 1 == WHITE       WHITE ^ 1 == BLACK
+        if (pos->pieces[target_square] != EMPTY) {
+          if (PieceColour[pos->pieces[target_square]] == (side ^ 1)) {
+            AddCaptureMove(pos,
+                           MOVE(square, target_square,
+                                pos->pieces[target_square], EMPTY, 0),
+                           list);
+          }
+          continue;
+        }
+        AddQuietMove(pos, MOVE(square, target_square, EMPTY, EMPTY, 0), list);
+      }
     }
+
+    piece = LoopNonSlidePiece[pieceIndex++];
   }
 }

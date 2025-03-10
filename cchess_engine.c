@@ -5,20 +5,20 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-#define TEST "5k2/1n6/4n3/6N1/8/3N4/8/5K2 w - - 0 1"
-
 int main() {
   AllInit();
 
   board_representation board[1];
-  ParseFen("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1", board);
+  ParseFen(
+      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
+      board);
   PrintBoard(board);
 
   move_list list[1];
 
   GenerateAllMoves(board, list);
 
-  // PrintMoveList(list);
+  PrintMoveList(list);
 
   return 0;
 }

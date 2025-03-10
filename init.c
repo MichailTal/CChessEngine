@@ -12,10 +12,10 @@ U64 ClearMask[64];
 U64 PieceKey[13][120];
 U64 SideKey;
 U64 CastleKeys[16];
-int PieceMajor[13];
-int PieceMinor[13];
-int PieceValue[13];
-int PieceColour[13];
+// int PieceMajor[13];
+// int PieceMinor[13];
+// int PieceValue[13];
+// int PieceColour[13];
 
 int FilesBrd[BRD_SQ_NUM];
 int RanksBrd[BRD_SQ_NUM];
