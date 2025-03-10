@@ -132,3 +132,88 @@ static void MovePiece(const int from, const int to, board_representation *pos) {
     }
     ASSERT(t_PieceNum);
 }
+
+int MakeMove(board_representation *pos, const int move) {
+
+    ASSERT(CheckBoard(pos));
+
+    int from = FROMSQ(move);
+    int to = TOSQ(move);
+    int side = pos -> side;
+
+    ASSERT(SqOnBoard(from));
+    ASSERT(SqOnBoard(from));
+    ASSERT(SideValid(side));
+    ASSERT(PieceValid(pos -> pieces[from]));
+
+    pos -> moveHistory[pos -> histPly].posKey = pos -> posKey;
+
+    if (move & MOVEFLAGENPASSANT) {
+        if (side == WHITE) {
+            ClearPiece(to-10, pos);
+        } else {
+            ClearPiece(to+10, pos);
+        }
+    } else if (move & MOVEFLAGECASTLE) {
+        switch(to) {
+            case C1:
+                MovePiece(A1, D1, pos);
+            break;
+            case C8:
+                MovePiece(A8, D8, pos);
+            break;
+            case G1:
+                MovePiece(H1, F1, pos);
+            break;
+            case G8:
+                MovePiece(H8, F8, pos);
+            break;
+            default: ASSERT(FALSE); break;
+        }
+    }
+
+    if (pos -> enPassant != NO_SQ) HASH_EP;
+    HASH_CA;
+
+    pos -> moveHistory[pos -> histPly].move = move;
+    pos -> moveHistory[pos -> histPly].fiftyMoveRule = pos -> fiftyMoveRule;
+    pos -> moveHistory[pos -> histPly].enPassant = pos -> enPassant;
+    pos -> moveHistory[pos -> histPly].castlePermission = pos ->castlePermission;
+
+    pos -> castlePermission &= CastlePerm[from];
+    pos -> castlePermission &= CastlePerm[to];
+    pos -> enPassant = NO_SQ;
+
+    HASH_CA;
+
+    int captured = CAPTURED(move);
+
+    pos -> fiftyMoveRule++;
+
+    if (captured != EMPTY) {
+        ASSERT(PieceValid(captured));
+        ClearPiece(to, pos);
+        pos -> fiftyMoveRule = 0;
+    }
+
+    pos -> histPly++;
+    pos -> ply++;
+
+    if (PiecePawn[pos -> pieces[from]]) {
+        pos -> fiftyMoveRule = 0;
+
+        if (move & MOVEFLAGPAWNSTART) {
+            if (side == WHITE) {
+                pos -> enPassant = from + 10;
+                ASSERT(RanksBrd[pos -> enPassant] == RANK_3);
+            } else {
+                pos -> enPassant = from - 10;
+                ASSERT(RanksBrd[pos -> enPassant] == RANK_6); 
+            }
+            HASH_EP;
+        }
+    }
+
+    // TODO: Hier gehts weiter :)
+
+}
