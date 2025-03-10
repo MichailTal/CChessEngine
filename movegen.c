@@ -32,14 +32,15 @@ const int PceDir[13][8] = {{0, 0, 0, 0, 0, 0, 0},
 
 const int NumDir[13] = {0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8};
 
-static void AddQuietMove(const board_representation *pos, int move, move_list *list) {
+static void AddQuietMove(const board_representation *pos, int move,
+                         move_list *list) {
   list->moves[list->count].move = move;
   list->moves[list->count].score = 0;
   list->count++;
 }
 
 static void AddCaptureMove(const board_representation *pos, int move,
-                    move_list *list) {
+                           move_list *list) {
 
   list->moves[list->count].move = move;
   list->moves[list->count].score = 0;
@@ -47,7 +48,7 @@ static void AddCaptureMove(const board_representation *pos, int move,
 }
 
 static void AddEnPassantMove(const board_representation *pos, int move,
-                      move_list *list) {
+                             move_list *list) {
 
   list->moves[list->count].move = move;
   list->moves[list->count].score = 0;
@@ -55,7 +56,7 @@ static void AddEnPassantMove(const board_representation *pos, int move,
 }
 
 static void AddWhitePawnCapMove(const board_representation *pos, const int from,
-                         const int to, const int cap, move_list *list) {
+                                const int to, const int cap, move_list *list) {
   ASSERT(PieceValidEmpty(cap));
   ASSERT(SqOnBoard(from));
   ASSERT(SqOnBoard(to));
@@ -71,7 +72,7 @@ static void AddWhitePawnCapMove(const board_representation *pos, const int from,
 }
 
 static void AddWhitePawnMove(const board_representation *pos, const int from,
-                      const int to, move_list *list) {
+                             const int to, move_list *list) {
   ASSERT(SqOnBoard(from));
   ASSERT(SqOnBoard(to));
 
@@ -86,7 +87,7 @@ static void AddWhitePawnMove(const board_representation *pos, const int from,
 }
 
 static void AddBlackPawnCapMove(const board_representation *pos, const int from,
-                         const int to, const int cap, move_list *list) {
+                                const int to, const int cap, move_list *list) {
   ASSERT(PieceValidEmpty(cap));
   ASSERT(SqOnBoard(from));
   ASSERT(SqOnBoard(to));
@@ -102,7 +103,7 @@ static void AddBlackPawnCapMove(const board_representation *pos, const int from,
 }
 
 static void AddBlackPawnMove(const board_representation *pos, const int from,
-                      const int to, move_list *list) {
+                             const int to, move_list *list) {
 
   ASSERT(SqOnBoard(from));
   ASSERT(SqOnBoard(to));

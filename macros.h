@@ -29,6 +29,11 @@
 #define IsKn(p) (PieceKnight[(p)])
 #define IsKi(p) (PieceKing[(p)])
 
+#define HASH_PCE(pce, sq) (pos->posKey ^= (PieceKey[(pce)][(sq)]))
+#define HASH_CA (pos->posKey ^=)(CastleKeys[(pos->castlePermission)])
+#define HASH_SIDE (pos->posKey ^= (SideKey))
+#define HASH_EP (pos->posKey ^= (PieceKey[EMPTY][(pos->enPassant)]))
+
 /* GAME MOVE EXPLANATION */
 
 /*
