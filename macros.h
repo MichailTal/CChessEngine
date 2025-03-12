@@ -46,16 +46,16 @@
 0000 0000 0000 0000 0000 0000 -> Did we castle? (0x1000000)
 */
 
-#define FROMSQ(m) ((m)&0x7F)
-#define TOSQ(m) (((m) >> 7) & 0x7F)
-#define CAPTURED(m) (((m) >> 14) & 0xF)
-#define PROMOTED(m) (((m) >> 20) & 0xF)
+#define FROMSQ(m) ((m) & 0x7F)
+#define TOSQ(m) (((m)>>7) & 0x7F)
+#define CAPTURED(m) (((m)>>14) & 0xF)
+#define PROMOTED(m) (((m)>>20) & 0xF)
 
-#define MOVEFLAGENPASSANT 0x4000
-#define MOVEFLAGPAWNSTART 0x8000
+#define MOVEFLAGENPASSANT 0x40000
+#define MOVEFLAGPAWNSTART 0x80000
 #define MOVEFLAGECASTLE 0x1000000
 
 #define MOVEFLAGCAPTURE 0x7C000
-#define MOVEFLAGPROMOTION 0xF00000
+#define MOVEFLAGPROMOTED 0xF00000
 
 #endif

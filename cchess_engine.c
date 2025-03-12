@@ -9,16 +9,37 @@ int main() {
   AllInit();
 
   board_representation board[1];
-  ParseFen(
-      "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1",
-      board);
-  PrintBoard(board);
-
   move_list list[1];
 
-  GenerateAllMoves(board, list);
+  ParseFen(
+      START_FEN,
+      board);
 
+  GenerateAllMoves(board, list);
   PrintMoveList(list);
+
+  int MoveNum = 0;
+  int move = 0;
+
+  PrintBoard(board);
+  getchar();
+
+  for (MoveNum = 0; MoveNum < list -> count; ++MoveNum) {
+    move = list -> moves[MoveNum].move;
+
+    if (!MakeMove(board, move)) {
+      continue;
+    }
+
+    printf("\nMade: %s\n", PrintMove(move));
+    PrintBoard(board);
+
+    TakeMove(board);
+    printf("\nTAKEN:%s\n", PrintMove(move));
+    PrintBoard(board);
+
+    getchar();
+  }
 
   return 0;
 }

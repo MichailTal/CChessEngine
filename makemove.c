@@ -6,214 +6,310 @@
 #include "stdlib.h"
 
 const int CastlePerm[120] = {
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 13, 15, 15, 15, 12, 15, 15, 14, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15,  7, 15, 15, 15,  3, 15, 15, 11, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
-    15, 15, 15, 15, 15, 15, 15, 15, 15, 15
-};
-
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 13, 15, 15, 15, 12, 15, 15, 14, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+    15, 7,  15, 15, 15, 3,  15, 15, 11, 15, 15, 15, 15, 15, 15, 15, 15, 15,
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15};
 
 static void ClearPiece(const int square, board_representation *pos) {
 
-    ASSERT(SqOnBoard(square));
+  ASSERT(SqOnBoard(square));
 
-    int piece = pos -> pieces[square];
+  int piece = pos->pieces[square];
 
-    ASSERT(PieceValid(piece));
+  ASSERT(PieceValid(piece));
 
-    int colour = PieceColour[piece];
-    int index = 0;
-    int t_pieceNumber = -1;
+  int colour = PieceColour[piece];
+  int index = 0;
+  int t_pieceNumber = -1;
 
-    HASH_PCE(piece, square);
+  HASH_PCE(piece, square);
 
-    pos -> pieces[square] = EMPTY;
-    pos -> material[colour] -= PieceValue[piece];
+  pos->pieces[square] = EMPTY;
+  pos->material[colour] -= PieceValue[piece];
 
-    if (PieceBig[piece]) {
-        pos -> nonPawnPieces[colour]--;
+  if (PieceBig[piece]) {
+    pos->nonPawnPieces[colour]--;
 
-        if (PieceMajor[piece]) {
-            pos -> minorPieces[colour]--;
-        }
-        if (PieceMinor[piece]) {
-            pos -> minorPieces[colour]--;
-        }
-    } else {
-        CLRBIT(pos -> pawns[colour], SQ64(square));
-        CLRBIT(pos -> pawns[BOTH], SQ64(square));
+    if (PieceMajor[piece]) {
+      pos->minorPieces[colour]--;
     }
-
-    for (index = 0; index < pos -> pieceNumber[piece]; ++index) {
-        if (pos -> pieceList[piece][index] == square) {
-            t_pieceNumber = index;
-            break;
-        }
+    if (PieceMinor[piece]) {
+      pos->minorPieces[colour]--;
     }
+  } else {
+    CLRBIT(pos->pawns[colour], SQ64(square));
+    CLRBIT(pos->pawns[BOTH], SQ64(square));
+  }
 
-    ASSERT(t_pieceNumber != -1);
+  for (index = 0; index < pos->pieceNumber[piece]; ++index) {
+    if (pos->pieceList[piece][index] == square) {
+      t_pieceNumber = index;
+      break;
+    }
+  }
 
-    pos -> pieceNumber[piece]--;
-    pos -> pieceList[piece][t_pieceNumber]  = pos -> pieceList[piece] [pos -> pieceNumber[piece]];
+  ASSERT(t_pieceNumber != -1);
+
+  pos->pieceNumber[piece]--;
+  pos->pieceList[piece][t_pieceNumber] =
+      pos->pieceList[piece][pos->pieceNumber[piece]];
 }
 
-static void AddPiece(const int square, board_representation *pos, const int piece) {
+static void AddPiece(const int square, board_representation *pos,
+                     const int piece) {
 
-    ASSERT(PieceValid(piece));
-    ASSERT(SqOnBoard(square));
+  ASSERT(PieceValid(piece));
+  ASSERT(SqOnBoard(square));
 
-    int colour = PieceColour[piece];
+  int colour = PieceColour[piece];
 
-    HASH_PCE(piece, square);
+  HASH_PCE(piece, square);
 
-    pos -> pieces[square] = piece;
+  pos->pieces[square] = piece;
 
-    if (PieceBig[piece]) {
-        pos -> nonPawnPieces[colour]++;
+  if (PieceBig[piece]) {
+    pos->nonPawnPieces[colour]++;
 
-        if (PieceMajor[piece]) {
-            pos -> majorPieces[colour]++;
-        }
-        if (PieceMajor[piece]) {
-            pos -> minorPieces[colour]++;
-        }
-    } else {
-        SETBIT(pos -> pawns[colour], SQ64(square));
-        SETBIT(pos -> pawns[BOTH], SQ64(square));
+    if (PieceMajor[piece]) {
+      pos->majorPieces[colour]++;
     }
+    if (PieceMajor[piece]) {
+      pos->minorPieces[colour]++;
+    }
+  } else {
+    SETBIT(pos->pawns[colour], SQ64(square));
+    SETBIT(pos->pawns[BOTH], SQ64(square));
+  }
 
-    pos -> material[colour] += PieceValue[piece];
-    pos -> pieceList[piece] [pos -> pieceNumber[piece]++] = square;
+  pos->material[colour] += PieceValue[piece];
+  pos->pieceList[piece][pos->pieceNumber[piece]++] = square;
 }
 
 static void MovePiece(const int from, const int to, board_representation *pos) {
 
-    ASSERT(SqOnBoard(from));
-    ASSERT(SqOnBoard(to));
+  ASSERT(SqOnBoard(from));
+  ASSERT(SqOnBoard(to));
 
-    int index = 0;
-    int piece = pos -> pieces[from];
-    int colour = PieceColour[piece];
+  int index = 0;
+  int piece = pos->pieces[from];
+  int colour = PieceColour[piece];
 
 #ifdef DEBUG
-    int t_PieceNum = FALSE;
+  int t_PieceNum = FALSE;
 #endif
 
-    HASH_PCE(piece, from);
-    pos -> pieces[from] = EMPTY;
+  HASH_PCE(piece, from);
+  pos->pieces[from] = EMPTY;
 
-    HASH_PCE(piece, to);
-    pos -> pieces[to] = piece;
+  HASH_PCE(piece, to);
+  pos->pieces[to] = piece;
 
-    // e.g. it is a pawn
-    if(!PieceBig[piece]) {
-        CLRBIT(pos -> pawns[colour], SQ64(from));
-        CLRBIT(pos -> pawns[BOTH], SQ64(from));
-        SETBIT(pos -> pawns[colour], SQ64(to));
-        SETBIT(pos -> pawns[BOTH], SQ64(to));
-    }
+  // e.g. it is a pawn
+  if (!PieceBig[piece]) {
+    CLRBIT(pos->pawns[colour], SQ64(from));
+    CLRBIT(pos->pawns[BOTH], SQ64(from));
+    SETBIT(pos->pawns[colour], SQ64(to));
+    SETBIT(pos->pawns[BOTH], SQ64(to));
+  }
 
-    for(index = 0; index < pos -> pieceNumber[piece]; ++index) {
-        if(pos -> pieceList[piece][index] == from) {
-            pos -> pieceList[piece][index] = to;
+  for (index = 0; index < pos->pieceNumber[piece]; ++index) {
+    if (pos->pieceList[piece][index] == from) {
+      pos->pieceList[piece][index] = to;
 #ifdef DEBUG
-            t_PieceNum = TRUE;
+      t_PieceNum = TRUE;
 #endif
-            break;
-        }
+      break;
     }
-    ASSERT(t_PieceNum);
+  }
+  ASSERT(t_PieceNum);
 }
 
 int MakeMove(board_representation *pos, const int move) {
 
-    ASSERT(CheckBoard(pos));
+  ASSERT(CheckBoard(pos));
 
-    int from = FROMSQ(move);
-    int to = TOSQ(move);
-    int side = pos -> side;
+  int from = FROMSQ(move);
+  int to = TOSQ(move);
+  int side = pos->side;
 
-    ASSERT(SqOnBoard(from));
-    ASSERT(SqOnBoard(from));
-    ASSERT(SideValid(side));
-    ASSERT(PieceValid(pos -> pieces[from]));
+  ASSERT(SqOnBoard(from));
+  ASSERT(SqOnBoard(from));
+  ASSERT(SideValid(side));
+  ASSERT(PieceValid(pos->pieces[from]));
 
-    pos -> moveHistory[pos -> histPly].posKey = pos -> posKey;
+  pos->moveHistory[pos->histPly].posKey = pos->posKey;
 
-    if (move & MOVEFLAGENPASSANT) {
-        if (side == WHITE) {
-            ClearPiece(to-10, pos);
-        } else {
-            ClearPiece(to+10, pos);
-        }
-    } else if (move & MOVEFLAGECASTLE) {
-        switch(to) {
-            case C1:
-                MovePiece(A1, D1, pos);
-            break;
-            case C8:
-                MovePiece(A8, D8, pos);
-            break;
-            case G1:
-                MovePiece(H1, F1, pos);
-            break;
-            case G8:
-                MovePiece(H8, F8, pos);
-            break;
-            default: ASSERT(FALSE); break;
-        }
+  if (move & MOVEFLAGENPASSANT) {
+    if (side == WHITE) {
+      ClearPiece(to - 10, pos);
+    } else {
+      ClearPiece(to + 10, pos);
     }
-
-    if (pos -> enPassant != NO_SQ) HASH_EP;
-    HASH_CA;
-
-    pos -> moveHistory[pos -> histPly].move = move;
-    pos -> moveHistory[pos -> histPly].fiftyMoveRule = pos -> fiftyMoveRule;
-    pos -> moveHistory[pos -> histPly].enPassant = pos -> enPassant;
-    pos -> moveHistory[pos -> histPly].castlePermission = pos ->castlePermission;
-
-    pos -> castlePermission &= CastlePerm[from];
-    pos -> castlePermission &= CastlePerm[to];
-    pos -> enPassant = NO_SQ;
-
-    HASH_CA;
-
-    int captured = CAPTURED(move);
-
-    pos -> fiftyMoveRule++;
-
-    if (captured != EMPTY) {
-        ASSERT(PieceValid(captured));
-        ClearPiece(to, pos);
-        pos -> fiftyMoveRule = 0;
+  } else if (move & MOVEFLAGECASTLE) {
+    switch (to) {
+    case C1:
+      MovePiece(A1, D1, pos);
+      break;
+    case C8:
+      MovePiece(A8, D8, pos);
+      break;
+    case G1:
+      MovePiece(H1, F1, pos);
+      break;
+    case G8:
+      MovePiece(H8, F8, pos);
+      break;
+    default:
+      ASSERT(FALSE);
+      break;
     }
+  }
 
-    pos -> histPly++;
-    pos -> ply++;
+  if (pos->enPassant != NO_SQ)
+    HASH_EP;
+  HASH_CA;
 
-    if (PiecePawn[pos -> pieces[from]]) {
-        pos -> fiftyMoveRule = 0;
+  pos->moveHistory[pos->histPly].move = move;
+  pos->moveHistory[pos->histPly].fiftyMoveRule = pos->fiftyMoveRule;
+  pos->moveHistory[pos->histPly].enPassant = pos->enPassant;
+  pos->moveHistory[pos->histPly].castlePermission = pos->castlePermission;
 
-        if (move & MOVEFLAGPAWNSTART) {
-            if (side == WHITE) {
-                pos -> enPassant = from + 10;
-                ASSERT(RanksBrd[pos -> enPassant] == RANK_3);
-            } else {
-                pos -> enPassant = from - 10;
-                ASSERT(RanksBrd[pos -> enPassant] == RANK_6); 
-            }
-            HASH_EP;
-        }
+  pos->castlePermission &= CastlePerm[from];
+  pos->castlePermission &= CastlePerm[to];
+  pos->enPassant = NO_SQ;
+
+  HASH_CA;
+
+  int captured = CAPTURED(move);
+
+  pos->fiftyMoveRule++;
+
+  if (captured != EMPTY) {
+    ASSERT(PieceValid(captured));
+    ClearPiece(to, pos);
+    pos->fiftyMoveRule = 0;
+  }
+
+  pos->histPly++;
+  pos->ply++;
+
+  if (PiecePawn[pos->pieces[from]]) {
+    pos->fiftyMoveRule = 0;
+
+    if (move & MOVEFLAGPAWNSTART) {
+      if (side == WHITE) {
+        pos->enPassant = from + 10;
+        ASSERT(RanksBrd[pos->enPassant] == RANK_3);
+      } else {
+        pos->enPassant = from - 10;
+        ASSERT(RanksBrd[pos->enPassant] == RANK_6);
+      }
+      HASH_EP;
     }
+  }
 
-    // TODO: Hier gehts weiter :)
+  MovePiece(from, to, pos);
 
+  int promotedPiece = PROMOTED(move);
+  if (promotedPiece != EMPTY) {
+    ASSERT(PieceValid(promotedPiece) && !PiecePawn[promotedPiece]);
+    ClearPiece(to, pos);
+    AddPiece(to, pos, promotedPiece);
+  }
+
+  if (PieceKing[pos->pieces[to]]) {
+    pos->kingSquare[pos->side] = to;
+  }
+
+  pos->side ^= 1;
+  HASH_SIDE;
+
+  ASSERT(CheckBoard(pos));
+
+  if (SqAttacked(pos->kingSquare[side], pos->side, pos)) {
+    TakeMove(pos);
+    return FALSE;
+  }
+
+  return TRUE;
+}
+
+void TakeMove(board_representation *pos) {
+
+  ASSERT(CheckBoard(pos));
+
+  pos->histPly--;
+  pos->ply--;
+
+  int move = pos->moveHistory[pos->histPly].move;
+  int from = FROMSQ(move);
+  int to = TOSQ(move);
+
+  ASSERT(SqOnBoard(from));
+  ASSERT(SqOnBoard(to));
+
+  if (pos->enPassant != NO_SQ)
+    HASH_EP;
+  HASH_CA;
+
+  pos->castlePermission = pos->moveHistory[pos->histPly].castlePermission;
+  pos->fiftyMoveRule = pos->moveHistory[pos->histPly].fiftyMoveRule;
+  pos->enPassant = pos->moveHistory[pos->histPly].enPassant;
+
+  if (pos->enPassant != NO_SQ)
+    HASH_EP;
+  HASH_CA;
+
+  pos->side ^= 1;
+  HASH_SIDE;
+
+  if (MOVEFLAGENPASSANT & move) {
+    if (pos->side == WHITE) {
+      AddPiece(to - 10, pos, bP);
+    } else {
+      AddPiece(to + 10, pos, wP);
+    }
+  } else if (MOVEFLAGCAPTURE & move) {
+    switch (to) {
+    case C1:
+      MovePiece(D1, A1, pos);
+      break;
+    case C8:
+      MovePiece(D8, A8, pos);
+      break;
+    case G1:
+      MovePiece(F1, H1, pos);
+      break;
+    case G8:
+      MovePiece(F8, H8, pos);
+      break;
+    default:
+      ASSERT(FALSE);
+      break;
+    }
+  }
+
+  MovePiece(to, from, pos);
+
+  if (PieceKing[pos->pieces[from]]) {
+    pos->kingSquare[pos->side] = from;
+  }
+
+  int captured = CAPTURED(move);
+  if (captured != EMPTY) {
+    ASSERT(PieceValid(captured));
+    AddPiece(to, pos, captured);
+  }
+
+  if (PROMOTED(move) != EMPTY) {
+    ASSERT(PieceValid(PROMOTED(move)) && !PiecePawn[PROMOTED(move)]);
+    ClearPiece(from, pos);
+    AddPiece(from, pos, (PieceColour[PROMOTED(move)] == WHITE ? wP : bP));
+  }
+
+  ASSERT(CheckBoard(pos));
 }

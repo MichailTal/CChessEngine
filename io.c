@@ -25,6 +25,7 @@ char *PrintMove(const int move) {
   int rankto = RanksBrd[TOSQ(move)];
 
   int promoted = PROMOTED(move);
+  int captured = CAPTURED(move);
 
   if (promoted) {
     char promotechar = 'q';
@@ -39,6 +40,11 @@ char *PrintMove(const int move) {
             ('a' + fileto), ('1' + rankto), promotechar);
   } else {
     sprintf(MvStr, "%c%c%c%c", ('a' + filefrom), ('1' + rankfrom),
+            ('a' + fileto), ('1' + rankto));
+  }
+
+  if (captured) {
+    sprintf(MvStr, "%c%cx%c%c", ('a' + filefrom), ('1' + rankfrom),
             ('a' + fileto), ('1' + rankto));
   }
 

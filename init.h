@@ -25,4 +25,6 @@ int PieceValidEmpty(const int piece);
 int PieceValid(const int piece);
 void PrintMoveList(const move_list *list);
 void GenerateAllMoves(const board_representation *pos, move_list *list);
+void TakeMove(board_representation *pos);
+int MakeMove(board_representation *pos, const int move);
 #endif // INIT_H
