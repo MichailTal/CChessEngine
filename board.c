@@ -76,12 +76,14 @@ int CheckBoard(const board_representation *pos) {
 
   ASSERT(t_material[WHITE] == pos->material[WHITE] &&
          t_material[BLACK] == pos->material[BLACK]);
-  ASSERT(t_minPce[WHITE] == pos->minorPieces[WHITE] &&
-         t_minPce[BLACK] == pos->minorPieces[BLACK]);
-  ASSERT(t_majPce[WHITE] == pos->majorPieces[WHITE] &&
-         t_majPce[BLACK] == pos->majorPieces[BLACK]);
-  ASSERT(t_bigPce[WHITE] == pos->nonPawnPieces[WHITE] &&
-         t_bigPce[BLACK] == pos->nonPawnPieces[BLACK]);
+         printf("Temp Value: %d, Actual Value: %d", t_minPce[WHITE], pos -> minPce[WHITE]);
+  ASSERT(t_minPce[WHITE] == pos->minPce[WHITE]);
+  //printf("Temp Value: %d, Actual Value: %d", t_minPce[BLACK], pos -> minPce[BLACK]);
+  ASSERT(t_minPce[BLACK] == pos->minPce[BLACK]);
+  ASSERT(t_majPce[WHITE] == pos->majPce[WHITE] &&
+         t_majPce[BLACK] == pos->majPce[BLACK]);
+  ASSERT(t_bigPce[WHITE] == pos->bigPce[WHITE] &&
+         t_bigPce[BLACK] == pos->bigPce[BLACK]);
 
   ASSERT(pos->side == WHITE || pos->side == BLACK);
   ASSERT(GeneratePosKey(pos) == pos->posKey);
@@ -107,13 +109,15 @@ void UpdateListMaterial(board_representation *pos) {
     if (piece != OFFBOARD && piece != EMPTY) {
       colour = PieceColour[piece];
       if (PieceBig[piece] == TRUE)
-        pos->nonPawnPieces[colour]++;
+        pos->bigPce[colour]++;
       if (PieceMajor[piece] == TRUE)
-        pos->majorPieces[colour]++;
+        pos->majPce[colour]++;
       if (PieceMinor[piece] == TRUE)
-        pos->minorPieces[colour]++;
+        pos->minPce[colour]++;
 
       pos->material[colour] += PieceValue[piece];
+
+      ASSERT(pos->pieceNumber[piece] < 10 && pos->pieceNumber[piece] >= 0);
 
       // Piece List
       // PieceList[wP][0] = a1
@@ -287,9 +291,9 @@ void ResetBoard(board_representation *pos) {
   }
 
   for (index = 0; index < 2; ++index) {
-    pos->nonPawnPieces[index] = 0;
-    pos->majorPieces[index] = 0;
-    pos->minorPieces[index] = 0;
+    pos->bigPce[index] = 0;
+    pos->majPce[index] = 0;
+    pos->minPce[index] = 0;
     pos->material[index] = 0;
   }
 

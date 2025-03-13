@@ -12,7 +12,6 @@ const int KiDir[8] = {-1, -10, 1, 10, -9, -11, 11, 9};
 int SqAttacked(const int sq, const int side, const board_representation *pos) {
 
   int piece, index, t_sq, direction;
-  printf("%d", side);
 
   ASSERT(SqOnBoard(sq));
   ASSERT(SideValid(side));
