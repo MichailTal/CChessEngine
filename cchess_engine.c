@@ -13,8 +13,8 @@ int main() {
   board_representation board[1];
   move_list list[1];
 
-  ParseFen("r1bqkbnr/pppppppp/B7/8/8/4P3/PPPP1PPP/RNBQK1NR b KQkq - 0 2", board);
-  PerftTest(1, board);
+  ParseFen(HARDTEST, board);
+  PerftTest(2, board);
   // GenerateAllMoves(board, list);
   // PrintMoveList(list);
 

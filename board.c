@@ -76,9 +76,7 @@ int CheckBoard(const board_representation *pos) {
 
   ASSERT(t_material[WHITE] == pos->material[WHITE] &&
          t_material[BLACK] == pos->material[BLACK]);
-         printf("Temp Value: %d, Actual Value: %d", t_minPce[WHITE], pos -> minPce[WHITE]);
   ASSERT(t_minPce[WHITE] == pos->minPce[WHITE]);
-  //printf("Temp Value: %d, Actual Value: %d", t_minPce[BLACK], pos -> minPce[BLACK]);
   ASSERT(t_minPce[BLACK] == pos->minPce[BLACK]);
   ASSERT(t_majPce[WHITE] == pos->majPce[WHITE] &&
          t_majPce[BLACK] == pos->majPce[BLACK]);

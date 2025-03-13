@@ -62,34 +62,33 @@ static void ClearPiece(const int square, board_representation *pos) {
     
 }
 
-static void AddPiece(const int square, board_representation *pos,
-                     const int piece) {
+static void AddPiece(const int sq, board_representation *pos, const int pce) {
 
-  ASSERT(PieceValid(piece));
-  ASSERT(SqOnBoard(square));
+    ASSERT(PieceValid(pce));
+    ASSERT(SqOnBoard(sq));
+	
+	int col = PieceColour[pce];
+	ASSERT(SideValid(col));
 
-  int colour = PieceColour[piece];
+    HASH_PCE(pce,sq);
+	
+	pos->pieces[sq] = pce;
 
-  HASH_PCE(piece, square);
-
-  pos->pieces[square] = piece;
-
-  if (PieceBig[piece]) {
-    pos->bigPce[colour]++;
-
-    if (PieceMajor[piece]) {
-      pos->majPce[colour]++;
-    }
-    if (PieceMajor[piece]) {
-      pos->minPce[colour]++;
-    }
-  } else {
-    SETBIT(pos->pawns[colour], SQ64(square));
-    SETBIT(pos->pawns[BOTH], SQ64(square));
-  }
-
-  pos->material[colour] += PieceValue[piece];
-  pos->pieceList[piece][pos->pieceNumber[piece]++] = square;
+    if(PieceBig[pce]) {
+			pos->bigPce[col]++;
+		if(PieceMajor[pce]) {
+			pos->majPce[col]++;
+		} else {
+			pos->minPce[col]++;
+		}
+	} else {
+		SETBIT(pos->pawns[col],SQ64(sq));
+		SETBIT(pos->pawns[BOTH],SQ64(sq));
+	}
+	
+	pos->material[col] += PieceValue[pce];
+	pos->pieceList[pce][pos->pieceNumber[pce]++] = sq;
+	
 }
 
 static void MovePiece(const int from, const int to, board_representation *pos) {
@@ -288,7 +287,6 @@ void TakeMove(board_representation *pos) {
     }
 	
 	int captured = CAPTURED(move);
-    printf("Piece to Add: %c", PieceCharacter[captured]);
     if(captured != EMPTY) {
         ASSERT(PieceValid(captured));
         AddPiece(to, pos, captured);
