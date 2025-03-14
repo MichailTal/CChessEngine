@@ -58,4 +58,6 @@
 #define MOVEFLAGCAPTURE 0x7C000
 #define MOVEFLAGPROMOTED 0xF00000
 
+#define NOMOVE 0
+
 #endif

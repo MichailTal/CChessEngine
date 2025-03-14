@@ -28,4 +28,5 @@ void GenerateAllMoves(const board_representation *pos, move_list *list);
 void TakeMove(board_representation *pos);
 int MakeMove(board_representation *pos, const int move);
 void PerftTest(int depth, board_representation *pos);
+int ParseMove(char *ptrChar, board_representation *pos);
 #endif // INIT_H

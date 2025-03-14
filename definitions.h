@@ -150,9 +150,9 @@ typedef struct {
   U64 posKey; // unique key for each position
 
   int pieceNumber[13]; // Number of pieces on the board
-  int bigPce[2]; // Basically is it a pawn or not
-  int majPce[2]; // Rooks and Queen(s)
-  int minPce[2]; // Bishops and Knights
+  int bigPce[2];       // Basically is it a pawn or not
+  int majPce[2];       // Rooks and Queen(s)
+  int minPce[2];       // Bishops and Knights
   int material[2];
 
   int castlePermission;

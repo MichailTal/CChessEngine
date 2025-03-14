@@ -66,3 +66,47 @@ void PrintMoveList(const move_list *list) {
   }
   printf("MoveList Total %d Moves:\n\n", list->count);
 }
+
+int ParseMove(char *ptrChar, board_representation *pos) {
+
+  if (ptrChar[1] > '8' || ptrChar[1] < '1') return NOMOVE;
+  if (ptrChar[3] > '8' || ptrChar[3] < '1') return NOMOVE;
+  if (ptrChar[0] > 'h' || ptrChar[0] < 'a') return NOMOVE;
+  if (ptrChar[2] > 'h' || ptrChar[2] < 'a') return NOMOVE;
+
+  int from = FILERANK2SQUARE(ptrChar[0] - 'a', ptrChar[1] - '1');
+  int to = FILERANK2SQUARE(ptrChar[2] - 'a', ptrChar[3] - '1');
+
+  printf("ptrChar: %s from: %d, to: %d, \n", ptrChar, from, to);
+
+  ASSERT(SqOnBoard(from) && SqOnBoard(to));
+
+  move_list list[1];
+  GenerateAllMoves(pos, list);
+
+  int MoveNum = 0;
+  int Move = 0;
+  int PromPce = EMPTY;
+  
+  for(MoveNum = 0; MoveNum < list->count; ++MoveNum) {
+		Move = list->moves[MoveNum].move;
+		if(FROMSQ(Move)==from && TOSQ(Move)==to) {
+			PromPce = PROMOTED(Move);
+      // handling the promotion cases
+			if(PromPce!=EMPTY) {
+				if(IsRQ(PromPce) && !IsBQ(PromPce) && ptrChar[4]=='r') {
+					return Move;
+				} else if(!IsRQ(PromPce) && IsBQ(PromPce) && ptrChar[4]=='b') {
+					return Move;
+				} else if(IsRQ(PromPce) && IsBQ(PromPce) && ptrChar[4]=='q') {
+					return Move;
+				} else if(IsKn(PromPce) && ptrChar[4]=='n') {
+					return Move;
+				}
+				continue;
+			}
+			return Move;
+		}
+  }
+    return NOMOVE;
+}
