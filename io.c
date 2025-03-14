@@ -77,8 +77,6 @@ int ParseMove(char *ptrChar, board_representation *pos) {
   int from = FILERANK2SQUARE(ptrChar[0] - 'a', ptrChar[1] - '1');
   int to = FILERANK2SQUARE(ptrChar[2] - 'a', ptrChar[3] - '1');
 
-  printf("ptrChar: %s from: %d, to: %d, \n", ptrChar, from, to);
-
   ASSERT(SqOnBoard(from) && SqOnBoard(to));
 
   move_list list[1];

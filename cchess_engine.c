@@ -16,7 +16,7 @@ int main() {
   board_representation board[1];
   move_list list[1];
 
-  ParseFen(HARDTEST, board);
+  ParseFen(START_FEN, board);
 
   char input[6];
   int Move = NOMOVE;
@@ -34,6 +34,11 @@ int main() {
         Move = ParseMove(input, board);
         if (Move != NOMOVE) {
           MakeMove(board, Move);
+          if (IsRepetition(board)) {
+            printf("REP SEEN\n");
+          }
+        } else {
+          printf("Move not parsed: %s \n");
         }
       }
       fflush(stdin);
