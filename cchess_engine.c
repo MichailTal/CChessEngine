@@ -20,6 +20,8 @@ int main() {
 
   char input[6];
   int Move = NOMOVE;
+  int PvNum = 0;
+  int Max = 0;
 
   while (TRUE) {
     PrintBoard(board);
@@ -32,9 +34,18 @@ int main() {
       TakeMove(board);
     } else if (input[0] == 'p') {
       PerftTest(4, board);
+    } else if (input[0] == 'r') {
+      Max = GetPvLine(4, board);
+      printf("Pv Line of %d Moves: ", Max);
+      for (PvNum = 0; PvNum < Max; ++PvNum) {
+        Move = board->PvArray[PvNum];
+        printf(" %s", PrintMove(Move));
+      }
+      printf("\n");
     } else {
       Move = ParseMove(input, board);
       if (Move != NOMOVE) {
+        StorePvMove(board, Move);
         MakeMove(board, Move);
         if (IsRepetition(board)) {
           printf("REP SEEN\n");

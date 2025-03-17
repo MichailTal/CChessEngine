@@ -7,6 +7,7 @@ typedef unsigned long long U64;
 #define BRD_SQ_NUM 120
 #define MAXGAMEHALFMOVES 2048
 #define MAXPOSITIONMOVES 256
+#define MAXDEPTH 64
 #define START_FEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 #define CLRBIT(bb, sq) ((bb) &= ClearMask[(sq)])
@@ -171,6 +172,7 @@ typedef struct {
   S_UNDO moveHistory[MAXGAMEHALFMOVES];
 
   S_PVTABLE PvTable[1];
+  int PvArray[MAXDEPTH];
 
   int pieceList[13][10]; // piece list
 

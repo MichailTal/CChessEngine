@@ -32,4 +32,8 @@ int ParseMove(char *ptrChar, board_representation *pos);
 int IsRepetition(const board_representation *pos);
 int GetTimeMs();
 void InitPvTable(S_PVTABLE *table);
+int ProbePvTable(const board_representation *pos);
+void StorePvMove(const board_representation *pos, const int move);
+int MoveExists(board_representation *pos, const int move);
+int GetPvLine(const int depth, board_representation *pos);
 #endif // INIT_H
