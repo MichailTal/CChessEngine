@@ -31,4 +31,5 @@ void PerftTest(int depth, board_representation *pos);
 int ParseMove(char *ptrChar, board_representation *pos);
 int IsRepetition(const board_representation *pos);
 int GetTimeMs();
+void InitPvTable(S_PVTABLE *table);
 #endif // INIT_H

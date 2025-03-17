@@ -315,6 +315,10 @@ void ResetBoard(board_representation *pos) {
   pos->castlePermission = 0;
 
   pos->posKey = 0ULL;
+
+  pos->PvTable->pTable = NULL;
+
+  InitPvTable(pos->PvTable);
 }
 
 void PrintBoard(const board_representation *pos) {

@@ -57,7 +57,8 @@ void PerftTest(int depth, board_representation *pos) {
     printf("move %d : %s : %ld\n", MoveNum + 1, PrintMove(move), oldnodes);
   }
 
-  printf("\nTest Complete : %ld nodes visited in %dms\n", leafNodes, GetTimeMs() - start);
+  printf("\nTest Complete : %ld nodes visited in %dms\n", leafNodes,
+         GetTimeMs() - start);
 
   return;
 }

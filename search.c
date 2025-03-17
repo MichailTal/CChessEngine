@@ -7,19 +7,18 @@
 
 int IsRepetition(const board_representation *pos) {
 
-    int index = 0;
-  
-    for(index = pos->histPly - pos->fiftyMoveRule; index < pos->histPly-1; ++index) {
+  int index = 0;
 
-      ASSERT(index >= 0 && index < MAXGAMEHALFMOVES);
+  for (index = pos->histPly - pos->fiftyMoveRule; index < pos->histPly - 1;
+       ++index) {
 
-      if(pos->posKey == pos->moveHistory[index].posKey) {
-        return TRUE;
-      }
+    ASSERT(index >= 0 && index < MAXGAMEHALFMOVES);
+
+    if (pos->posKey == pos->moveHistory[index].posKey) {
+      return TRUE;
     }
-    return FALSE;
   }
-
-void SearchPosition(board_representation *pos) {
-    
+  return FALSE;
 }
+
+void SearchPosition(board_representation *pos) {}

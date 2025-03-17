@@ -135,6 +135,17 @@ typedef struct {
   U64 posKey;
 } S_UNDO;
 
+// Principle Variation Structs
+typedef struct {
+  U64 posKey;
+  int move;
+} S_PVENTRY;
+
+typedef struct {
+  S_PVENTRY *pTable;
+  int numEntries;
+} S_PVTABLE;
+
 typedef struct {
   int pieces[BRD_SQ_NUM];
   U64 pawns[3];      // stores the pawn positions on the respective rank
@@ -158,6 +169,8 @@ typedef struct {
   int castlePermission;
 
   S_UNDO moveHistory[MAXGAMEHALFMOVES];
+
+  S_PVTABLE PvTable[1];
 
   int pieceList[13][10]; // piece list
 
