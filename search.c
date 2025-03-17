@@ -10,6 +10,9 @@ int IsRepetition(const board_representation *pos) {
     int index = 0;
   
     for(index = pos->histPly - pos->fiftyMoveRule; index < pos->histPly-1; ++index) {
+
+      ASSERT(index >= 0 && index < MAXGAMEHALFMOVES);
+
       if(pos->posKey == pos->moveHistory[index].posKey) {
         return TRUE;
       }
