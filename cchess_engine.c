@@ -47,9 +47,6 @@ int main() {
       if (Move != NOMOVE) {
         StorePvMove(board, Move);
         MakeMove(board, Move);
-        if (IsRepetition(board)) {
-          printf("REP SEEN\n");
-        }
       } else {
         printf("Move not parsed: %s \n");
       }

@@ -29,7 +29,6 @@ void TakeMove(board_representation *pos);
 int MakeMove(board_representation *pos, const int move);
 void PerftTest(int depth, board_representation *pos);
 int ParseMove(char *ptrChar, board_representation *pos);
-int IsRepetition(const board_representation *pos);
 int GetTimeMs();
 void InitPvTable(S_PVTABLE *table);
 int ProbePvTable(const board_representation *pos);

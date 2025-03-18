@@ -34,6 +34,8 @@
 #define HASH_SIDE (pos->posKey ^= (SideKey))
 #define HASH_EP (pos->posKey ^= (PieceKey[EMPTY][(pos->enPassant)]))
 
+#define MIRROR64(square) (Mirror64[(square)])
+
 /* GAME MOVE EXPLANATION */
 
 /*
