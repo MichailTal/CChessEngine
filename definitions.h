@@ -177,8 +177,9 @@ typedef struct {
   int pieceList[13][10]; // piece list
 
   // Only for non-captures
-  int searchHistory[13] [BRD_SQ_NUM];
-  int searchKillers[2] [MAXDEPTH]; // Two moves that were the most recent beta cut offs
+  int searchHistory[13][BRD_SQ_NUM];
+  int searchKillers[2][MAXDEPTH]; // Two moves that were the most recent beta
+                                  // cut offs
 
 } board_representation;
 

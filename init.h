@@ -36,4 +36,6 @@ int ProbePvTable(const board_representation *pos);
 void StorePvMove(const board_representation *pos, const int move);
 int MoveExists(board_representation *pos, const int move);
 int GetPvLine(const int depth, board_representation *pos);
+int EvalPosition(const board_representation *pos);
+void SearchPosition(board_representation *pos, S_SEARCHINFO *info);
 #endif // INIT_H
