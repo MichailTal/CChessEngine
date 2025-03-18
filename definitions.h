@@ -176,6 +176,10 @@ typedef struct {
 
   int pieceList[13][10]; // piece list
 
+  // Only for non-captures
+  int searchHistory[13] [BRD_SQ_NUM];
+  int searchKillers[2] [MAXDEPTH]; // Two moves that were the most recent beta cut offs
+
 } board_representation;
 
 typedef struct {
@@ -187,5 +191,22 @@ typedef struct {
   move_representation moves[MAXPOSITIONMOVES];
   int count;
 } move_list;
+
+typedef struct {
+
+  int starttime;
+  int stoptime;
+  int depth;
+  int depthset;
+  int timeset;
+  int movestogo;
+  int infinite;
+
+  long nodes;
+
+  int quit;
+  int stopped;
+
+} S_SEARCHINFO;
 
 #endif
