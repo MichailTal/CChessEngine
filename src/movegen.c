@@ -70,6 +70,10 @@ int MoveExists(board_representation *pos, const int move) {
 
 static void AddQuietMove(const board_representation *pos, int move,
                          move_list *list) {
+
+  ASSERT(SqOnBoard(FROMSQ(move)));
+  ASSERT(SqOnBoard(TOSQ(move)));                        
+
   list->moves[list->count].move = move;
   list->moves[list->count].score = 0;
   list->count++;
@@ -77,6 +81,9 @@ static void AddQuietMove(const board_representation *pos, int move,
 
 static void AddCaptureMove(const board_representation *pos, int move,
                            move_list *list) {
+  ASSERT(SqOnBoard(FROMSQ(move)));
+  ASSERT(SqOnBoard(TOSQ(move))); 
+  ASSERT(PieceValid(CAPTURED(move)));
 
   list->moves[list->count].move = move;
   list->moves[list->count].score = MvvLvaScores[CAPTURED(move)][pos -> pieces[FROMSQ(move)]];
@@ -86,6 +93,9 @@ static void AddCaptureMove(const board_representation *pos, int move,
 static void AddEnPassantMove(const board_representation *pos, int move,
                              move_list *list) {
 
+  ASSERT(SqOnBoard(FROMSQ(move)));
+  ASSERT(SqOnBoard(TOSQ(move))); 
+  
   list->moves[list->count].move = move;
   list->moves[list->count].score = 105;
   list->count++;

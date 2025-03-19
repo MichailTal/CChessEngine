@@ -38,7 +38,7 @@ int main() {
     } else if (input[0] == 'p') {
       PerftTest(4, board);
     } else if (input[0] == 's') {
-      info -> depth = 5;
+      info -> depth = 10;
       SearchPosition(board, info);
     } else if (input[0] == 'r') {
       Max = GetPvLine(4, board);
