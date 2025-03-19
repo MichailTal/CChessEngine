@@ -4,6 +4,12 @@
 #include "../include/macros.h"
 #include "stdio.h"
 
+board_representation * GenBoard() {
+  board_representation * board = (board_representation*) malloc(sizeof(board_representation));
+  board -> PvTable -> pTable = NULL;
+  return board;
+}
+
 int CheckBoard(const board_representation *pos) {
 
   int t_pceNum[13] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
