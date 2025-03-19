@@ -19,7 +19,7 @@ int main() {
   move_list list[1];
   S_SEARCHINFO info[1];
 
-  ParseFen(WAC1, board);
+  ParseFen(START_FEN, board);
 
   char input[6];
   int Move = NOMOVE;
@@ -38,7 +38,7 @@ int main() {
     } else if (input[0] == 'p') {
       PerftTest(4, board);
     } else if (input[0] == 's') {
-      info -> depth = 4;
+      info -> depth = 5;
       SearchPosition(board, info);
     } else if (input[0] == 'r') {
       Max = GetPvLine(4, board);

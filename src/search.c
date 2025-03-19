@@ -10,6 +10,25 @@ static void CheckUp() {
   // Check if time up or interrupt from GUI
 }
 
+static void PickNextMove(int moveNum, move_list *list) {
+
+  move_representation temp;
+  int index = 0;
+  int bestScore = 0;
+  int bestNum = moveNum;
+
+  for (index = moveNum; index < list -> count; ++index) {
+    if (list -> moves[index].score > bestScore) {
+      bestScore = list -> moves[index].score;
+      bestNum = index;
+    }
+  } 
+  
+  temp = list -> moves[moveNum];
+  list -> moves[moveNum] = list -> moves[bestNum];
+  list -> moves[bestNum] = temp;
+}
+
 static int IsRepetition(const board_representation *pos) {
 
   int index = 0;
@@ -84,6 +103,8 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     int Score = -INFINITE;
 
     for (MoveNum = 0; MoveNum < list -> count; ++MoveNum) {
+
+      PickNextMove(MoveNum, list);
 
       if(!MakeMove(pos, list ->moves[MoveNum].move)) {
         continue;
