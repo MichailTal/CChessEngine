@@ -1,9 +1,8 @@
-#include "definitions.h"
-#include "globals.h"
-#include "init.h"
-#include "macros.h"
+#include "../include/definitions.h"
+#include "../include/globals.h"
+#include "../include/init.h"
+#include "../include/macros.h"
 #include "stdio.h"
-#include "stdlib.h"
 
 int CheckBoard(const board_representation *pos) {
 

@@ -1,7 +1,7 @@
-#include "definitions.h"
-#include "globals.h"
-#include "init.h"
-#include "macros.h"
+#include "../include/definitions.h"
+#include "../include/globals.h"
+#include "../include/init.h"
+#include "../include/macros.h"
 #include "stddef.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -48,7 +48,7 @@ int main() {
         StorePvMove(board, Move);
         MakeMove(board, Move);
       } else {
-        printf("Move not parsed: %s \n");
+        printf("Move not parsed: %s \n", PrintMove(Move));
       }
     }
     fflush(stdin);

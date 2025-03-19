@@ -1,7 +1,7 @@
-#include "definitions.h"
-#include "globals.h"
-#include "init.h"
-#include "macros.h"
+#include "../include/definitions.h"
+#include "../include/globals.h"
+#include "../include/init.h"
+#include "../include/macros.h"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -25,7 +25,32 @@ static int IsRepetition(const board_representation *pos) {
   return FALSE;
 }
 
-static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos) {}
+static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos) {
+
+  int index = 0;
+  int index_2 = 0;
+
+  for (index = 0; index < 13; ++index) {
+    for (index_2 = 0; index_2 < BRD_SQ_NUM; ++index_2) {
+      pos -> searchHistory[index][index_2] = 0;
+    }
+  }
+
+  for (index = 0; index < 2; ++index) {
+    for (index_2 = 0; index_2 < MAXDEPTH; ++index_2) {
+      pos -> searchKillers[index][index_2] = 0;
+    }
+  }
+
+  ClearPvTable(pos -> PvTable);
+  pos -> ply = 0;
+
+  info -> starttime = GetTimeMs();
+  info -> stopped = 0;
+  info -> nodes = 0;
+
+  
+}
 
 static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
                      S_SEARCHINFO *info, int DoNull) {

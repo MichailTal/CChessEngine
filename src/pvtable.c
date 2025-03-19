@@ -1,7 +1,7 @@
-#include "definitions.h"
-#include "globals.h"
-#include "init.h"
-#include "macros.h"
+#include "../include/definitions.h"
+#include "../include/globals.h"
+#include "../include/init.h"
+#include "../include/macros.h"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -33,7 +33,7 @@ int GetPvLine(const int depth, board_representation *pos) {
 // 2 MB init size
 const int PVSize = 0x100000 * 2;
 
-static void ClearPvTable(S_PVTABLE *table) {
+void ClearPvTable(S_PVTABLE *table) {
 
   S_PVENTRY *pvEntry;
 

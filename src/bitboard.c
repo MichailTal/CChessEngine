@@ -1,7 +1,7 @@
-#include "definitions.h"
-#include "globals.h"
-#include "init.h"
-#include "macros.h"
+#include "../include/definitions.h"
+#include "../include/globals.h"
+#include "../include/init.h"
+#include "../include/macros.h"
 #include "stdio.h"
 
 const int BitTable[64] = {63, 30, 3,  32, 25, 41, 22, 33, 15, 50, 42, 13, 11,
