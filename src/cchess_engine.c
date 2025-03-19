@@ -10,13 +10,16 @@
 #define HARDTEST                                                               \
   "r2k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3RK2R w KQkq - 0 1"
 
+#define WAC1 "2rr3k/pp3pp1/1nnqbN1p/3pN3/2pP4/2P3Q1/PPB4P/R4RK1 w - -"
+
 int main() {
   AllInit();
 
   board_representation board[1];
   move_list list[1];
+  S_SEARCHINFO info[1];
 
-  ParseFen(START_FEN, board);
+  ParseFen(WAC1, board);
 
   char input[6];
   int Move = NOMOVE;
@@ -34,6 +37,9 @@ int main() {
       TakeMove(board);
     } else if (input[0] == 'p') {
       PerftTest(4, board);
+    } else if (input[0] == 's') {
+      info -> depth = 4;
+      SearchPosition(board, info);
     } else if (input[0] == 'r') {
       Max = GetPvLine(4, board);
       printf("Pv Line of %d Moves: ", Max);

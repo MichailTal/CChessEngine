@@ -13,6 +13,10 @@ typedef unsigned long long U64;
 #define CLRBIT(bb, sq) ((bb) &= ClearMask[(sq)])
 #define SETBIT(bb, sq) ((bb) |= SetMask[(sq)])
 
+#define INFINITE 30000
+
+#define ISMATE (INFINITE - MAXDEPTH)
+
 // Piece Definitions
 
 enum { EMPTY, wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK };
@@ -207,6 +211,9 @@ typedef struct {
 
   int quit;
   int stopped;
+
+  float failhigh;
+  float failhighfirst;
 
 } S_SEARCHINFO;
 
