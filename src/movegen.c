@@ -32,6 +32,27 @@ const int PceDir[13][8] = {{0, 0, 0, 0, 0, 0, 0},
 
 const int NumDir[13] = {0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8};
 
+const int VictimScore[13] = {0, 100, 200, 300, 400, 500, 600, 100, 200, 300, 400, 500, 600};
+static int MvvLvaScores[13][13];
+
+void InitMvvLa() {
+
+  int Attacker;
+  int Victim;
+  
+  for (Attacker = wP; Attacker <= bK; ++Attacker) {
+    for (Victim = wP; Victim <= bK; ++Victim) {
+      MvvLvaScores[Victim][Attacker] = VictimScore[Victim] + 6 - (VictimScore[Attacker] / 100);
+    }
+  }
+
+  for (Victim = wP; Victim <= bK; ++Victim) {
+    for (Attacker = wP; Attacker <= bK; ++Attacker) {
+      printf("%c x %c = %d\n", PieceCharacter[Attacker], PieceCharacter[Victim], MvvLvaScores[Victim][Attacker]);
+    }
+  }
+}
+
 int MoveExists(board_representation *pos, const int move) {
 
   move_list list[1];
@@ -64,7 +85,7 @@ static void AddCaptureMove(const board_representation *pos, int move,
                            move_list *list) {
 
   list->moves[list->count].move = move;
-  list->moves[list->count].score = 0;
+  list->moves[list->count].score = MvvLvaScores[CAPTURED(move)][pos -> pieces[FROMSQ(move)]];
   list->count++;
 }
 
@@ -72,7 +93,7 @@ static void AddEnPassantMove(const board_representation *pos, int move,
                              move_list *list) {
 
   list->moves[list->count].move = move;
-  list->moves[list->count].score = 0;
+  list->moves[list->count].score = 105;
   list->count++;
 }
 

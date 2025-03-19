@@ -98,4 +98,5 @@ void AllInit() {
   InitBitMask();
   InitHashKeys();
   InitFilesRanksBrd();
+  InitMvvLa();
 }

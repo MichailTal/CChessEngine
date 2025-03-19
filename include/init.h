@@ -38,4 +38,5 @@ int GetPvLine(const int depth, board_representation *pos);
 int EvalPosition(const board_representation *pos);
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info);
 void ClearPvTable(S_PVTABLE *table);
+void InitMvvLa();
 #endif // INIT_H
