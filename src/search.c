@@ -101,6 +101,17 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     int OldAlpha = alpha;
     int bestMove = NOMOVE;
     int Score = -INFINITE;
+    int PvMove = NOMOVE;
+
+    if( PvMove != NOMOVE) {
+      for(MoveNum = 0; MoveNum < list->count; ++MoveNum) {
+        if( list->moves[MoveNum].move == PvMove) {
+          list->moves[MoveNum].score = 2000000;
+          printf("Pv move found \n");
+          break;
+        }
+      }
+    }
 
     for (MoveNum = 0; MoveNum < list -> count; ++MoveNum) {
 
@@ -120,10 +131,20 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
             info -> failhighfirst++;
           }
           info -> failhigh++;
+
+          if (!(list -> moves[MoveNum].move & MOVEFLAGCAPTURE)) {
+            pos -> searchKillers[1][pos -> ply] = pos -> searchKillers[0][pos -> ply];
+            pos -> searchKillers[0][pos -> ply] = list -> moves[MoveNum].move;
+          }
+
+
           return beta;
         }
         alpha = Score;
         bestMove = list -> moves[MoveNum].move;
+        if (!(list -> moves[MoveNum].move & MOVEFLAGCAPTURE)) {
+          pos -> searchHistory[pos -> pieces[FROMSQ(bestMove)]][TOSQ(bestMove)] += depth;
+        }
       } 
     }
 
