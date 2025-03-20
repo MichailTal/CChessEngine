@@ -4,9 +4,10 @@
 #include "../include/macros.h"
 #include "stdio.h"
 
-board_representation * GenBoard() {
-  board_representation * board = (board_representation*) malloc(sizeof(board_representation));
-  board -> PvTable -> pTable = NULL;
+board_representation *GenBoard() {
+  board_representation *board =
+      (board_representation *)malloc(sizeof(board_representation));
+  board->PvTable->pTable = NULL;
   return board;
 }
 

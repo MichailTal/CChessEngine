@@ -39,5 +39,5 @@ int EvalPosition(const board_representation *pos);
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info);
 void ClearPvTable(S_PVTABLE *table);
 void InitMvvLa();
-board_representation * GenBoard();
+board_representation *GenBoard();
 #endif // INIT_H

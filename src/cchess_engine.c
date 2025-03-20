@@ -10,12 +10,13 @@
 #define HARDTEST                                                               \
   "r2k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3RK2R w KQkq - 0 1"
 
-#define WAC1 "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 0 1"
+#define WAC1                                                                   \
+  "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 0 1"
 
 int main() {
   AllInit();
 
-  board_representation * board = GenBoard();
+  board_representation *board = GenBoard();
   move_list list[1];
   S_SEARCHINFO info[1];
 
@@ -38,7 +39,7 @@ int main() {
     } else if (input[0] == 'p') {
       PerftTest(4, board);
     } else if (input[0] == 's') {
-      info -> depth = 6;
+      info->depth = 6;
       SearchPosition(board, info);
     } else if (input[0] == 'r') {
       Max = GetPvLine(4, board);

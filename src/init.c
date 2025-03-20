@@ -1,6 +1,6 @@
+#include "../include/init.h"
 #include "../include/definitions.h"
 #include "../include/globals.h"
-#include "../include/init.h"
 #include "../include/macros.h"
 #include "stdio.h"
 
