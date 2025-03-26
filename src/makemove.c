@@ -199,7 +199,7 @@ int MakeMove(board_representation *pos, int move) {
 
   if (PiecePawn[pos->pieces[from]]) {
     pos->fiftyMoveRule = 0;
-    if (move & MOVEFLAGENPASSANT) {
+    if (move & MOVEFLAGPAWNSTART) {
       if (side == WHITE) {
         pos->enPassant = from + 10;
         ASSERT(RanksBrd[pos->enPassant] == RANK_3);

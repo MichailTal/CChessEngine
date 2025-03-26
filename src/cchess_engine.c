@@ -16,51 +16,7 @@
 int main() {
   AllInit();
 
-  board_representation *board = GenBoard();
-  move_list list[1];
-  S_SEARCHINFO info[1];
+  UCI_Loop();
 
-  ParseFen(WAC1, board);
-
-  char input[6];
-  int Move = NOMOVE;
-  int PvNum = 0;
-  int Max = 0;
-
-  while (TRUE) {
-    PrintBoard(board);
-    printf("Please enter a move: > ");
-    fgets(input, 6, stdin);
-
-    if (input[0] == 'q') {
-      break;
-    } else if (input[0] == 't') {
-      TakeMove(board);
-    } else if (input[0] == 'p') {
-      PerftTest(4, board);
-    } else if (input[0] == 's') {
-      info->depth = 6;
-      info -> starttime = GetTimeMs();
-      info -> stoptime = GetTimeMs() + 200000;
-      SearchPosition(board, info);
-    } else if (input[0] == 'r') {
-      Max = GetPvLine(4, board);
-      printf("Pv Line of %d Moves: ", Max);
-      for (PvNum = 0; PvNum < Max; ++PvNum) {
-        Move = board->PvArray[PvNum];
-        printf(" %s", PrintMove(Move));
-      }
-      printf("\n");
-    } else {
-      Move = ParseMove(input, board);
-      if (Move != NOMOVE) {
-        StorePvMove(board, Move);
-        MakeMove(board, Move);
-      } else {
-        printf("Move not parsed: %s \n", PrintMove(Move));
-      }
-    }
-    fflush(stdin);
-  }
   return 0;
 }

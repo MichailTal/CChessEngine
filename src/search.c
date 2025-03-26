@@ -266,7 +266,8 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {
     pvMoves = GetPvLine(currentDepth, pos);
     bestMove = pos->PvArray[0];
 
-    printf("info score cp %d depth %d nodes %ld time %d ", bestScore, currentDepth, info->nodes, GetTimeMs() - info -> starttime);
+    printf("info score cp %d depth %d nodes %ld time %d ", bestScore,
+           currentDepth, info->nodes, GetTimeMs() - info->starttime);
 
     pvMoves = GetPvLine(currentDepth, pos);
     printf("pv");

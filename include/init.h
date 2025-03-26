@@ -41,4 +41,5 @@ void ClearPvTable(S_PVTABLE *table);
 void InitMvvLa();
 board_representation *GenBoard();
 void GenerateAllCaps(const board_representation *pos, move_list *list);
+void UCI_Loop();
 #endif // INIT_H
