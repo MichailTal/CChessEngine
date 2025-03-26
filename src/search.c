@@ -72,14 +72,79 @@ static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos) {
   info->failhighfirst = 0;
 }
 
+static int Quiescence(int alpha, int beta, board_representation *pos,
+                      S_SEARCHINFO *info) {
+  ASSERT(CheckBoard(pos));
+  info->nodes++;
+
+  if (IsRepetition(pos) || pos->fiftyMoveRule >= 100) {
+    return 0;
+  }
+
+  if (pos->ply > MAXDEPTH - 1) {
+    return EvalPosition(pos);
+  }
+
+  int Score = EvalPosition(pos);
+
+  if (Score >= beta) {
+    return beta;
+  }
+
+  if (Score > alpha) {
+    alpha = Score;
+  }
+
+  move_list list[1];
+  GenerateAllCaps(pos, list);
+
+  int MoveNum = 0;
+  int Legal = 0;
+  int OldAlpha = alpha;
+  int BestMove = NOMOVE;
+  Score = -INFINITE;
+  int PvMove = ProbePvTable(pos);
+
+  for (MoveNum = 0; MoveNum < list->count; ++MoveNum) {
+
+    PickNextMove(MoveNum, list);
+
+    if (!MakeMove(pos, list->moves[MoveNum].move)) {
+      continue;
+    }
+
+    Legal++;
+    Score = -Quiescence(-beta, -alpha, pos, info);
+    TakeMove(pos);
+
+    if (Score > alpha) {
+      if (Score >= beta) {
+        if (Legal == 1) {
+          info->failhighfirst++;
+        }
+        info->failhigh++;
+
+        return beta;
+      }
+      alpha = Score;
+      BestMove = list->moves[MoveNum].move;
+    }
+  }
+
+  if (alpha != OldAlpha) {
+    StorePvMove(pos, BestMove);
+  }
+
+  return alpha;
+}
+
 static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
                      S_SEARCHINFO *info, int DoNull) {
 
   ASSERT(CheckBoard(pos));
 
   if (depth == 0) {
-    info->nodes++;
-    return EvalPosition(pos);
+    return Quiescence(alpha, beta, pos, info);
   }
 
   info->nodes++;
@@ -100,13 +165,12 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   int OldAlpha = alpha;
   int bestMove = NOMOVE;
   int Score = -INFINITE;
-  int PvMove = NOMOVE;
+  int PvMove = ProbePvTable(pos);
 
   if (PvMove != NOMOVE) {
     for (MoveNum = 0; MoveNum < list->count; ++MoveNum) {
       if (list->moves[MoveNum].move == PvMove) {
         list->moves[MoveNum].score = 2000000;
-        printf("Pv move found \n");
         break;
       }
     }
@@ -160,11 +224,6 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   }
 
   return alpha;
-}
-
-static int Quiescence(int alpha, int beta, board_representation *pos,
-                      S_SEARCHINFO *info) {
-  return 0;
 }
 
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {

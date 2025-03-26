@@ -40,4 +40,5 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info);
 void ClearPvTable(S_PVTABLE *table);
 void InitMvvLa();
 board_representation *GenBoard();
+void GenerateAllCaps(const board_representation *pos, move_list *list);
 #endif // INIT_H
