@@ -42,4 +42,5 @@ void InitMvvLa();
 board_representation *GenBoard();
 void GenerateAllCaps(const board_representation *pos, move_list *list);
 void UCI_Loop();
+void ReadInput(S_SEARCHINFO *info);
 #endif // INIT_H
