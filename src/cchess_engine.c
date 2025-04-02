@@ -13,7 +13,7 @@
 int main() {
   AllInit();
 
-  UCI_Loop();
+  // UCI_Loop();
 
   return 0;
 }

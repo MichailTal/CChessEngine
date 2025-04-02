@@ -48,7 +48,7 @@ void ParsePosition(char *lineIn, board_representation *pos) {
   PrintBoard(pos);
 }
 
-void UCI_Loop() {
+void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
 
   setvbuf(stdin, NULL, _IONBF, 0);
   setvbuf(stdout, NULL, _IONBF, 0);
@@ -60,8 +60,6 @@ void UCI_Loop() {
   printf("id author Nils\n");
   printf("uci ok\n");
 
-  board_representation *pos = GenBoard();
-  S_SEARCHINFO info[1];
   InitPvTable(pos->PvTable);
 
   while (TRUE) {
