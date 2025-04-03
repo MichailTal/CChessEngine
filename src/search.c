@@ -175,6 +175,12 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     return EvalPosition(pos);
   }
 
+  int InCheck = SqAttacked(pos -> kingSquare[pos -> side], pos -> side ^ 1, pos);
+
+  if (InCheck == TRUE); {
+    depth++;
+  }
+
   move_list list[1];
   GenerateAllMoves(pos, list);
 
@@ -234,7 +240,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   }
 
   if (Legal == 0) {
-    if (SqAttacked(pos->kingSquare[pos->side], pos->side ^ 1, pos)) {
+    if (InCheck) {
       return -ISMATE + pos->ply; // Distance to mate from the root
     } else {
       return 0;
