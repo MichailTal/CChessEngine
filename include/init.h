@@ -43,4 +43,6 @@ board_representation *GenBoard();
 void GenerateAllCaps(const board_representation *pos, move_list *list);
 void UCI_Loop(board_representation *pos, S_SEARCHINFO *info);
 void ReadInput(S_SEARCHINFO *info);
+void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info);
+void Console_Loop(board_representation *pos, S_SEARCHINFO *info);
 #endif // INIT_H

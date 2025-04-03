@@ -91,25 +91,33 @@ int Checkresult(board_representation *pos) {
   return FALSE;
 }
 
+void PrintOptions() {
+  printf("feature ping=1 setboard=1 colors=0 usermove=1\n");
+  printf("feature done=1\n");
+}
+
 void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
 
+  info->GAME_MODE = XBOARDMODE;
+  info->POST_THINKING = TRUE;
   setvbuf(stdin, NULL, _IONBF, 0);
   setvbuf(stdout, NULL, _IONBF, 0);
+  PrintOptions();
 
-  int depth = -1;
-  int movestogo[2] = {30, 30};
-  int movetime = -1;
-  int time = -1;
-  int inc = 0;
+  int depth = -1, movestogo[2] = {30, 30}, movetime = -1;
+  int time = -1, inc = 0;
   int engineSide = BOTH;
   int timeLeft;
   int sec;
   int mps;
   int move = NOMOVE;
-  int i;
-  int score;
-  char inBuf[80];
-  char command[80];
+  char inBuf[80], command[80];
+  int MB;
+
+  engineSide = BLACK;
+  ParseFen(START_FEN, pos);
+  depth = -1;
+  time = -1;
 
   while (TRUE) {
 
@@ -165,6 +173,11 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       continue;
     }
 
+    if (!strcmp(command, "protover")) {
+      PrintOptions();
+      continue;
+    }
+
     if (!strcmp(command, "sd")) {
       sscanf(inBuf, "sd %d", &depth);
       printf("DEBUG depth:%d\n", depth);
@@ -175,12 +188,6 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       sscanf(inBuf, "st %d", &movetime);
       printf("DEBUG movetime:%d\n", movetime);
       continue;
-    }
-
-    if(!strcmp(command, "protover")){
-        printf("feature ping=1 setboard=1 colors=0 usermove=1\n");
-        printf("feature done=1\n");
-        continue;
     }
 
     if (!strcmp(command, "time")) {
@@ -244,5 +251,160 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       MakeMove(pos, move);
       pos->ply = 0;
     }
+  }
+}
+
+void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
+
+  printf("Welcome to the Console Mode!\n");
+  printf("Type help for commands\n\n");
+
+  info->GAME_MODE = CONSOLEMODE;
+  info->POST_THINKING = TRUE;
+  setvbuf(stdin, NULL, _IONBF, 0);
+  setvbuf(stdout, NULL, _IONBF, 0);
+
+  int depth = MAXDEPTH, movetime = 3000;
+  int engineSide = BOTH;
+  int move = NOMOVE;
+  char inBuf[80], command[80];
+
+  engineSide = BLACK;
+  ParseFen(START_FEN, pos);
+
+  while (TRUE) {
+
+    fflush(stdout);
+
+    if (pos->side == engineSide && Checkresult(pos) == FALSE) {
+      info->starttime = GetTimeMs();
+      info->depth = depth;
+
+      if (movetime != 0) {
+        info->timeset = TRUE;
+        info->stoptime = info->starttime + movetime;
+      }
+
+      SearchPosition(pos, info);
+    }
+
+    printf("\nEngine > ");
+
+    fflush(stdout);
+
+    memset(&inBuf[0], 0, sizeof(inBuf));
+    fflush(stdout);
+    if (!fgets(inBuf, 80, stdin))
+      continue;
+
+    sscanf(inBuf, "%s", command);
+
+    if (!strcmp(command, "help")) {
+      printf("Commands:\n");
+      printf("quit - quit game\n");
+      printf("force - computer will not think\n");
+      printf("print - show board\n");
+      printf("post - show thinking\n");
+      printf("nopost - do not show thinking\n");
+      printf("new - start new game\n");
+      printf("go - set computer thinking\n");
+      printf("depth x - set depth to x\n");
+      printf("time x - set thinking time to x seconds (depth still applies if "
+             "set)\n");
+      printf("view - show current depth and movetime settings\n");
+      printf("setboard x - set position to fen x\n");
+      printf("** note ** - to reset time and depth, set to 0\n");
+      printf("enter moves using b7b8q notation\n\n\n");
+      continue;
+    }
+
+    if (!strcmp(command, "eval")) {
+      PrintBoard(pos);
+      printf("Eval:%d", EvalPosition(pos));
+      continue;
+    }
+
+    if (!strcmp(command, "setboard")) {
+      engineSide = BOTH;
+      ParseFen(inBuf + 9, pos);
+      continue;
+    }
+
+    if (!strcmp(command, "quit")) {
+      info->quit = TRUE;
+      break;
+    }
+
+    if (!strcmp(command, "post")) {
+      info->POST_THINKING = TRUE;
+      continue;
+    }
+
+    if (!strcmp(command, "print")) {
+      PrintBoard(pos);
+      continue;
+    }
+
+    if (!strcmp(command, "nopost")) {
+      info->POST_THINKING = FALSE;
+      continue;
+    }
+
+    if (!strcmp(command, "force")) {
+      engineSide = BOTH;
+      continue;
+    }
+
+    if (!strcmp(command, "view")) {
+      if (depth == MAXDEPTH)
+        printf("depth not set ");
+      else
+        printf("depth %d", depth);
+
+      if (movetime != 0)
+        printf(" movetime %ds\n", movetime / 1000);
+      else
+        printf(" movetime not set\n");
+
+      continue;
+    }
+
+    if (!strcmp(command, "depth")) {
+      sscanf(inBuf, "depth %d", &depth);
+      if (depth == 0)
+        depth = MAXDEPTH;
+      continue;
+    }
+
+    if (!strcmp(command, "time")) {
+      sscanf(inBuf, "time %d", &movetime);
+      movetime *= 1000;
+      continue;
+    }
+
+    if (!strcmp(command, "new")) {
+      ClearPvTable(pos->PvTable);
+      engineSide = BLACK;
+      ParseFen(START_FEN, pos);
+      continue;
+    }
+
+    if (!strcmp(command, "go")) {
+      engineSide = pos->side;
+      continue;
+    }
+
+    if (!strcmp(command, "takeback")) {
+        TakeMove(pos);
+        continue;
+      }
+
+    move = ParseMove(inBuf, pos);
+    if (move == NOMOVE) {
+      printf("Command unknown:%s\n", inBuf);
+      continue;
+    }
+    MakeMove(pos, move);
+    pos->ply = 0;
   }
 }

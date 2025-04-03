@@ -51,6 +51,9 @@ enum {
 // Colours
 enum { WHITE, BLACK, BOTH };
 
+// Engine Modes
+enum { UCIMODE, XBOARDMODE, CONSOLEMODE };
+
 // Square Definitions
 enum {
   A1 = 21,
@@ -214,6 +217,9 @@ typedef struct {
 
   float failhigh;
   float failhighfirst;
+
+  int GAME_MODE;
+  int POST_THINKING;
 
 } S_SEARCHINFO;
 

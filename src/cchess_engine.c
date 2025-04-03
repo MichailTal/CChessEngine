@@ -13,7 +13,40 @@
 int main() {
   AllInit();
 
-  // UCI_Loop();
+  board_representation *pos = GenBoard();
+  S_SEARCHINFO info[1];
+
+  printf("Welcome to the Chess Engine! Type 'console' for the terminal mode\n");
+
+  char line[256];
+  while (TRUE) {
+    memset(&line[0], 0, sizeof(line));
+
+    fflush(stdout);
+    if (!fgets(line, 256, stdin))
+      continue;
+    if (line[0] == '\n')
+      continue;
+
+    if (!strncmp(line, "uci", 3)) {
+      UCI_Loop(pos, info);
+      if (info->quit == TRUE)
+        break;
+      continue;
+    } else if (!strncmp(line, "xboard", 6)) {
+      XBoard_Loop(pos, info);
+      if (info->quit == TRUE)
+        break;
+      continue;
+    } else if (!strncmp(line, "console", 7)) {
+      Console_Loop(pos, info);
+      if (info->quit)
+        break;
+      continue;
+    } else if (!strncmp(line, "quit", 4)) {
+      break;
+    }
+  }
 
   return 0;
 }
