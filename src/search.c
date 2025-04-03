@@ -177,9 +177,9 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
 
   int InCheck = SqAttacked(pos->kingSquare[pos->side], pos->side ^ 1, pos);
 
-  if (InCheck == TRUE)
-
-  { depth++; }
+  if (InCheck == TRUE) {
+    depth++;
+  }
 
   move_list list[1];
   GenerateAllMoves(pos, list);
