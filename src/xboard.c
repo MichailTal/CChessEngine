@@ -395,9 +395,9 @@ void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
     }
 
     if (!strcmp(command, "takeback")) {
-        TakeMove(pos);
-        continue;
-      }
+      TakeMove(pos);
+      continue;
+    }
 
     move = ParseMove(inBuf, pos);
     if (move == NOMOVE) {
