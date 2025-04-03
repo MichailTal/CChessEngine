@@ -177,7 +177,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
 
   int InCheck = SqAttacked(pos -> kingSquare[pos -> side], pos -> side ^ 1, pos);
 
-  if (InCheck == TRUE); {
+  if (InCheck == TRUE) {
     depth++;
   }
 
