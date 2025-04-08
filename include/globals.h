@@ -35,4 +35,11 @@ extern int PieceBishopQueen[13];
 
 extern int Mirror64[64];
 
+extern U64 FileBBMask[8];
+extern U64 RankBBMask[8];
+
+extern U64 BlackPassedMask[64];
+extern U64 WhitePassedMask[64];
+extern U64 IsolatedMask[64];
+
 #endif

@@ -357,3 +357,50 @@ void PrintBoard(const board_representation *pos) {
          pos->castlePermission & blackQueenCastle ? 'q' : '-');
   printf("PosKey:%llX\n", pos->posKey);
 }
+
+void MirrorBoard(board_representation *pos) {
+
+  int tempPiecesArray[64];
+  int tempSide = pos->side ^ 1;
+  int SwapPiece[13] = {EMPTY, bP, bN, bB, bR, bQ, bK, wP, wN, wB, wR, wQ, wK};
+  int tempCastlePerm = 0;
+  int tempEnPas = NO_SQ;
+
+  int square;
+  int tempPiece;
+
+  if (pos->castlePermission & whiteKingCastle)
+    tempCastlePerm |= blackKingCastle;
+  if (pos->castlePermission & whiteQueenCastle)
+    tempCastlePerm |= blackQueenCastle;
+
+  if (pos->castlePermission & blackKingCastle)
+    tempCastlePerm |= whiteKingCastle;
+  if (pos->castlePermission & blackQueenCastle)
+    tempCastlePerm |= whiteQueenCastle;
+
+  if (pos->enPassant != NO_SQ) {
+    tempEnPas = SQ120(Mirror64[SQ64(pos->enPassant)]);
+  }
+
+  for (square = 0; square < 64; square++) {
+    tempPiecesArray[square] = pos->pieces[SQ120(Mirror64[square])];
+  }
+
+  ResetBoard(pos);
+
+  for (square = 0; square < 64; square++) {
+    tempPiece = SwapPiece[tempPiecesArray[square]];
+    pos->pieces[SQ120(square)] = tempPiece;
+  }
+
+  pos->side = tempSide;
+  pos->castlePermission = tempCastlePerm;
+  pos->enPassant = tempEnPas;
+
+  pos->posKey = GeneratePosKey(pos);
+
+  UpdateListMaterial(pos);
+
+  ASSERT(CheckBoard(pos));
+}

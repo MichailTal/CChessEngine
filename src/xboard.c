@@ -396,6 +396,17 @@ void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
 
     if (!strcmp(command, "takeback")) {
       TakeMove(pos);
+      TakeMove(pos);
+      continue;
+    }
+
+    if (!strcmp(command, "mirror")) {
+      PrintBoard(pos);
+      printf("Evaluation: %d\n", EvalPosition(pos));
+      MirrorBoard(pos);
+      PrintBoard(pos);
+      printf("Evaluation (Mirror): %d\n", EvalPosition(pos));
+      MirrorBoard(pos);
       continue;
     }
 
