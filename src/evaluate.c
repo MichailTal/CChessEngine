@@ -94,12 +94,10 @@ int EvalPosition(const board_representation *pos) {
     score -= PawnTable[MIRROR64(SQ64(sq))];
 
     if ((IsolatedMask[SQ64(sq)] & pos->pawns[BLACK]) == 0) {
-      // printf("bP Iso:%s\n",PrSq(sq));
       score -= PawnIsolated;
     }
 
     if ((BlackPassedMask[SQ64(sq)] & pos->pawns[WHITE]) == 0) {
-      // printf("bP Passed:%s\n",PrSq(sq));
       score -= PawnPassed[7 - RanksBrd[sq]];
     }
   }
