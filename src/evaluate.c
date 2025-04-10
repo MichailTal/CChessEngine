@@ -108,9 +108,9 @@ int EvalPosition(const board_representation *pos) {
 
   ASSERT(CheckBoard(pos));
 
-  int pce;
+  int piece;
   int pieceNumber;
-  int sq;
+  int square;
   int score = pos->material[WHITE] - pos->material[BLACK];
 
   if (!pos->pieceNumber[wP] && !pos->pieceNumber[bP] &&
@@ -118,146 +118,146 @@ int EvalPosition(const board_representation *pos) {
     return 0;
   }
 
-  pce = wP;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
-    score += PawnTable[SQ64(sq)];
+  piece = wP;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
+    score += PawnTable[SQ64(square)];
 
-    if ((IsolatedMask[SQ64(sq)] & pos->pawns[WHITE]) == 0) {
+    if ((IsolatedMask[SQ64(square)] & pos->pawns[WHITE]) == 0) {
       score += PawnIsolated;
     }
 
-    if ((WhitePassedMask[SQ64(sq)] & pos->pawns[BLACK]) == 0) {
-      score += PawnPassed[RanksBrd[sq]];
+    if ((WhitePassedMask[SQ64(square)] & pos->pawns[BLACK]) == 0) {
+      score += PawnPassed[RanksBrd[square]];
     }
   }
 
-  pce = bP;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(MIRROR64(SQ64(sq)) >= 0 && MIRROR64(SQ64(sq)) <= 63);
-    score -= PawnTable[MIRROR64(SQ64(sq))];
+  piece = bP;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(MIRROR64(SQ64(square)) >= 0 && MIRROR64(SQ64(square)) <= 63);
+    score -= PawnTable[MIRROR64(SQ64(square))];
 
-    if ((IsolatedMask[SQ64(sq)] & pos->pawns[BLACK]) == 0) {
+    if ((IsolatedMask[SQ64(square)] & pos->pawns[BLACK]) == 0) {
       score -= PawnIsolated;
     }
 
-    if ((BlackPassedMask[SQ64(sq)] & pos->pawns[WHITE]) == 0) {
-      score -= PawnPassed[7 - RanksBrd[sq]];
+    if ((BlackPassedMask[SQ64(square)] & pos->pawns[WHITE]) == 0) {
+      score -= PawnPassed[7 - RanksBrd[square]];
     }
   }
 
-  pce = wN;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
-    score += KnightTable[SQ64(sq)];
+  piece = wN;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
+    score += KnightTable[SQ64(square)];
   }
 
-  pce = bN;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(MIRROR64(SQ64(sq)) >= 0 && MIRROR64(SQ64(sq)) <= 63);
-    score -= KnightTable[MIRROR64(SQ64(sq))];
+  piece = bN;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(MIRROR64(SQ64(square)) >= 0 && MIRROR64(SQ64(square)) <= 63);
+    score -= KnightTable[MIRROR64(SQ64(square))];
   }
 
-  pce = wB;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
-    score += BishopTable[SQ64(sq)];
+  piece = wB;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
+    score += BishopTable[SQ64(square)];
   }
 
-  pce = bB;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(MIRROR64(SQ64(sq)) >= 0 && MIRROR64(SQ64(sq)) <= 63);
-    score -= BishopTable[MIRROR64(SQ64(sq))];
+  piece = bB;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(MIRROR64(SQ64(square)) >= 0 && MIRROR64(SQ64(square)) <= 63);
+    score -= BishopTable[MIRROR64(SQ64(square))];
   }
 
-  pce = wR;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
-    score += RookTable[SQ64(sq)];
+  piece = wR;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
+    score += RookTable[SQ64(square)];
 
-    ASSERT(FileRankValid(FilesBrd[sq]));
+    ASSERT(FileRankValid(FilesBrd[square]));
 
-    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[sq]])) {
+    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[square]])) {
       score += RookOpenFile;
-    } else if (!(pos->pawns[WHITE] & FileBBMask[FilesBrd[sq]])) {
+    } else if (!(pos->pawns[WHITE] & FileBBMask[FilesBrd[square]])) {
       score += RookSemiOpenFile;
     }
   }
 
-  pce = bR;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(MIRROR64(SQ64(sq)) >= 0 && MIRROR64(SQ64(sq)) <= 63);
-    score -= RookTable[MIRROR64(SQ64(sq))];
-    ASSERT(FileRankValid(FilesBrd[sq]));
-    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[sq]])) {
+  piece = bR;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(MIRROR64(SQ64(square)) >= 0 && MIRROR64(SQ64(square)) <= 63);
+    score -= RookTable[MIRROR64(SQ64(square))];
+    ASSERT(FileRankValid(FilesBrd[square]));
+    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[square]])) {
       score -= RookOpenFile;
-    } else if (!(pos->pawns[BLACK] & FileBBMask[FilesBrd[sq]])) {
+    } else if (!(pos->pawns[BLACK] & FileBBMask[FilesBrd[square]])) {
       score -= RookSemiOpenFile;
     }
   }
 
-  pce = wQ;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
-    ASSERT(FileRankValid(FilesBrd[sq]));
-    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[sq]])) {
+  piece = wQ;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
+    ASSERT(FileRankValid(FilesBrd[square]));
+    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[square]])) {
       score += QueenOpenFile;
-    } else if (!(pos->pawns[WHITE] & FileBBMask[FilesBrd[sq]])) {
+    } else if (!(pos->pawns[WHITE] & FileBBMask[FilesBrd[square]])) {
       score += QueenSemiOpenFile;
     }
   }
 
-  pce = bQ;
-  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[pce]; ++pieceNumber) {
-    sq = pos->pieceList[pce][pieceNumber];
-    ASSERT(SqOnBoard(sq));
-    ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
-    ASSERT(FileRankValid(FilesBrd[sq]));
-    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[sq]])) {
+  piece = bQ;
+  for (pieceNumber = 0; pieceNumber < pos->pieceNumber[piece]; ++pieceNumber) {
+    square = pos->pieceList[piece][pieceNumber];
+    ASSERT(SqOnBoard(square));
+    ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
+    ASSERT(FileRankValid(FilesBrd[square]));
+    if (!(pos->pawns[BOTH] & FileBBMask[FilesBrd[square]])) {
       score -= QueenOpenFile;
-    } else if (!(pos->pawns[BLACK] & FileBBMask[FilesBrd[sq]])) {
+    } else if (!(pos->pawns[BLACK] & FileBBMask[FilesBrd[square]])) {
       score -= QueenSemiOpenFile;
     }
   }
 
-  pce = wK;
-  sq = pos->pieceList[pce][0];
-  ASSERT(SqOnBoard(sq));
-  ASSERT(SQ64(sq) >= 0 && SQ64(sq) <= 63);
+  piece = wK;
+  square = pos->pieceList[piece][0];
+  ASSERT(SqOnBoard(square));
+  ASSERT(SQ64(square) >= 0 && SQ64(square) <= 63);
 
   if ((pos->material[BLACK] <= ENDGAME_MAT)) {
-    score += KingE[SQ64(sq)];
+    score += KingE[SQ64(square)];
   } else {
-    score += KingO[SQ64(sq)];
+    score += KingO[SQ64(square)];
   }
 
-  pce = bK;
-  sq = pos->pieceList[pce][0];
-  ASSERT(SqOnBoard(sq));
-  ASSERT(MIRROR64(SQ64(sq)) >= 0 && MIRROR64(SQ64(sq)) <= 63);
+  piece = bK;
+  square = pos->pieceList[piece][0];
+  ASSERT(SqOnBoard(square));
+  ASSERT(MIRROR64(SQ64(square)) >= 0 && MIRROR64(SQ64(square)) <= 63);
 
   if ((pos->material[WHITE] <= ENDGAME_MAT)) {
-    score -= KingE[MIRROR64(SQ64(sq))];
+    score -= KingE[MIRROR64(SQ64(square))];
   } else {
-    score -= KingO[MIRROR64(SQ64(sq))];
+    score -= KingO[MIRROR64(SQ64(square))];
   }
 
   if (pos->pieceNumber[wB] >= 2)
