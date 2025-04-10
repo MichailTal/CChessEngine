@@ -251,6 +251,12 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       MakeMove(pos, move);
       pos->ply = 0;
     }
+
+    if (!strcmp(command, "depth")) {  // For Lichess
+      sscanf(inBuf, "depth %d", &depth);
+      printf("DEBUG depth set via depth cmd: %d\n", depth);
+      continue;
+    }
   }
 }
 
