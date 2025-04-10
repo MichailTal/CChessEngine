@@ -134,6 +134,8 @@ enum {
   blackQueenCastle = 8
 };
 
+enum { HFNONE, HFALPHA, HFBETA, HFEXACT };
+
 // Undo moves
 typedef struct {
   int move;
@@ -147,12 +149,19 @@ typedef struct {
 typedef struct {
   U64 posKey;
   int move;
-} S_PVENTRY;
+  int score;
+  int depth;
+  int flags;
+} S_HASHENTRY;
 
 typedef struct {
-  S_PVENTRY *pTable;
+  S_HASHENTRY *pTable;
   int numEntries;
-} S_PVTABLE;
+  int newWrite;
+  int overWrite;
+  int hit;
+  int cut;
+} S_HASHTABLE;
 
 typedef struct {
   int pieces[BRD_SQ_NUM];
@@ -178,7 +187,7 @@ typedef struct {
 
   S_UNDO moveHistory[MAXGAMEHALFMOVES];
 
-  S_PVTABLE PvTable[1];
+  S_HASHTABLE HashTable[1];
   int PvArray[MAXDEPTH];
 
   int pieceList[13][10]; // piece list

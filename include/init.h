@@ -30,14 +30,16 @@ int MakeMove(board_representation *pos, const int move);
 void PerftTest(int depth, board_representation *pos);
 int ParseMove(char *ptrChar, board_representation *pos);
 int GetTimeMs();
-void InitPvTable(S_PVTABLE *table);
-int ProbePvTable(const board_representation *pos);
-void StorePvMove(const board_representation *pos, const int move);
+void InitHashTable(S_HASHTABLE *table);
+int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
+                   int beta, int depth);
+void StoreHashEntry(board_representation *pos, const int move, int score,
+                    const int flags, const int depth);
 int MoveExists(board_representation *pos, const int move);
 int GetPvLine(const int depth, board_representation *pos);
 int EvalPosition(const board_representation *pos);
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info);
-void ClearPvTable(S_PVTABLE *table);
+void ClearHashTable(S_HASHTABLE *table);
 void InitMvvLa();
 board_representation *GenBoard();
 void GenerateAllCaps(const board_representation *pos, move_list *list);
@@ -46,4 +48,7 @@ void ReadInput(S_SEARCHINFO *info);
 void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info);
 void Console_Loop(board_representation *pos, S_SEARCHINFO *info);
 void MirrorBoard(board_representation *pos);
+void TakeNullMove(board_representation *pos);
+void MakeNullMove(board_representation *pos);
+int ProbePvMove(const board_representation *pos);
 #endif // INIT_H

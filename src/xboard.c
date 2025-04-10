@@ -224,7 +224,7 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
     }
 
     if (!strcmp(command, "new")) {
-      ClearPvTable(pos->PvTable);
+      ClearHashTable(pos->HashTable);
       engineSide = BLACK;
       ParseFen(START_FEN, pos);
       depth = -1;
@@ -383,7 +383,7 @@ void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
     }
 
     if (!strcmp(command, "new")) {
-      ClearPvTable(pos->PvTable);
+      ClearHashTable(pos->HashTable);
       engineSide = BLACK;
       ParseFen(START_FEN, pos);
       continue;

@@ -60,7 +60,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
   printf("id author Nils\n");
   printf("uci ok\n");
 
-  InitPvTable(pos->PvTable);
+  InitHashTable(pos->HashTable);
 
   while (TRUE) {
     memset(&line[0], 0, sizeof(line));

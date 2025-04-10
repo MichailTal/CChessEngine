@@ -312,3 +312,52 @@ void TakeMove(board_representation *pos) {
 
   ASSERT(CheckBoard(pos));
 }
+
+void MakeNullMove(board_representation *pos) {
+
+  ASSERT(CheckBoard(pos));
+  ASSERT(!SqAttacked(pos->kingSquare[pos->side], pos->side ^ 1, pos));
+
+  pos->ply++;
+  pos->moveHistory[pos->histPly].posKey = pos->posKey;
+
+  if (pos->enPassant != NO_SQ)
+    HASH_EP;
+
+  pos->moveHistory[pos->histPly].move = NOMOVE;
+  pos->moveHistory[pos->histPly].fiftyMoveRule = pos->fiftyMoveRule;
+  pos->moveHistory[pos->histPly].enPassant = pos->enPassant;
+  pos->moveHistory[pos->histPly].castlePermission = pos->castlePermission;
+  pos->enPassant = NO_SQ;
+
+  pos->side ^= 1;
+  pos->histPly++;
+  HASH_SIDE;
+
+  ASSERT(CheckBoard(pos));
+  ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+
+  return;
+} // MakeNullMove
+
+void TakeNullMove(board_representation *pos) {
+  ASSERT(CheckBoard(pos));
+
+  pos->histPly--;
+  pos->ply--;
+
+  if (pos->enPassant != NO_SQ)
+    HASH_EP;
+
+  pos->castlePermission = pos->moveHistory[pos->histPly].castlePermission;
+  pos->fiftyMoveRule = pos->moveHistory[pos->histPly].fiftyMoveRule;
+  pos->enPassant = pos->moveHistory[pos->histPly].enPassant;
+
+  if (pos->enPassant != NO_SQ)
+    HASH_EP;
+  pos->side ^= 1;
+  HASH_SIDE;
+
+  ASSERT(CheckBoard(pos));
+  ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+}

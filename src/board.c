@@ -7,7 +7,7 @@
 board_representation *GenBoard() {
   board_representation *board =
       (board_representation *)malloc(sizeof(board_representation));
-  board->PvTable->pTable = NULL;
+  board->HashTable->pTable = NULL;
   return board;
 }
 
@@ -322,9 +322,9 @@ void ResetBoard(board_representation *pos) {
 
   pos->posKey = 0ULL;
 
-  pos->PvTable->pTable = NULL;
+  pos->HashTable->pTable = NULL;
 
-  InitPvTable(pos->PvTable);
+  InitHashTable(pos->HashTable);
 }
 
 void PrintBoard(const board_representation *pos) {
