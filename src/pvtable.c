@@ -59,7 +59,7 @@ void InitHashTable(S_HASHTABLE *table) {
   table->pTable =
       (S_HASHENTRY *)malloc(table->numEntries * sizeof(S_HASHENTRY));
   ClearHashTable(table);
-  printf("HashTable init complete with %d entries\n", table->numEntries);
+  //printf("HashTable init complete with %d entries\n", table->numEntries);
 }
 
 void StoreHashEntry(board_representation *pos, const int move, int score,
