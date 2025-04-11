@@ -204,14 +204,16 @@ int ConvertPolyMoveToInternalMove(unsigned short polyMove,
   return ParseMove(moveString, pos);
 }
 
-void ListBookMoves(U64 polyKey, board_representation *pos) {
+int GetBookMoves(board_representation *pos) {
   int index = 0;
   S_POLY_BOOK_ENTRY *entry;
   unsigned short move;
   const int MAXBOOKMOVES = 32;
   int bookMoves[MAXBOOKMOVES];
-  int tempMove;
+  int tempMove = NOMOVE;
   int counter = 0;
+
+  U64 polyKey = PolyKeyFromBoard(pos);
 
   for (entry = entries; entry < entries + NumEntries; entry++) {
     if (polyKey == endian_swap_u64(entry->key)) {
@@ -226,15 +228,11 @@ void ListBookMoves(U64 polyKey, board_representation *pos) {
     }
     index++;
   }
-  printf("Listing Book Moves:\n");
-  for (index = 0; index < counter; ++index) {
-    printf("BookMove: %d: %s", index + 1, PrintMove(bookMoves[index]));
+
+  if (counter != 0) {
+    int randMove = rand() % counter;
+    return bookMoves[randMove];
+  } else {
+    return NOMOVE;
   }
-}
-
-void GetBookMove(board_representation *pos) {
-
-  U64 polyKey = PolyKeyFromBoard(pos);
-  printf("polyKey: %llx\n", polyKey);
-  ListBookMoves(polyKey, pos);
 }

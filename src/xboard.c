@@ -268,12 +268,6 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       printf("DEBUG depth set via depth cmd: %d\n", depth);
       continue;
     }
-
-    if (!strcmp(command, "polykey")) {
-      // PrintBoard(pos);
-      GetBookMove(pos);
-      continue;
-    }
   }
 }
 

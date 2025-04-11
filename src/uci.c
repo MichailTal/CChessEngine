@@ -110,19 +110,17 @@ void ParsePosition(char *lineIn, board_representation *pos) {
 
 void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
 
-  setvbuf(stdin, NULL, _IONBF, 0);
-  setvbuf(stdout, NULL, _IONBF, 0);
+  info->GAME_MODE = UCIMODE;
+
+  setbuf(stdin, NULL);
+  setbuf(stdout, NULL);
 
   char line[INPUTBUFFER];
-
-  // See: https://www.wbec-ridderkerk.nl/html/UCIProtocol.html
-  printf("id name %s\n", NAME);
-  printf("id author Nils\n");
-  printf("uci ok\n");
+  printf("option name Hash type spin default 64 min 4 max %d\n", MAX_HASH);
+  printf("option name Book type check default true\n");
+  printf("uciok\n");
 
   int MB = 64;
-
-  InitHashTable(pos->HashTable, MB);
 
   while (TRUE) {
     memset(&line[0], 0, sizeof(line));
@@ -141,15 +139,14 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
     } else if (!strncmp(line, "ucinewgame", 10)) {
       ParsePosition("position startpos\n", pos);
     } else if (!strncmp(line, "go", 2)) {
-      printf("Seen Go...\n");
+      printf("Seen Go..\n");
       ParseGo(line, info, pos);
     } else if (!strncmp(line, "quit", 4)) {
       info->quit = TRUE;
       break;
     } else if (!strncmp(line, "uci", 3)) {
-      printf("id name %s\n", NAME);
-      printf("uci ok\n");
-    } else if (!strncmp(line, "setoption name Hash value", 26)) {
+      printf("uciok\n");
+    } else if (!strncmp(line, "setoption name Hash value ", 26)) {
       sscanf(line, "%*s %*s %*s %*s %d", &MB);
       if (MB < 4)
         MB = 4;
@@ -157,7 +154,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
         MB = MAX_HASH;
       printf("Set Hash to %d MB\n", MB);
       InitHashTable(pos->HashTable, MB);
-    } else if (!strncmp(line, "setoption name Book value", 26)) {
+    } else if (!strncmp(line, "setoption name Book value ", 26)) {
       char *ptrTrue = NULL;
       ptrTrue = strstr(line, "true");
       if (ptrTrue != NULL) {
@@ -165,9 +162,8 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       } else {
         EngineOptions->UseBook = FALSE;
       }
-
-      if (info->quit)
-        break;
     }
+    if (info->quit)
+      break;
   }
 }
