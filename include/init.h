@@ -30,7 +30,7 @@ int MakeMove(board_representation *pos, const int move);
 void PerftTest(int depth, board_representation *pos);
 int ParseMove(char *ptrChar, board_representation *pos);
 int GetTimeMs();
-void InitHashTable(S_HASHTABLE *table);
+void InitHashTable(S_HASHTABLE *table, const int MB);
 int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
                    int beta, int depth);
 void StoreHashEntry(board_representation *pos, const int move, int score,

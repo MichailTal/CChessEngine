@@ -252,6 +252,15 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       pos->ply = 0;
     }
 
+    if (!strcmp(command, "memory")) {
+      sscanf(inBuf, "memory %d", &MB);
+      if (MB < 4) MB = 4;
+      if (MB > 2048) MB = 2048;
+      printf("Set Hash to %d MB\n", MB);
+      InitHashTable(pos -> HashTable, MB);
+      continue;
+    }
+
     if (!strcmp(command, "depth")) { // For Lichess
       sscanf(inBuf, "depth %d", &depth);
       printf("DEBUG depth set via depth cmd: %d\n", depth);

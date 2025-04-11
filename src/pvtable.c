@@ -30,9 +30,6 @@ int GetPvLine(const int depth, board_representation *pos) {
   return count;
 }
 
-// 16 MB init size
-const int HashSize = 0x100000 * 16;
-
 void ClearHashTable(S_HASHTABLE *table) {
 
   S_HASHENTRY *tableEntry;
@@ -48,7 +45,8 @@ void ClearHashTable(S_HASHTABLE *table) {
   table->newWrite = 0;
 }
 
-void InitHashTable(S_HASHTABLE *table) {
+void InitHashTable(S_HASHTABLE *table, const int MB) {
+  int HashSize = 0x100000 * MB;
   table->numEntries = HashSize / sizeof(S_HASHENTRY);
   table->numEntries -= 2; // Prevent Out of Bound by indexing
 
