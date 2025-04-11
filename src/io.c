@@ -11,7 +11,7 @@ char *PrintSquare(const int square) {
   int file = FilesBrd[square];
   int rank = RanksBrd[square];
 
-  sprintf(SqStr, "%c%c", ('a' + file), ('1' + file));
+  sprintf(SqStr, "%c%c", ('a' + rank), ('1' + file));
 
   return SqStr;
 }

@@ -23,7 +23,7 @@ U64 BlackPassedMask[64];
 U64 WhitePassedMask[64];
 U64 IsolatedMask[64];
 
-void InitEvalMasks() {
+void InitEvalMasks(void) {
 
   int square, tsq, rank, file;
 
@@ -96,7 +96,7 @@ void InitEvalMasks() {
   }
 }
 
-void InitFilesRanksBrd() {
+void InitFilesRanksBrd(void) {
 
   int index = 0;
   int file = FILE_A;
@@ -117,7 +117,7 @@ void InitFilesRanksBrd() {
   }
 }
 
-void InitHashKeys() {
+void InitHashKeys(void) {
 
   int index_pieces = 0;
   int index_squares = 0;
@@ -134,7 +134,7 @@ void InitHashKeys() {
   }
 }
 
-void InitBitMask() {
+void InitBitMask(void) {
   int index = 0;
 
   for (index = 0; index < 64; index++) {
@@ -148,7 +148,7 @@ void InitBitMask() {
   }
 }
 
-void InitSq120To64() {
+void InitSq120To64(void) {
 
   int index = 0;
   int file = FILE_A;
@@ -173,7 +173,7 @@ void InitSq120To64() {
   }
 }
 
-void AllInit() {
+void AllInit(void) {
   InitSq120To64();
   InitBitMask();
   InitHashKeys();

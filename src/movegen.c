@@ -36,7 +36,7 @@ const int VictimScore[13] = {0,   100, 200, 300, 400, 500, 600,
                              100, 200, 300, 400, 500, 600};
 static int MvvLvaScores[13][13];
 
-void InitMvvLa() {
+void InitMvvLa(void) {
 
   int Attacker;
   int Victim;
@@ -101,8 +101,7 @@ static void AddCaptureMove(const board_representation *pos, int move,
   list->count++;
 }
 
-static void AddEnPassantMove(const board_representation *pos, int move,
-                             move_list *list) {
+static void AddEnPassantMove(int move, move_list *list) {
 
   ASSERT(SqOnBoard(FROMSQ(move)));
   ASSERT(SqOnBoard(TOSQ(move)));
@@ -218,13 +217,11 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
       if (pos->enPassant != NO_SQ) {
         if (square + 9 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
         if (square + 11 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
       }
     }
@@ -275,13 +272,11 @@ void GenerateAllMoves(const board_representation *pos, move_list *list) {
       if (pos->enPassant != NO_SQ) {
         if (square - 9 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square - 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square - 9, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
         if (square - 11 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square - 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square - 11, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
       }
     }
@@ -411,13 +406,11 @@ void GenerateAllCaps(const board_representation *pos, move_list *list) {
       if (pos->enPassant != NO_SQ) {
         if (square + 9 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square + 9, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
         if (square + 11 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square + 11, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
       }
     }
@@ -442,13 +435,11 @@ void GenerateAllCaps(const board_representation *pos, move_list *list) {
       if (pos->enPassant != NO_SQ) {
         if (square - 9 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square - 9, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square - 9, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
         if (square - 11 == pos->enPassant) {
           AddEnPassantMove(
-              pos, MOVE(square, square - 11, EMPTY, EMPTY, MOVEFLAGENPASSANT),
-              list);
+              MOVE(square, square - 11, EMPTY, EMPTY, MOVEFLAGENPASSANT), list);
         }
       }
     }

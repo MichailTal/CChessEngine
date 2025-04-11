@@ -4,7 +4,7 @@
 #include "../include/macros.h"
 #include "stdio.h"
 
-board_representation *GenBoard() {
+board_representation *GenBoard(void) {
   board_representation *board =
       (board_representation *)malloc(sizeof(board_representation));
   board->HashTable->pTable = NULL;
@@ -324,7 +324,7 @@ void ResetBoard(board_representation *pos) {
 
   pos->HashTable->pTable = NULL;
 
-  InitHashTable(pos->HashTable);
+  InitHashTable(pos->HashTable, 64);
 }
 
 void PrintBoard(const board_representation *pos) {

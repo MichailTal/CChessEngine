@@ -3,11 +3,11 @@
 
 #include "definitions.h"
 
-void AllInit();
+void AllInit(void);
 void PrintBitBoard(U64 bb);
 int PopBit(U64 *bb);
 int CountBits(U64 bit);
-U64 Rand_64();
+U64 Rand_64(void);
 U64 GeneratePosKey(const board_representation *pos);
 void ResetBoard(board_representation *pos);
 int ParseFen(char *fen, board_representation *pos);
@@ -29,7 +29,7 @@ void TakeMove(board_representation *pos);
 int MakeMove(board_representation *pos, const int move);
 void PerftTest(int depth, board_representation *pos);
 int ParseMove(char *ptrChar, board_representation *pos);
-int GetTimeMs();
+int GetTimeMs(void);
 void InitHashTable(S_HASHTABLE *table, const int MB);
 int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
                    int beta, int depth);
@@ -40,8 +40,8 @@ int GetPvLine(const int depth, board_representation *pos);
 int EvalPosition(const board_representation *pos);
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info);
 void ClearHashTable(S_HASHTABLE *table);
-void InitMvvLa();
-board_representation *GenBoard();
+void InitMvvLa(void);
+board_representation *GenBoard(void);
 void GenerateAllCaps(const board_representation *pos, move_list *list);
 void UCI_Loop(board_representation *pos, S_SEARCHINFO *info);
 void ReadInput(S_SEARCHINFO *info);

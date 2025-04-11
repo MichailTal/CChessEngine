@@ -91,7 +91,7 @@ int Checkresult(board_representation *pos) {
   return FALSE;
 }
 
-void PrintOptions() {
+void PrintOptions(void) {
   printf("feature ping=1 setboard=1 colors=0 usermove=1\n");
   printf("feature done=1\n");
 }
@@ -254,10 +254,12 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
 
     if (!strcmp(command, "memory")) {
       sscanf(inBuf, "memory %d", &MB);
-      if (MB < 4) MB = 4;
-      if (MB > 2048) MB = 2048;
+      if (MB < 4)
+        MB = 4;
+      if (MB > 2048)
+        MB = 2048;
       printf("Set Hash to %d MB\n", MB);
-      InitHashTable(pos -> HashTable, MB);
+      InitHashTable(pos->HashTable, MB);
       continue;
     }
 

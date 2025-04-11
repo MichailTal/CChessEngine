@@ -9,7 +9,7 @@ long leafNodes;
 
 void Perft(int depth, board_representation *pos) {
 
-  int check = CheckBoard(pos);
+  ASSERT(CheckBoard(pos));
 
   if (depth == 0) {
     leafNodes++;

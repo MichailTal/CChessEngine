@@ -14,7 +14,7 @@
 #include "unistd.h"
 #endif
 
-int GetTimeMs() {
+int GetTimeMs(void) {
 #ifdef WIN32
   return GetTickCount();
 #else
@@ -24,7 +24,7 @@ int GetTimeMs() {
 #endif
 }
 
-int InputWaiting() {
+int InputWaiting(void) {
 #ifndef WIN32
   fd_set readfds;
   struct timeval tv;

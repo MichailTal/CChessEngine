@@ -195,7 +195,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
       return 0;
     }
     if (Score >= beta && abs(Score) < ISMATE) {
-      info -> nullCut++;
+      info->nullCut++;
       return beta;
     }
   }

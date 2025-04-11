@@ -5,7 +5,7 @@
 #include "stdio.h"
 #include "stdlib.h"
 
-U64 Rand_64() {
+U64 Rand_64(void) {
   return ((U64)rand() | ((U64)rand() << 15) | ((U64)rand() << 30) |
           ((U64)rand() << 45) | (((U64)rand() & 0xf) << 60));
 }
