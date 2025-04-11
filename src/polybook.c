@@ -164,22 +164,72 @@ U64 endian_swap_u64(U64 x) {
   return x;
 }
 
-void ListBookMoves(U64 polyKey) {
-  int start = 0;
+int ConvertPolyMoveToInternalMove(unsigned short polyMove,
+                                  board_representation *pos) {
+
+  int fromfile = (polyMove >> 6) & 7;
+  int fromrank = (polyMove >> 9) & 7;
+  int tofile = (polyMove >> 0) & 7;
+  int torank = (polyMove >> 3) & 7;
+  int promotionpiece = (polyMove >> 12) & 7;
+
+  char moveString[6];
+
+  if (promotionpiece == 0) {
+    sprintf(moveString, "%c%c%c%c", FileCharacter[fromfile],
+            RankCharacter[fromrank], FileCharacter[tofile],
+            RankCharacter[torank]);
+  } else {
+    char promChar = 'q';
+    switch (promotionpiece) {
+    case 1:
+      promChar = 'n';
+      break;
+    case 2:
+      promChar = 'b';
+      break;
+    case 3:
+      promChar = 'r';
+      break;
+    }
+    sprintf(moveString, "%c%c%c%c%c", FileCharacter[fromfile],
+            RankCharacter[fromrank], FileCharacter[tofile],
+            RankCharacter[torank], promChar);
+  }
+  return ParseMove(moveString, pos);
+}
+
+void ListBookMoves(U64 polyKey, board_representation *pos) {
+  int index = 0;
   S_POLY_BOOK_ENTRY *entry;
   unsigned short move;
+  const int MAXBOOKMOVES = 32;
+  int bookMoves[MAXBOOKMOVES];
+  int tempMove;
+  int counter = 0;
 
   for (entry = entries; entry < entries + NumEntries; entry++) {
     if (polyKey == endian_swap_u64(entry->key)) {
       move = endian_swap_u16(entry->move);
+      tempMove = ConvertPolyMoveToInternalMove(move, pos);
+
+      if (tempMove != NOMOVE) {
+        bookMoves[counter++] = tempMove;
+        if (counter > MAXBOOKMOVES)
+          break;
+      }
     }
-    start++;
+    index++;
+  }
+  printf("Listing Book Moves:\n");
+  for (index = 0; index < counter; ++index) {
+    printf("BookMove: %d: %s", index + 1, PrintMove(bookMoves[index]));
   }
 }
 
 void GetBookMove(board_representation *pos) {
 
   U64 polyKey = PolyKeyFromBoard(pos);
-  printf("polyKeyx: %llx\n", polyKey);
-  ListBookMoves(polyKey);
+  printf("polyKey: %llx\n", polyKey);
+  ListBookMoves(polyKey,pos);
 }

@@ -8,7 +8,7 @@
 char PieceCharacter[] = ".PNBRQKpnbrqk";
 char SideCharacter[] = "wb-";
 char RankCharacter[] = "12345678";
-char FileChararacter[] = "abcdefgh";
+char FileCharacter[] = "abcdefgh";
 
 int PieceBig[13] = {FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE,
                     FALSE, TRUE,  TRUE, TRUE, TRUE, TRUE};

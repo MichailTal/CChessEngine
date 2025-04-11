@@ -42,7 +42,6 @@ extern U64 BlackPassedMask[64];
 extern U64 WhitePassedMask[64];
 extern U64 IsolatedMask[64];
 
-
 extern const U64 Random64Poly[781];
 
 #endif
