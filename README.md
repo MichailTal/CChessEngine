@@ -12,7 +12,7 @@ It currently has the following features:
 - MVV/LVA move ordering
 - Basic evaluation
 
-The engine is based around the old implementation of VICE, an easy engine for demonstration. 
+The engine is based around the old implementation of VICE, an easy engine for demonstration.
 You can check the repo [here](https://github.com/bluefeversoft/vice/tree/main)
 
 ## Lichess
@@ -22,7 +22,7 @@ This engine is powering a BOT Account on Lichess, that you can check out [here](
 
 ## Build process
 
-You can run this engine on both POSIX and Windows Systems as well as Docker Images. 
+You can run this engine on both POSIX and Windows Systems as well as Docker Images.
 
 - Clone the code from the main branch of this repo
 

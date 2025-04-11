@@ -270,8 +270,8 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
     }
 
     if (!strcmp(command, "polykey")) {
-      PrintBoard(pos);
-      printf("PolyKey: %llX\n", PolyKeyFromBoard(pos));
+      // PrintBoard(pos);
+      GetBookMove(pos);
       continue;
     }
   }

@@ -8,93 +8,89 @@
 #include "string.h"
 
 typedef struct {
-   U64 key;
-   unsigned short move;
-   unsigned short weight;
-   unsigned int learn;     
+  U64 key;
+  unsigned short move;
+  unsigned short weight;
+  unsigned int learn;
 } S_POLY_BOOK_ENTRY;
 
 long NumEntries = 0;
 
 S_POLY_BOOK_ENTRY *entries;
 
-const int PolyKindOfPiece[13] = {
-    -1, 1, 3, 5, 7, 9, 11, 0, 2, 4, 6, 8, 10
-};
+const int PolyKindOfPiece[13] = {-1, 1, 3, 5, 7, 9, 11, 0, 2, 4, 6, 8, 10};
 
 void InitPolyBook(void) {
-    char filePath[256];
-    printf("Enter the path to the book file: ");
-    if (fgets(filePath, sizeof(filePath), stdin) == NULL) {
-        fprintf(stderr, "Error reading file path\n");
-        return;
-    }
+  char filePath[256];
+  printf("Enter the path to the book file: ");
+  if (fgets(filePath, sizeof(filePath), stdin) == NULL) {
+    fprintf(stderr, "Error reading file path\n");
+    return;
+  }
 
-    // Remove newline character from the input
-    size_t len = strlen(filePath);
-    if (len > 0 && filePath[len - 1] == '\n') {
-        filePath[len - 1] = '\0';
-    }
+  // Remove newline character from the input
+  size_t len = strlen(filePath);
+  if (len > 0 && filePath[len - 1] == '\n') {
+    filePath[len - 1] = '\0';
+  }
 
-    FILE *pFile = fopen(filePath, "rb");
-    if (pFile == NULL) {
-        fprintf(stderr, "Error opening file: %s\n", filePath);
-        return;
-    }
+  FILE *pFile = fopen(filePath, "rb");
+  if (pFile == NULL) {
+    fprintf(stderr, "Error opening file: %s\n", filePath);
+    return;
+  }
 
-    fseek(pFile, 0, SEEK_END);
-    long position = ftell(pFile);
-    if (position < sizeof(S_POLY_BOOK_ENTRY)) {
-        fprintf(stderr, "No entries found\n");
-        fclose(pFile);
-        return;
-    }
-
-    NumEntries = position / sizeof(S_POLY_BOOK_ENTRY);
-    printf("%ld entries found in file\n", NumEntries);
-
-    entries = (S_POLY_BOOK_ENTRY*) malloc(NumEntries * sizeof(S_POLY_BOOK_ENTRY));
-    if (entries == NULL) {
-        fprintf(stderr, "Memory allocation failed\n");
-        fclose(pFile);
-        return;
-    }
-
-    rewind(pFile);
-    size_t returnValue = fread(entries, sizeof(S_POLY_BOOK_ENTRY), NumEntries, pFile);
-    if (returnValue != NumEntries) {
-        fprintf(stderr, "Error reading entries from file\n");
-    } else {
-        printf("fread() %ld entries in file\n", returnValue);
-    }
-
+  fseek(pFile, 0, SEEK_END);
+  long position = ftell(pFile);
+  if (position < sizeof(S_POLY_BOOK_ENTRY)) {
+    fprintf(stderr, "No entries found\n");
     fclose(pFile);
+    return;
+  }
+
+  NumEntries = position / sizeof(S_POLY_BOOK_ENTRY);
+  printf("%ld entries found in file\n", NumEntries);
+
+  entries = (S_POLY_BOOK_ENTRY *)malloc(NumEntries * sizeof(S_POLY_BOOK_ENTRY));
+  if (entries == NULL) {
+    fprintf(stderr, "Memory allocation failed\n");
+    fclose(pFile);
+    return;
+  }
+
+  rewind(pFile);
+  size_t returnValue =
+      fread(entries, sizeof(S_POLY_BOOK_ENTRY), NumEntries, pFile);
+  if (returnValue != NumEntries) {
+    fprintf(stderr, "Error reading entries from file\n");
+  } else {
+    printf("fread() %ld entries in file\n", returnValue);
+  }
+
+  fclose(pFile);
 }
 
-void CleanPolyBook(void) {
-    free(entries);
+void CleanPolyBook(void) { free(entries); }
 
-}
+int HasPawnForCapture(board_representation *pos) {
+  int squareWithPawn = 0;
+  int targetPiece = (pos->side == WHITE) ? wP : bP;
 
-int HasPawnForCapture(board_representation *pos ) {
-    int squareWithPawn = 0;
-    int targetPiece = (pos -> side == WHITE) ? wP : bP;
-
-    if (pos -> enPassant != NO_SQ) {
-        if (pos -> side == WHITE) {
-            squareWithPawn = pos -> enPassant -10;
-        } else {
-            squareWithPawn = pos -> enPassant +10;
-        }
-
-        if (pos -> pieces[squareWithPawn + 1] == targetPiece) {
-            return TRUE;
-        } else if (pos -> pieces[squareWithPawn - 1] == targetPiece) {
-            return TRUE;
-        }
+  if (pos->enPassant != NO_SQ) {
+    if (pos->side == WHITE) {
+      squareWithPawn = pos->enPassant - 10;
+    } else {
+      squareWithPawn = pos->enPassant + 10;
     }
 
-    return FALSE;
+    if (pos->pieces[squareWithPawn + 1] == targetPiece) {
+      return TRUE;
+    } else if (pos->pieces[squareWithPawn - 1] == targetPiece) {
+      return TRUE;
+    }
+  }
+
+  return FALSE;
 }
 
 U64 PolyKeyFromBoard(board_representation *pos) {
@@ -106,16 +102,16 @@ U64 PolyKeyFromBoard(board_representation *pos) {
   int piece = EMPTY;
   int polyPiece = 0;
   int offset = 0;
-  
+
   for (square = 0; square < BRD_SQ_NUM; ++square) {
-    piece = pos -> pieces[square];
+    piece = pos->pieces[square];
 
     if (piece != NO_SQ && piece != EMPTY && piece != OFFBOARD) {
-        ASSERT(piece >= wP && piece <= bK);
-        polyPiece = PolyKindOfPiece[piece];
-        rank = RanksBrd[square];
-        file = FilesBrd[square];
-        finalKey ^= Random64Poly[(64 * polyPiece) + (8 * rank) + file];
+      ASSERT(piece >= wP && piece <= bK);
+      polyPiece = PolyKindOfPiece[piece];
+      rank = RanksBrd[square];
+      file = FilesBrd[square];
+      finalKey ^= Random64Poly[(64 * polyPiece) + (8 * rank) + file];
     }
   }
 
@@ -123,25 +119,67 @@ U64 PolyKeyFromBoard(board_representation *pos) {
 
   offset = 768;
 
-  if (pos -> castlePermission & whiteKingCastle) finalKey ^= Random64Poly[offset + 0];
-  if (pos -> castlePermission & whiteQueenCastle) finalKey ^= Random64Poly[offset + 1];
-  if (pos -> castlePermission & blackKingCastle) finalKey ^= Random64Poly[offset + 2];
-  if (pos -> castlePermission & blackQueenCastle) finalKey ^= Random64Poly[offset + 3];
+  if (pos->castlePermission & whiteKingCastle)
+    finalKey ^= Random64Poly[offset + 0];
+  if (pos->castlePermission & whiteQueenCastle)
+    finalKey ^= Random64Poly[offset + 1];
+  if (pos->castlePermission & blackKingCastle)
+    finalKey ^= Random64Poly[offset + 2];
+  if (pos->castlePermission & blackQueenCastle)
+    finalKey ^= Random64Poly[offset + 3];
 
-  // En Passant 
+  // En Passant
 
   offset = 772;
 
   if (HasPawnForCapture(pos) == TRUE) {
-    file = FilesBrd[pos -> enPassant];
+    file = FilesBrd[pos->enPassant];
     finalKey ^= Random64Poly[offset + file];
   }
 
   // Side to Move
 
-  if (pos -> side == WHITE) {
+  if (pos->side == WHITE) {
     finalKey ^= Random64Poly[780];
   }
 
   return finalKey;
+}
+
+unsigned short endian_swap_u16(unsigned short x) {
+  x = (x >> 8) | (x << 8);
+  return x;
+}
+
+unsigned int endian_swap_u32(unsigned int x) {
+  x = (x >> 24) | ((x << 8) & 0x00FF0000) | ((x >> 8) & 0x0000FF00) | (x << 24);
+  return x;
+}
+
+U64 endian_swap_u64(U64 x) {
+  x = (x >> 56) | ((x << 40) & 0x00FF000000000000) |
+      ((x << 24) & 0x0000FF0000000000) | ((x << 8) & 0x000000FF00000000) |
+      ((x >> 8) & 0x00000000FF000000) | ((x >> 24) & 0x0000000000FF0000) |
+      ((x >> 40) & 0x000000000000FF00) | (x << 56);
+  return x;
+}
+
+void ListBookMoves(U64 polyKey) {
+  int start = 0;
+  S_POLY_BOOK_ENTRY *entry;
+  unsigned short move;
+
+  for (entry = entries; entry < entries + NumEntries; entry++) {
+    if (polyKey == endian_swap_u64(entry->key)) {
+      move = endian_swap_u16(entry->move);
+    }
+    start++;
+  }
+}
+
+void GetBookMove(board_representation *pos) {
+
+  U64 polyKey = PolyKeyFromBoard(pos);
+  printf("polyKeyx: %llx\n", polyKey);
+  ListBookMoves(polyKey);
 }

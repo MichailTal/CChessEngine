@@ -56,14 +56,13 @@ void InitHashTable(S_HASHTABLE *table, const int MB) {
 
   table->pTable =
       (S_HASHENTRY *)malloc(table->numEntries * sizeof(S_HASHENTRY));
-  
-  if(table->pTable == NULL) {
-    printf("Hash Allocation did fail, trying %d MB\n", MB/2);
+
+  if (table->pTable == NULL) {
+    printf("Hash Allocation did fail, trying %d MB\n", MB / 2);
   } else {
-    ClearHashTable(table);        
+    ClearHashTable(table);
   }
 }
-
 
 void StoreHashEntry(board_representation *pos, const int move, int score,
                     const int flags, const int depth) {
