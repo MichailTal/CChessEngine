@@ -53,4 +53,5 @@ void MakeNullMove(board_representation *pos);
 int ProbePvMove(const board_representation *pos);
 int MoveListOk(const move_list *list, const board_representation *pos);
 int SqIs120(const int square);
+U64 PolyKeyFromBoard(board_representation *board);
 #endif // INIT_H
