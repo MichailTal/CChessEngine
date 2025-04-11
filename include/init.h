@@ -51,4 +51,6 @@ void MirrorBoard(board_representation *pos);
 void TakeNullMove(board_representation *pos);
 void MakeNullMove(board_representation *pos);
 int ProbePvMove(const board_representation *pos);
+int MoveListOk(const move_list *list, const board_representation *pos);
+int SqIs120(const int square);
 #endif // INIT_H

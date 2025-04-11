@@ -194,7 +194,8 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     if (info->stopped == TRUE) {
       return 0;
     }
-    if (Score >= beta) {
+    if (Score >= beta && abs(Score) < ISMATE) {
+      info -> nullCut++;
       return beta;
     }
   }

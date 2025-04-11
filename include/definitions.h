@@ -226,6 +226,7 @@ typedef struct {
 
   float failhigh;
   float failhighfirst;
+  int nullCut;
 
   int GAME_MODE;
   int POST_THINKING;
