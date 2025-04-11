@@ -26,6 +26,10 @@ int main(int argc, char *argv[]) {
       Console_Loop(pos, info);
       return 0;
     }
+
+    if (!strcmp(argv[2], "-nobook")) {
+      EngineOptions->UseBook = FALSE;
+    }
   }
 
   // Fallback: interactive stdin mode

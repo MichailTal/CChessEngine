@@ -336,6 +336,8 @@ void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
              "set)\n");
       printf("view - show current depth and movetime settings\n");
       printf("setboard x - set position to fen x\n");
+      printf("bookoff - disables the book usage");
+      printf("bookon - enables the book usage");
       printf("** note ** - to reset time and depth, set to 0\n");
       printf("enter moves using b7b8q notation\n\n\n");
       continue;
@@ -389,6 +391,12 @@ void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
       else
         printf(" movetime not set\n");
 
+      if (EngineOptions->UseBook == FALSE) {
+        printf("Book disabled");
+      } else {
+        printf("Book enabled");
+      }
+
       continue;
     }
 
@@ -420,6 +428,18 @@ void Console_Loop(board_representation *pos, S_SEARCHINFO *info) {
     if (!strcmp(command, "takeback")) {
       TakeMove(pos);
       TakeMove(pos);
+      continue;
+    }
+
+    if (!strcmp(command, "bookoff")) {
+      printf("Book disabled\n");
+      EngineOptions->UseBook = FALSE;
+      continue;
+    }
+
+    if (!strcmp(command, "bookon")) {
+      printf("Book enabled\n");
+      EngineOptions->UseBook = TRUE;
       continue;
     }
 

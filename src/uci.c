@@ -141,16 +141,33 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
     } else if (!strncmp(line, "ucinewgame", 10)) {
       ParsePosition("position startpos\n", pos);
     } else if (!strncmp(line, "go", 2)) {
+      printf("Seen Go...\n");
       ParseGo(line, info, pos);
     } else if (!strncmp(line, "quit", 4)) {
       info->quit = TRUE;
       break;
     } else if (!strncmp(line, "uci", 3)) {
       printf("id name %s\n", NAME);
-      printf("id author Nils\n");
       printf("uci ok\n");
+    } else if (!strncmp(line, "setoption name Hash value", 26)) {
+      sscanf(line, "%*s %*s %*s %*s %d", &MB);
+      if (MB < 4)
+        MB = 4;
+      if (MB > MAX_HASH)
+        MB = MAX_HASH;
+      printf("Set Hash to %d MB\n", MB);
+      InitHashTable(pos->HashTable, MB);
+    } else if (!strncmp(line, "setoption name Book value", 26)) {
+      char *ptrTrue = NULL;
+      ptrTrue = strstr(line, "true");
+      if (ptrTrue != NULL) {
+        EngineOptions->UseBook = TRUE;
+      } else {
+        EngineOptions->UseBook = FALSE;
+      }
+
+      if (info->quit)
+        break;
     }
-    if (info->quit)
-      break;
   }
 }

@@ -23,6 +23,8 @@ U64 BlackPassedMask[64];
 U64 WhitePassedMask[64];
 U64 IsolatedMask[64];
 
+S_OPTIONS EngineOptions[1];
+
 void InitEvalMasks(void) {
 
   int square, tsq, rank, file;

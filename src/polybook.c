@@ -22,6 +22,9 @@ const int PolyKindOfPiece[13] = {-1, 1, 3, 5, 7, 9, 11, 0, 2, 4, 6, 8, 10};
 
 void InitPolyBook(void) {
   char filePath[256];
+
+  EngineOptions->UseBook = FALSE;
+
   printf("Enter the path to the book file: ");
   if (fgets(filePath, sizeof(filePath), stdin) == NULL) {
     fprintf(stderr, "Error reading file path\n");
@@ -66,6 +69,8 @@ void InitPolyBook(void) {
   } else {
     printf("fread() %ld entries in file\n", returnValue);
   }
+
+  EngineOptions->UseBook = TRUE;
 
   fclose(pFile);
 }
@@ -231,5 +236,5 @@ void GetBookMove(board_representation *pos) {
 
   U64 polyKey = PolyKeyFromBoard(pos);
   printf("polyKey: %llx\n", polyKey);
-  ListBookMoves(polyKey,pos);
+  ListBookMoves(polyKey, pos);
 }

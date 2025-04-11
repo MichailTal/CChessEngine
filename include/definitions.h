@@ -17,6 +17,8 @@ typedef unsigned long long U64;
 
 #define ISMATE (INFINITE - MAXDEPTH)
 
+#define MAX_HASH 1024
+
 // Piece Definitions
 
 enum { EMPTY, wP, wN, wB, wR, wQ, wK, bP, bN, bB, bR, bQ, bK };
@@ -232,5 +234,9 @@ typedef struct {
   int POST_THINKING;
 
 } S_SEARCHINFO;
+
+typedef struct {
+  int UseBook;
+} S_OPTIONS;
 
 #endif
