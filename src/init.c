@@ -180,4 +180,5 @@ void AllInit(void) {
   InitFilesRanksBrd();
   InitEvalMasks();
   InitMvvLa();
+  InitPolyBook();
 }

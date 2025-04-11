@@ -4,10 +4,77 @@
 #include "../include/macros.h"
 #include "../include/polykeys.h"
 #include "stdio.h"
+#include "stdlib.h"
+#include "string.h"
+
+typedef struct {
+   U64 key;
+   unsigned short move;
+   unsigned short weight;
+   unsigned int learn;     
+} S_POLY_BOOK_ENTRY;
+
+long NumEntries = 0;
+
+S_POLY_BOOK_ENTRY *entries;
 
 const int PolyKindOfPiece[13] = {
     -1, 1, 3, 5, 7, 9, 11, 0, 2, 4, 6, 8, 10
 };
+
+void InitPolyBook(void) {
+    char filePath[256];
+    printf("Enter the path to the book file: ");
+    if (fgets(filePath, sizeof(filePath), stdin) == NULL) {
+        fprintf(stderr, "Error reading file path\n");
+        return;
+    }
+
+    // Remove newline character from the input
+    size_t len = strlen(filePath);
+    if (len > 0 && filePath[len - 1] == '\n') {
+        filePath[len - 1] = '\0';
+    }
+
+    FILE *pFile = fopen(filePath, "rb");
+    if (pFile == NULL) {
+        fprintf(stderr, "Error opening file: %s\n", filePath);
+        return;
+    }
+
+    fseek(pFile, 0, SEEK_END);
+    long position = ftell(pFile);
+    if (position < sizeof(S_POLY_BOOK_ENTRY)) {
+        fprintf(stderr, "No entries found\n");
+        fclose(pFile);
+        return;
+    }
+
+    NumEntries = position / sizeof(S_POLY_BOOK_ENTRY);
+    printf("%ld entries found in file\n", NumEntries);
+
+    entries = (S_POLY_BOOK_ENTRY*) malloc(NumEntries * sizeof(S_POLY_BOOK_ENTRY));
+    if (entries == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        fclose(pFile);
+        return;
+    }
+
+    rewind(pFile);
+    size_t returnValue = fread(entries, sizeof(S_POLY_BOOK_ENTRY), NumEntries, pFile);
+    if (returnValue != NumEntries) {
+        fprintf(stderr, "Error reading entries from file\n");
+    } else {
+        printf("fread() %ld entries in file\n", returnValue);
+    }
+
+    fclose(pFile);
+}
+
+void CleanPolyBook(void) {
+    free(entries);
+
+}
 
 int HasPawnForCapture(board_representation *pos ) {
     int squareWithPawn = 0;

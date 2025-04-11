@@ -58,5 +58,6 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  CleanPolyBook();
   return 0;
 }
