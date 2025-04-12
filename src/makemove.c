@@ -335,7 +335,7 @@ void MakeNullMove(board_representation *pos) {
   HASH_SIDE;
 
   ASSERT(CheckBoard(pos));
-  ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+  ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   return;
 } // MakeNullMove
@@ -359,5 +359,5 @@ void TakeNullMove(board_representation *pos) {
   HASH_SIDE;
 
   ASSERT(CheckBoard(pos));
-  ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+  ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 }

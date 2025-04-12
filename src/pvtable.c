@@ -6,13 +6,13 @@
 #include "stdlib.h"
 
 int GetPvLine(const int depth, board_representation *pos) {
-  ASSERT(depth < MAXDEPTH);
+  ASSERT(depth <= MAXDEPTH);
 
   int move = ProbePvMove(pos);
   int count = 0;
 
   while (move != NOMOVE && count < depth) {
-    ASSERT(count < MAXDEPTH);
+    ASSERT(count <= MAXDEPTH);
 
     if (MoveExists(pos, move)) {
       MakeMove(pos, move);
@@ -71,10 +71,10 @@ void StoreHashEntry(board_representation *pos, const int move, int score,
 
   ASSERT(index >= 0 &&
          index <= pos->HashTable->numEntries - 1); // Checks calculation above
-  ASSERT(depth >= 1 && depth < MAXDEPTH);
+  ASSERT(depth >= 1 && depth <= MAXDEPTH);
   ASSERT(flags >= HFALPHA && flags <= HFEXACT);
   ASSERT(score >= -INFINITE && score <= INFINITE);
-  ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+  ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   if (pos->HashTable->pTable[index].posKey == 0) {
     pos->HashTable->newWrite++;
@@ -105,7 +105,7 @@ int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
   ASSERT(alpha < beta);
   ASSERT(alpha >= -INFINITE && alpha <= INFINITE);
   ASSERT(beta >= -INFINITE && beta <= INFINITE);
-  ASSERT(pos->ply >= 0 && pos->ply < MAXDEPTH);
+  ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   if (pos->HashTable->pTable[index].posKey == pos->posKey) {
     *move = pos->HashTable->pTable[index].move;
@@ -113,7 +113,7 @@ int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
       pos->HashTable->hit++;
 
       ASSERT(pos->HashTable->pTable[index].depth >= 1 &&
-             pos->HashTable->pTable[index].depth < MAXDEPTH);
+             pos->HashTable->pTable[index].depth <= MAXDEPTH);
       ASSERT(pos->HashTable->pTable[index].flags >= HFALPHA &&
              pos->HashTable->pTable[index].flags <= HFEXACT);
 
