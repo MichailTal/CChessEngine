@@ -135,7 +135,7 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       }
 
       if (depth == -1 || depth > MAXDEPTH) {
-        info->depth = 8;
+        info->depth = 10;
       }
 
       printf(
