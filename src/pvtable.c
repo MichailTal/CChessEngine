@@ -101,7 +101,7 @@ int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
 
   ASSERT(index >= 0 &&
          index <= pos->HashTable->numEntries - 1); // Checks calculation above
-  ASSERT(depth >= 1 && depth < MAXDEPTH);
+  ASSERT(depth >= 1 && depth <= MAXDEPTH);
   ASSERT(alpha < beta);
   ASSERT(alpha >= -INFINITE && alpha <= INFINITE);
   ASSERT(beta >= -INFINITE && beta <= INFINITE);
