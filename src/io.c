@@ -18,7 +18,6 @@ char *PrintSquare(const int square) {
 
 char *PrintMove(const int move) {
   static char MvStr[6];
-
   int filefrom = FilesBrd[FROMSQ(move)];
   int rankfrom = RanksBrd[FROMSQ(move)];
   int fileto = FilesBrd[TOSQ(move)];
@@ -36,16 +35,22 @@ char *PrintMove(const int move) {
     } else if (!IsRQ(promoted) && IsBQ(promoted)) {
       promotechar = 'b';
     }
-    sprintf(MvStr, "%c%c%c%c%c", ('a' + filefrom), ('1' + rankfrom),
-            ('a' + fileto), ('1' + rankto), promotechar);
-  } else {
-    sprintf(MvStr, "%c%c%c%c", ('a' + filefrom), ('1' + rankfrom),
-            ('a' + fileto), ('1' + rankto));
-  }
 
-  if (captured) {
-    sprintf(MvStr, "%c%cx%c%c", ('a' + filefrom), ('1' + rankfrom),
-            ('a' + fileto), ('1' + rankto));
+    if (captured) {
+      sprintf(MvStr, "%c%cx%c%c%c", ('a' + filefrom), ('1' + rankfrom),
+              ('a' + fileto), ('1' + rankto), promotechar);
+    } else {
+      sprintf(MvStr, "%c%c%c%c%c", ('a' + filefrom), ('1' + rankfrom),
+              ('a' + fileto), ('1' + rankto), promotechar);
+    }
+  } else {
+    if (captured) {
+      sprintf(MvStr, "%c%cx%c%c", ('a' + filefrom), ('1' + rankfrom),
+              ('a' + fileto), ('1' + rankto));
+    } else {
+      sprintf(MvStr, "%c%c%c%c", ('a' + filefrom), ('1' + rankfrom),
+              ('a' + fileto), ('1' + rankto));
+    }
   }
 
   return MvStr;

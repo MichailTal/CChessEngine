@@ -8,8 +8,8 @@
 #include "string.h"
 
 int main(int argc, char *argv[]) {
-  const char *bookPath = NULL;  // Default: no book
-  EngineOptions->UseBook = FALSE;  // Default: book disabled
+  const char *bookPath = NULL;    // Default: no book
+  EngineOptions->UseBook = FALSE; // Default: book disabled
 
   for (int i = 1; i < argc; i++) {
     if (!strcmp(argv[i], "-book") && i + 1 < argc) {
