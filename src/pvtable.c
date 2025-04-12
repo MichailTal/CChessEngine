@@ -123,8 +123,8 @@ int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
       else if (*score < -ISMATE)
         *score += pos->ply;
 
+      ASSERT(*score >= -INFINITE && *score <= INFINITE);
       switch (pos->HashTable->pTable[index].flags) {
-        ASSERT(*score >= -INFINITE && *score <= INFINITE);
 
       case HFALPHA:
         if (*score <= alpha) {
