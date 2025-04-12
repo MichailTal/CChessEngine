@@ -20,21 +20,12 @@ S_POLY_BOOK_ENTRY *entries;
 
 const int PolyKindOfPiece[13] = {-1, 1, 3, 5, 7, 9, 11, 0, 2, 4, 6, 8, 10};
 
-void InitPolyBook(void) {
-  char filePath[256];
-
+void InitPolyBook(const char *filePath) {
   EngineOptions->UseBook = FALSE;
 
-  printf("Enter the path to the book file: ");
-  if (fgets(filePath, sizeof(filePath), stdin) == NULL) {
-    fprintf(stderr, "Error reading file path\n");
+  if (filePath == NULL || filePath[0] == '\0') {
+    fprintf(stderr, "No book file provided\n");
     return;
-  }
-
-  // Remove newline character from the input
-  size_t len = strlen(filePath);
-  if (len > 0 && filePath[len - 1] == '\n') {
-    filePath[len - 1] = '\0';
   }
 
   FILE *pFile = fopen(filePath, "rb");
@@ -71,7 +62,6 @@ void InitPolyBook(void) {
   }
 
   EngineOptions->UseBook = TRUE;
-
   fclose(pFile);
 }
 

@@ -3,7 +3,7 @@
 
 #include "definitions.h"
 
-void AllInit(void);
+void AllInit(const char *filePath);
 void PrintBitBoard(U64 bb);
 int PopBit(U64 *bb);
 int CountBits(U64 bit);
@@ -55,5 +55,5 @@ int MoveListOk(const move_list *list, const board_representation *pos);
 int SqIs120(const int square);
 int GetBookMoves(board_representation *board);
 void CleanPolyBook(void);
-void InitPolyBook(void);
+void InitPolyBook(const char *filePath);
 #endif // INIT_H

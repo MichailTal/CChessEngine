@@ -175,12 +175,12 @@ void InitSq120To64(void) {
   }
 }
 
-void AllInit(void) {
+void AllInit(const char *filePath) {
   InitSq120To64();
   InitBitMask();
   InitHashKeys();
   InitFilesRanksBrd();
   InitEvalMasks();
   InitMvvLa();
-  InitPolyBook();
+  InitPolyBook(filePath);
 }

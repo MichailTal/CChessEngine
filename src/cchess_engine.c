@@ -8,27 +8,36 @@
 #include "string.h"
 
 int main(int argc, char *argv[]) {
-  AllInit();
+  const char *bookPath = NULL;  // Default: no book
+  EngineOptions->UseBook = FALSE;  // Default: book disabled
+
+  for (int i = 1; i < argc; i++) {
+    if (!strcmp(argv[i], "-book") && i + 1 < argc) {
+      bookPath = argv[i + 1];
+      EngineOptions->UseBook = TRUE;
+      i++;
+    } else if (!strcmp(argv[i], "-nobook")) {
+      EngineOptions->UseBook = FALSE;
+    }
+  }
+
+  AllInit(bookPath);
 
   board_representation *pos = GenBoard();
   S_SEARCHINFO info[1];
-
   info->quit = FALSE;
 
-  if (argc > 1) {
-    if (!strcmp(argv[1], "-xboard")) {
+  // Mode selection
+  for (int i = 1; i < argc; i++) {
+    if (!strcmp(argv[i], "-xboard")) {
       XBoard_Loop(pos, info);
       return 0;
-    } else if (!strcmp(argv[1], "-uci")) {
+    } else if (!strcmp(argv[i], "-uci")) {
       UCI_Loop(pos, info);
       return 0;
-    } else if (!strcmp(argv[1], "-console")) {
+    } else if (!strcmp(argv[i], "-console")) {
       Console_Loop(pos, info);
       return 0;
-    }
-
-    if (!strcmp(argv[2], "-nobook")) {
-      EngineOptions->UseBook = FALSE;
     }
   }
 
