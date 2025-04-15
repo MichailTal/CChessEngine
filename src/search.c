@@ -72,6 +72,7 @@ static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos,
   table->hit = 0;
   table->cut = 0;
   pos->ply = 0;
+  table ->currentage++;
 
   info->starttime = GetTimeMs();
   info->stopped = 0;
@@ -320,7 +321,6 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info,
                currentDepth, info->nodes, GetTimeMs() - info->starttime);
       }
       if (info->GAME_MODE == UCIMODE || info->POST_THINKING == TRUE) {
-        pvMoves = GetPvLine(currentDepth, pos, table);
         if (!(info->GAME_MODE == XBOARDMODE)) {
           printf("pv");
         }

@@ -137,6 +137,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
     } else if (!strncmp(line, "position", 8)) {
       ParsePosition(line, pos);
     } else if (!strncmp(line, "ucinewgame", 10)) {
+      ClearHashTable(HashTable);
       ParsePosition("position startpos\n", pos);
     } else if (!strncmp(line, "run", 3)) {
       ParseFen(START_FEN, pos);

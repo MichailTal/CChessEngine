@@ -43,8 +43,10 @@ void ClearHashTable(S_HASHTABLE *table) {
     tableEntry->depth = 0;
     tableEntry->score = 0;
     tableEntry->flags = 0;
+    tableEntry->age = 0;
   }
   table->newWrite = 0;
+  table->currentage = 0;
 }
 
 void InitHashTable(S_HASHTABLE *table, const int MB) {
@@ -79,11 +81,19 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
   ASSERT(score >= -INF_BOUND && score <= INF_BOUND);
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
+  int replace = FALSE;
+
   if (table->pTable[index].posKey == 0) {
     table->newWrite++;
+    replace = TRUE;
   } else {
-    table->overWrite++;
+    if (table->pTable[index].age < table->currentage ||
+        table->pTable[index].depth < depth) {
+      replace = TRUE;
+    }
   }
+
+  if(replace == FALSE) return;
 
   if (score > ISMATE)
     score += pos->ply;
@@ -95,6 +105,7 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
   table->pTable[index].flags = flags;
   table->pTable[index].score = score;
   table->pTable[index].depth = depth;
+  table -> pTable[index].age = table -> currentage;
 }
 
 int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
