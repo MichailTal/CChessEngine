@@ -13,9 +13,10 @@ typedef unsigned long long U64;
 #define CLRBIT(bb, sq) ((bb) &= ClearMask[(sq)])
 #define SETBIT(bb, sq) ((bb) |= SetMask[(sq)])
 
-#define INF_BOUND 30000
+#define INF_BOUND 32000
+#define AB_BOUND 30000
 
-#define ISMATE (INF_BOUND - MAXDEPTH)
+#define ISMATE (AB_BOUND - MAXDEPTH)
 
 #define MAX_HASH 1024
 

@@ -2,10 +2,19 @@
 #include "../include/globals.h"
 #include "../include/init.h"
 #include "../include/macros.h"
+#include "../include/tinycthread.h"
 #include "stdio.h"
 #include "stdlib.h"
 
+#define EXTRACT_SCORE(x) ((x & 0xFFFF) - INF_BOUND)
+#define EXTRACT_DEPTH(x) ((x >> 16) & 0x3F)
+#define EXTRACT_FLAGS(x) ((x >> 23) & 0x3)
+#define EXTRACT_MOVE(x) ((int)(x >> 25))
+
+#define FOLD_DATA(score, depth, flag, move) ( (score + INF_BOUND) | (depth << 16) | (flag << 23)  | ((U64)move << 25))
+
 S_HASHTABLE HashTable[1];
+thrd_t MainSearchThread;
 
 int GetPvLine(const int depth, board_representation *pos, const S_HASHTABLE *table) {
   ASSERT(depth <= MAXDEPTH);
@@ -78,7 +87,7 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
          index <= table->numEntries - 1); // Checks calculation above
   ASSERT(depth >= 1 && depth <= MAXDEPTH);
   ASSERT(flags >= HFALPHA && flags <= HFEXACT);
-  ASSERT(score >= -INF_BOUND && score <= INF_BOUND);
+  ASSERT(score >= -AB_BOUND && score <= AB_BOUND);
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   int replace = FALSE;
@@ -118,8 +127,8 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
          index <= table->numEntries - 1); // Checks calculation above
   ASSERT(depth >= 1 && depth <= MAXDEPTH);
   ASSERT(alpha < beta);
-  ASSERT(alpha >= -INF_BOUND && alpha <= INF_BOUND);
-  ASSERT(beta >= -INF_BOUND && beta <= INF_BOUND);
+  ASSERT(alpha >= -AB_BOUND && alpha <= AB_BOUND);
+  ASSERT(beta >= -AB_BOUND && beta <= AB_BOUND);
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   if (table->pTable[index].posKey == pos->posKey) {
@@ -138,7 +147,7 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
       else if (*score < -ISMATE)
         *score += pos->ply;
 
-      ASSERT(*score >= -INF_BOUND && *score <= INF_BOUND);
+      ASSERT(*score >= -AB_BOUND && *score <= AB_BOUND);
       switch (table->pTable[index].flags) {
 
       case HFALPHA:
