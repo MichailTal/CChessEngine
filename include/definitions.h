@@ -240,4 +240,10 @@ typedef struct {
   int UseBook;
 } S_OPTIONS;
 
+typedef struct {
+  S_SEARCHINFO *info;
+  board_representation *pos;
+  S_HASHTABLE *ttable;
+} S_SEARCH_THREAD_DATA;
+
 #endif

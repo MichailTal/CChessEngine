@@ -7,7 +7,7 @@
 
 S_HASHTABLE HashTable[1];
 
-int GetPvLine(const int depth, board_representation *pos, S_HASHTABLE *table) {
+int GetPvLine(const int depth, board_representation *pos, const S_HASHTABLE *table) {
   ASSERT(depth <= MAXDEPTH);
 
   int move = ProbePvMove(pos, table);
@@ -93,7 +93,8 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
     }
   }
 
-  if(replace == FALSE) return;
+  if (replace == FALSE)
+    return;
 
   if (score > ISMATE)
     score += pos->ply;
@@ -105,7 +106,7 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
   table->pTable[index].flags = flags;
   table->pTable[index].score = score;
   table->pTable[index].depth = depth;
-  table -> pTable[index].age = table -> currentage;
+  table->pTable[index].age = table->currentage;
 }
 
 int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
@@ -165,7 +166,7 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
   return FALSE;
 }
 
-int ProbePvMove(const board_representation *pos, S_HASHTABLE *table) {
+int ProbePvMove(const board_representation *pos, const S_HASHTABLE *table) {
 
   int index = pos->posKey % table->numEntries;
   ASSERT(index >= 0 && index <= table->numEntries - 1);

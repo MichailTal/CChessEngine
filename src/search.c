@@ -2,17 +2,15 @@
 #include "../include/globals.h"
 #include "../include/init.h"
 #include "../include/macros.h"
-#include "math.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "string.h"
 
 static void CheckUp(S_SEARCHINFO *info) {
   // Check if time up or interrupt from GUI
   if (info->timeset == TRUE && GetTimeMs() > info->stoptime) {
     info->stopped = TRUE;
   }
-
-  ReadInput(info);
 }
 
 static void PickNextMove(int moveNum, move_list *list) {
@@ -72,7 +70,7 @@ static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos,
   table->hit = 0;
   table->cut = 0;
   pos->ply = 0;
-  table ->currentage++;
+  table->currentage++;
 
   info->starttime = GetTimeMs();
   info->stopped = 0;
@@ -281,6 +279,16 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   }
 
   return alpha;
+}
+
+int SearchPositionThread(void *data) {
+  S_SEARCH_THREAD_DATA *searchData = (S_SEARCH_THREAD_DATA *)data;
+  board_representation *pos = malloc(sizeof(board_representation));
+  memcpy(pos, searchData->pos, sizeof(board_representation));
+  SearchPosition(pos, searchData->info, searchData->ttable);
+  free(pos);
+  printf("Freed Thread\n");
+  return 0;
 }
 
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info,

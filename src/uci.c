@@ -2,14 +2,35 @@
 #include "../include/globals.h"
 #include "../include/init.h"
 #include "../include/macros.h"
+#include "../include/tinycthread.h"
 #include "stdio.h"
 #include "string.h"
 
 #define INPUTBUFFER 400 * 6
 
+thrd_t MainSearchThread;
+
+thrd_t LaunchSearchThread(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table) {
+  S_SEARCH_THREAD_DATA *pSearchData = malloc(sizeof(S_SEARCH_THREAD_DATA));
+
+  pSearchData -> pos = pos;
+  pSearchData -> info = info;
+  pSearchData -> ttable = table;
+
+  thrd_t th;
+  thrd_create(&th, &SearchPositionThread, (void*)pSearchData);
+
+  return th;
+}
+
+void JoinSearchThread(S_SEARCHINFO *info) {
+  info -> stopped = TRUE;
+  thrd_join(MainSearchThread, NULL);
+}
+
 // go depth 6 wtime 180000 btime 100000 binc 1000 winc 1000 movetime 1000
 // movestogo 40
-void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos) {
+void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos, S_HASHTABLE *table) {
 
   int depth = -1, movestogo = 30, movetime = -1;
   int time = -1, inc = 0;
@@ -69,7 +90,8 @@ void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos) {
 
   printf("time:%d start:%d stop:%d depth:%d timeset:%d\n", time,
          info->starttime, info->stoptime, info->depth, info->timeset);
-  SearchPosition(pos, info, HashTable);
+  //SearchPosition(pos, info, table);
+  MainSearchThread = LaunchSearchThread(pos, info, table);
 }
 
 void ParsePosition(char *lineIn, board_representation *pos) {
@@ -141,13 +163,16 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       ParsePosition("position startpos\n", pos);
     } else if (!strncmp(line, "run", 3)) {
       ParseFen(START_FEN, pos);
-      ParseGo("go infinte", info, pos);
+      ParseGo("go infinte", info, pos, HashTable);
     } else if (!strncmp(line, "quit", 4)) {
-      info->quit = TRUE;
+      info -> quit = TRUE;
+      JoinSearchThread(info);
       break;
+    } else if (!strncmp(line, "stop", 4)) {
+      JoinSearchThread(info);
     } else if (!strncmp(line, "go", 2)) {
       printf("Seen Go..\n");
-      ParseGo(line, info, pos);
+      ParseGo(line, info, pos, HashTable);
     } else if (!strncmp(line, "uci", 3)) {
       printf("uciok\n");
     } else if (!strncmp(line, "setoption name Hash value ", 26)) {
