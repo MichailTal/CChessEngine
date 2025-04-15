@@ -8,27 +8,31 @@
 
 #define INPUTBUFFER 400 * 6
 
-thrd_t LaunchSearchThread(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table) {
+thrd_t MainSearchThread;
+
+thrd_t LaunchSearchThread(board_representation *pos, S_SEARCHINFO *info,
+                          S_HASHTABLE *table) {
   S_SEARCH_THREAD_DATA *pSearchData = malloc(sizeof(S_SEARCH_THREAD_DATA));
 
-  pSearchData -> pos = pos;
-  pSearchData -> info = info;
-  pSearchData -> ttable = table;
+  pSearchData->pos = pos;
+  pSearchData->info = info;
+  pSearchData->ttable = table;
 
   thrd_t th;
-  thrd_create(&th, &SearchPositionThread, (void*)pSearchData);
+  thrd_create(&th, &SearchPositionThread, (void *)pSearchData);
 
   return th;
 }
 
 void JoinSearchThread(S_SEARCHINFO *info) {
-  info -> stopped = TRUE;
+  info->stopped = TRUE;
   thrd_join(MainSearchThread, NULL);
 }
 
 // go depth 6 wtime 180000 btime 100000 binc 1000 winc 1000 movetime 1000
 // movestogo 40
-void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos, S_HASHTABLE *table) {
+void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos,
+             S_HASHTABLE *table) {
 
   int depth = -1, movestogo = 30, movetime = -1;
   int time = -1, inc = 0;
@@ -88,7 +92,7 @@ void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos, S_HASHTA
 
   printf("time:%d start:%d stop:%d depth:%d timeset:%d\n", time,
          info->starttime, info->stoptime, info->depth, info->timeset);
-  //SearchPosition(pos, info, table);
+  // SearchPosition(pos, info, table);
   MainSearchThread = LaunchSearchThread(pos, info, table);
 }
 
@@ -163,7 +167,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       ParseFen(START_FEN, pos);
       ParseGo("go infinte", info, pos, HashTable);
     } else if (!strncmp(line, "quit", 4)) {
-        info -> quit = TRUE;
+      info->quit = TRUE;
       JoinSearchThread(info);
       break;
     } else if (!strncmp(line, "stop", 4)) {

@@ -15,6 +15,8 @@ It currently has the following features:
 The engine is based around the old implementation of VICE, an easy engine for demonstration.
 You can check the repo [here](https://github.com/bluefeversoft/vice/tree/main)
 
+For Multithreading the Move Search, this engine utilizes [tinycthread](https://github.com/tinycthread/tinycthread).
+
 ## Lichess
 
 This engine is powering a BOT Account on Lichess, that you can check out [here](https://lichess.org/@/Nilstron)
@@ -36,3 +38,7 @@ You can run this engine on both POSIX and Windows Systems as well as Docker Imag
  ```
 
 - the binary is created within the folder of the Makefile
+
+## Author
+
+You can find the Author of the engine [here](https://www.linkedin.com/in/nils-k%C3%B6hler97/)

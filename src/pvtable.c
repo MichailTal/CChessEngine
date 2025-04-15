@@ -16,7 +16,8 @@
 S_HASHTABLE HashTable[1];
 thrd_t MainSearchThread;
 
-int GetPvLine(const int depth, board_representation *pos, const S_HASHTABLE *table) {
+int GetPvLine(const int depth, board_representation *pos,
+              const S_HASHTABLE *table) {
   ASSERT(depth <= MAXDEPTH);
 
   int move = ProbePvMove(pos, table);
