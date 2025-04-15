@@ -17,7 +17,7 @@
 S_HASHTABLE HashTable[1];
 
 void VerifyEntrySMP(S_HASHENTRY *entry) {
-  U64 data = FOLD_DATA(entry->score, entry->depth, entry->flags, entry->move);
+  /*U64 data = FOLD_DATA(entry->score, entry->depth, entry->flags, entry->move);
   U64 key = entry->posKey ^ data;
 
   if(data != entry -> smp_data) {printf("data error"); exit(1);}
@@ -31,7 +31,7 @@ void VerifyEntrySMP(S_HASHENTRY *entry) {
   if(move != entry -> move) {printf("move error %s", PrintMove(move)); exit(1);}
   if(flag != entry -> flags) {printf("flag error %d", flag); exit(1);}
   if(depth != entry -> depth) {printf("depth error %d", depth); exit(1);}
-  if(score != entry -> score) {printf("score error %d", score); exit(1);}
+  if(score != entry -> score) {printf("score error %d", score); exit(1);} */
   
 }
 
@@ -67,11 +67,11 @@ void ClearHashTable(S_HASHTABLE *table) {
 
   for (tableEntry = table->pTable;
        tableEntry < table->pTable + table->numEntries; tableEntry++) {
-    tableEntry->posKey = 0ULL;
+    /*tableEntry->posKey = 0ULL;
     tableEntry->move = NOMOVE;
     tableEntry->depth = 0;
     tableEntry->score = 0;
-    tableEntry->flags = 0;
+    tableEntry->flags = 0;*/
     tableEntry->age = 0;
     tableEntry->smp_data = 0ULL;
     tableEntry->smp_key = 0ULL;
@@ -115,12 +115,13 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
 
   int replace = FALSE;
 
-  if (table->pTable[index].posKey == 0) {
+  if (table->pTable[index].smp_key == 0) {
     table->newWrite++;
     replace = TRUE;
   } else {
-    if (table->pTable[index].age < table->currentage ||
-        table->pTable[index].depth <= depth) {
+    if (table->pTable[index].age < table -> currentage) {
+      replace = TRUE;
+    } else if (EXTRACT_DEPTH(table -> pTable[index].smp_data < depth)) {
       replace = TRUE;
     }
   }
@@ -136,16 +137,14 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
   U64 smp_data = FOLD_DATA(score, depth, flags, move);
   U64 smp_key = pos -> posKey ^ smp_data;
 
-  table->pTable[index].move = move;
+  /*table->pTable[index].move = move;
   table->pTable[index].posKey = pos->posKey;
   table->pTable[index].flags = flags;
   table->pTable[index].score = score;
-  table->pTable[index].depth = depth;
+  table->pTable[index].depth = depth; */
   table->pTable[index].age = table->currentage;
   table->pTable[index].smp_data = smp_data;
   table->pTable[index].smp_key = smp_key;
-
-  VerifyEntrySMP(&table -> pTable[index]);
 
 }
 
@@ -162,31 +161,32 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
   ASSERT(beta >= -AB_BOUND && beta <= AB_BOUND);
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
-  if (table->pTable[index].posKey == pos->posKey) {
+  U64 test_key = pos -> posKey ^ table->pTable[index].smp_data;
 
-    U64 test_key = table -> pTable[index].posKey ^ table->pTable[index].smp_data;
-    if(test_key != table->pTable[index].smp_key) printf("Error with test key");
+  if (table->pTable[index].smp_key == test_key) {
 
-    VerifyEntrySMP(&table->pTable[index]);
+    int smp_depth = EXTRACT_DEPTH(table->pTable[index].smp_data);
+    int smp_move = EXTRACT_MOVE(table->pTable[index].smp_data);
+    int smp_flags = EXTRACT_FLAGS(table->pTable[index].smp_data);
+    int smp_score = EXTRACT_SCORE(table->pTable[index].smp_data);
 
-
-    *move = table->pTable[index].move;
-    if (table->pTable[index].depth >= depth) {
+    *move = smp_move;
+    if (smp_depth >= depth) {
       table->hit++;
 
-      ASSERT(table->pTable[index].depth >= 1 &&
-             table->pTable[index].depth <= MAXDEPTH);
-      ASSERT(table->pTable[index].flags >= HFALPHA &&
-             table->pTable[index].flags <= HFEXACT);
+      ASSERT(smp_depth >= 1 &&
+             smp_depth <= MAXDEPTH);
+      ASSERT(smp_flags >= HFALPHA &&
+             smp_flags <= HFEXACT);
 
-      *score = table->pTable[index].score;
+      *score = smp_score;
       if (*score > ISMATE)
         *score -= pos->ply;
       else if (*score < -ISMATE)
         *score += pos->ply;
 
       ASSERT(*score >= -AB_BOUND && *score <= AB_BOUND);
-      switch (table->pTable[index].flags) {
+      switch (smp_flags) {
 
       case HFALPHA:
         if (*score <= alpha) {
@@ -216,10 +216,13 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
 int ProbePvMove(const board_representation *pos, const S_HASHTABLE *table) {
 
   int index = pos->posKey % table->numEntries;
+
+  U64 test_key = pos -> posKey ^ table -> pTable[index].smp_data;
+
   ASSERT(index >= 0 && index <= table->numEntries - 1);
 
-  if (table->pTable[index].posKey == pos->posKey) {
-    return table->pTable[index].move;
+  if (table->pTable[index].smp_key == test_key) {
+    return EXTRACT_MOVE(table -> pTable[index].smp_data);
   }
 
   return NOMOVE;

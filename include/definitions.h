@@ -153,11 +153,11 @@ typedef struct {
 
 // Principle Variation Structs
 typedef struct {
-  U64 posKey;
+  /*U64 posKey;
   int move;
   int score;
   int depth;
-  int flags;
+  int flags;*/
   int age;
   U64 smp_data;
   U64 smp_key;
