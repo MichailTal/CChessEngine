@@ -8,6 +8,8 @@
 
 #define INPUTBUFFER 400 * 6
 
+thrd_t MainSearchThread;
+
 thrd_t LaunchSearchThread(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table) {
   S_SEARCH_THREAD_DATA *pSearchData = malloc(sizeof(S_SEARCH_THREAD_DATA));
 
