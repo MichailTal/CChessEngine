@@ -142,7 +142,7 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
           "time:%d start:%d stop:%d depth:%d timeset:%d movestogo:%d mps:%d\n",
           time, info->starttime, info->stoptime, info->depth, info->timeset,
           movestogo[pos->side], mps);
-      SearchPosition(pos, info);
+      SearchPosition(pos, info, HashTable);
 
       if (mps != 0) {
         movestogo[pos->side ^ 1]--;
@@ -224,7 +224,7 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
     }
 
     if (!strcmp(command, "new")) {
-      ClearHashTable(pos->HashTable);
+      ClearHashTable(HashTable);
       engineSide = BLACK;
       ParseFen(START_FEN, pos);
       depth = -1;
@@ -259,7 +259,7 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
       if (MB > 2048)
         MB = 2048;
       printf("Set Hash to %d MB\n", MB);
-      InitHashTable(pos->HashTable, MB);
+      InitHashTable(HashTable, MB);
       continue;
     }
 

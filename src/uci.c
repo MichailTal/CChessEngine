@@ -69,7 +69,7 @@ void ParseGo(char *line, S_SEARCHINFO *info, board_representation *pos) {
 
   printf("time:%d start:%d stop:%d depth:%d timeset:%d\n", time,
          info->starttime, info->stoptime, info->depth, info->timeset);
-  SearchPosition(pos, info);
+  SearchPosition(pos, info, HashTable);
 }
 
 void ParsePosition(char *lineIn, board_representation *pos) {
@@ -156,7 +156,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       if (MB > MAX_HASH)
         MB = MAX_HASH;
       printf("Set Hash to %d MB\n", MB);
-      InitHashTable(pos->HashTable, MB);
+      InitHashTable(HashTable, MB);
     } else if (!strncmp(line, "setoption name Book value ", 26)) {
       char *ptrTrue = NULL;
       ptrTrue = strstr(line, "true");

@@ -50,7 +50,8 @@ static int IsRepetition(const board_representation *pos) {
   return FALSE;
 }
 
-static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos) {
+static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos,
+                           S_HASHTABLE *table) {
 
   int index = 0;
   int index_2 = 0;
@@ -67,9 +68,9 @@ static void ClearForSearch(S_SEARCHINFO *info, board_representation *pos) {
     }
   }
 
-  pos->HashTable->overWrite = 0;
-  pos->HashTable->hit = 0;
-  pos->HashTable->cut = 0;
+  table->overWrite = 0;
+  table->hit = 0;
+  table->cut = 0;
   pos->ply = 0;
 
   info->starttime = GetTimeMs();
@@ -149,7 +150,7 @@ static int Quiescence(int alpha, int beta, board_representation *pos,
 }
 
 static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
-                     S_SEARCHINFO *info, int DoNull) {
+                     S_SEARCHINFO *info, S_HASHTABLE *table, int DoNull) {
 
   ASSERT(CheckBoard(pos));
 
@@ -180,15 +181,15 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   int Score = -INF_BOUND;
   int PvMove = NOMOVE;
 
-  if (ProbeHashEntry(pos, &PvMove, &Score, alpha, beta, depth) == TRUE) {
-    pos->HashTable->cut++;
+  if (ProbeHashEntry(pos, table, &PvMove, &Score, alpha, beta, depth) == TRUE) {
+    table->cut++;
     return Score;
   }
 
   if (DoNull && !InCheck && pos->ply && (pos->bigPce[pos->side] > 1) &&
       depth >= 4) { // No Check and no Zugzwang for the Null Move Pruning
     MakeNullMove(pos);
-    Score = -AlphaBeta(-beta, -beta + 1, depth - 4, pos, info,
+    Score = -AlphaBeta(-beta, -beta + 1, depth - 4, pos, info, table,
                        FALSE); // No recursive null moving
     TakeNullMove(pos);
     if (info->stopped == TRUE) {
@@ -227,7 +228,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     }
 
     Legal++;
-    Score = -AlphaBeta(-beta, -alpha, depth - 1, pos, info, TRUE);
+    Score = -AlphaBeta(-beta, -alpha, depth - 1, pos, info, table, TRUE);
     TakeMove(pos);
 
     if (info->stopped == TRUE) {
@@ -250,7 +251,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
             pos->searchKillers[0][pos->ply] = list->moves[MoveNum].move;
           }
 
-          StoreHashEntry(pos, bestMove, beta, HFBETA, depth);
+          StoreHashEntry(pos, table, bestMove, beta, HFBETA, depth);
 
           return beta;
         }
@@ -273,22 +274,23 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   }
 
   if (alpha != OldAlpha) {
-    StoreHashEntry(pos, bestMove, BestScore, HFEXACT, depth);
+    StoreHashEntry(pos, table, bestMove, BestScore, HFEXACT, depth);
   } else {
-    StoreHashEntry(pos, bestMove, alpha, HFALPHA, depth);
+    StoreHashEntry(pos, table, bestMove, alpha, HFALPHA, depth);
   }
 
   return alpha;
 }
 
-void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {
+void SearchPosition(board_representation *pos, S_SEARCHINFO *info,
+                    S_HASHTABLE *table) {
 
   int bestMove = NOMOVE;
   int bestScore = -INF_BOUND;
   int currentDepth = 0;
   int pvMoves = 0;
   int pvNum = 0;
-  ClearForSearch(info, pos);
+  ClearForSearch(info, pos, table);
 
   if (EngineOptions->UseBook == TRUE) {
     bestMove = GetBookMoves(pos);
@@ -297,14 +299,14 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {
   if (bestMove == NOMOVE) {
     for (currentDepth = 1; currentDepth <= info->depth; ++currentDepth) {
 
-      bestScore =
-          AlphaBeta(-INF_BOUND, INF_BOUND, currentDepth, pos, info, TRUE);
+      bestScore = AlphaBeta(-INF_BOUND, INF_BOUND, currentDepth, pos, info,
+                            table, TRUE);
 
       if (info->stopped == TRUE) {
         break;
       }
 
-      pvMoves = GetPvLine(currentDepth, pos);
+      pvMoves = GetPvLine(currentDepth, pos, table);
       bestMove = pos->PvArray[0];
 
       if (info->GAME_MODE == UCIMODE) {
@@ -318,7 +320,7 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {
                currentDepth, info->nodes, GetTimeMs() - info->starttime);
       }
       if (info->GAME_MODE == UCIMODE || info->POST_THINKING == TRUE) {
-        pvMoves = GetPvLine(currentDepth, pos);
+        pvMoves = GetPvLine(currentDepth, pos, table);
         if (!(info->GAME_MODE == XBOARDMODE)) {
           printf("pv");
         }

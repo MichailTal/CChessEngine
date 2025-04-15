@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
   }
 
   // Fallback: interactive stdin mode
-  printf("Welcome to the Chess Engine! Type 'console', 'xboard', or 'uci'\n");
+  printf("Welcome to the Chess Engine! Type 'xboard', or 'uci'\n");
 
   char line[256];
   while (TRUE) {

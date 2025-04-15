@@ -189,7 +189,6 @@ typedef struct {
 
   S_UNDO moveHistory[MAXGAMEHALFMOVES];
 
-  S_HASHTABLE HashTable[1];
   int PvArray[MAXDEPTH];
 
   int pieceList[13][10]; // piece list

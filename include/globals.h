@@ -45,5 +45,6 @@ extern U64 IsolatedMask[64];
 extern const U64 Random64Poly[781];
 
 extern S_OPTIONS EngineOptions[1];
+extern S_HASHTABLE HashTable[1];
 
 #endif

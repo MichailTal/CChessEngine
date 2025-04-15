@@ -7,7 +7,7 @@
 board_representation *GenBoard(void) {
   board_representation *board =
       (board_representation *)malloc(sizeof(board_representation));
-  board->HashTable->pTable = NULL;
+  HashTable->pTable = NULL;
   return board;
 }
 
@@ -157,7 +157,7 @@ int ParseFen(char *fen, board_representation *pos) {
   int sq64 = 0;
   int sq120 = 0;
 
-  ResetBoard(pos);
+  ResetBoard(pos, HashTable);
 
   while ((rank >= RANK_1) && *fen) {
     count = 1;
@@ -282,7 +282,7 @@ int ParseFen(char *fen, board_representation *pos) {
   return 0;
 }
 
-void ResetBoard(board_representation *pos) {
+void ResetBoard(board_representation *pos, S_HASHTABLE *table) {
 
   int index = 0;
 
@@ -322,9 +322,9 @@ void ResetBoard(board_representation *pos) {
 
   pos->posKey = 0ULL;
 
-  pos->HashTable->pTable = NULL;
+  table->pTable = NULL;
 
-  InitHashTable(pos->HashTable, 64);
+  InitHashTable(table, 64);
 }
 
 void PrintBoard(const board_representation *pos) {
@@ -358,7 +358,7 @@ void PrintBoard(const board_representation *pos) {
   printf("PosKey:%llX\n", pos->posKey);
 }
 
-void MirrorBoard(board_representation *pos) {
+void MirrorBoard(board_representation *pos, S_HASHTABLE *table) {
 
   int tempPiecesArray[64];
   int tempSide = pos->side ^ 1;
@@ -387,7 +387,7 @@ void MirrorBoard(board_representation *pos) {
     tempPiecesArray[square] = pos->pieces[SQ120(Mirror64[square])];
   }
 
-  ResetBoard(pos);
+  ResetBoard(pos, table);
 
   for (square = 0; square < 64; square++) {
     tempPiece = SwapPiece[tempPiecesArray[square]];
