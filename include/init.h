@@ -46,7 +46,6 @@ void GenerateAllCaps(const board_representation *pos, move_list *list);
 void UCI_Loop(board_representation *pos, S_SEARCHINFO *info);
 void ReadInput(S_SEARCHINFO *info);
 void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info);
-void Console_Loop(board_representation *pos, S_SEARCHINFO *info);
 void MirrorBoard(board_representation *pos);
 void TakeNullMove(board_representation *pos);
 void MakeNullMove(board_representation *pos);

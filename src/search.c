@@ -100,7 +100,7 @@ static int Quiescence(int alpha, int beta, board_representation *pos,
 
   int Score = EvalPosition(pos);
 
-  ASSERT(Score > -INFINITE && Score < INFINITE);
+  ASSERT(Score > -INF_BOUND && Score < INF_BOUND);
 
   if (Score >= beta) {
     return beta;
@@ -115,7 +115,7 @@ static int Quiescence(int alpha, int beta, board_representation *pos,
 
   int MoveNum = 0;
   int Legal = 0;
-  Score = -INFINITE;
+  Score = -INF_BOUND;
 
   for (MoveNum = 0; MoveNum < list->count; ++MoveNum) {
 
@@ -177,7 +177,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     depth++;
   }
 
-  int Score = -INFINITE;
+  int Score = -INF_BOUND;
   int PvMove = NOMOVE;
 
   if (ProbeHashEntry(pos, &PvMove, &Score, alpha, beta, depth) == TRUE) {
@@ -185,7 +185,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
     return Score;
   }
 
-  if (DoNull && !InCheck && pos->ply &&
+  if (DoNull && !InCheck && pos->ply && (pos->bigPce[pos->side] > 1) &&
       depth >= 4) { // No Check and no Zugzwang for the Null Move Pruning
     MakeNullMove(pos);
     Score = -AlphaBeta(-beta, -beta + 1, depth - 4, pos, info,
@@ -207,7 +207,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
   int Legal = 0;
   int OldAlpha = alpha;
   int bestMove = NOMOVE;
-  int BestScore = -INFINITE;
+  int BestScore = -INF_BOUND;
 
   if (PvMove != NOMOVE) {
     for (MoveNum = 0; MoveNum < list->count; ++MoveNum) {
@@ -284,7 +284,7 @@ static int AlphaBeta(int alpha, int beta, int depth, board_representation *pos,
 void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {
 
   int bestMove = NOMOVE;
-  int bestScore = -INFINITE;
+  int bestScore = -INF_BOUND;
   int currentDepth = 0;
   int pvMoves = 0;
   int pvNum = 0;
@@ -297,7 +297,8 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info) {
   if (bestMove == NOMOVE) {
     for (currentDepth = 1; currentDepth <= info->depth; ++currentDepth) {
 
-      bestScore = AlphaBeta(-INFINITE, INFINITE, currentDepth, pos, info, TRUE);
+      bestScore =
+          AlphaBeta(-INF_BOUND, INF_BOUND, currentDepth, pos, info, TRUE);
 
       if (info->stopped == TRUE) {
         break;

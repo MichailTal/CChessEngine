@@ -1,10 +1,13 @@
+SRCS = $(wildcard src/*.c)
+NAME = CChessEngine
+
 .ONESHELL:
 
 build:
-	gcc -Iinclude src/*.c -o cchess_engine
+	gcc -Iinclude $(SRCS) -o $(NAME) -O2
 
 debug:
-	gcc -Iinclude src/*.c -o cchess_engine -Wall -Wextra -Werror -pedantic -std=c99 -g
+	gcc -Iinclude $(SRCS) -o $(NAME) -Wall -Wextra -Werror -pedantic -std=c99 -g
 
 pre-commit:
 	pre-commit run --all-files

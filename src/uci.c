@@ -138,12 +138,15 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       ParsePosition(line, pos);
     } else if (!strncmp(line, "ucinewgame", 10)) {
       ParsePosition("position startpos\n", pos);
-    } else if (!strncmp(line, "go", 2)) {
-      printf("Seen Go..\n");
-      ParseGo(line, info, pos);
+    } else if (!strncmp(line, "run", 3)) {
+      ParseFen(START_FEN, pos);
+      ParseGo("go infinte", info, pos);
     } else if (!strncmp(line, "quit", 4)) {
       info->quit = TRUE;
       break;
+    } else if (!strncmp(line, "go", 2)) {
+      printf("Seen Go..\n");
+      ParseGo(line, info, pos);
     } else if (!strncmp(line, "uci", 3)) {
       printf("uciok\n");
     } else if (!strncmp(line, "setoption name Hash value ", 26)) {

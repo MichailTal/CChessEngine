@@ -13,9 +13,9 @@ typedef unsigned long long U64;
 #define CLRBIT(bb, sq) ((bb) &= ClearMask[(sq)])
 #define SETBIT(bb, sq) ((bb) |= SetMask[(sq)])
 
-#define INFINITE 30000
+#define INF_BOUND 30000
 
-#define ISMATE (INFINITE - MAXDEPTH)
+#define ISMATE (INF_BOUND - MAXDEPTH)
 
 #define MAX_HASH 1024
 
@@ -54,7 +54,7 @@ enum {
 enum { WHITE, BLACK, BOTH };
 
 // Engine Modes
-enum { UCIMODE, XBOARDMODE, CONSOLEMODE };
+enum { UCIMODE, XBOARDMODE };
 
 // Square Definitions
 enum {

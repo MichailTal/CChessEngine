@@ -73,7 +73,7 @@ void StoreHashEntry(board_representation *pos, const int move, int score,
          index <= pos->HashTable->numEntries - 1); // Checks calculation above
   ASSERT(depth >= 1 && depth <= MAXDEPTH);
   ASSERT(flags >= HFALPHA && flags <= HFEXACT);
-  ASSERT(score >= -INFINITE && score <= INFINITE);
+  ASSERT(score >= -INF_BOUND && score <= INF_BOUND);
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   if (pos->HashTable->pTable[index].posKey == 0) {
@@ -103,8 +103,8 @@ int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
          index <= pos->HashTable->numEntries - 1); // Checks calculation above
   ASSERT(depth >= 1 && depth <= MAXDEPTH);
   ASSERT(alpha < beta);
-  ASSERT(alpha >= -INFINITE && alpha <= INFINITE);
-  ASSERT(beta >= -INFINITE && beta <= INFINITE);
+  ASSERT(alpha >= -INF_BOUND && alpha <= INF_BOUND);
+  ASSERT(beta >= -INF_BOUND && beta <= INF_BOUND);
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   if (pos->HashTable->pTable[index].posKey == pos->posKey) {
@@ -123,7 +123,7 @@ int ProbeHashEntry(board_representation *pos, int *move, int *score, int alpha,
       else if (*score < -ISMATE)
         *score += pos->ply;
 
-      ASSERT(*score >= -INFINITE && *score <= INFINITE);
+      ASSERT(*score >= -INF_BOUND && *score <= INF_BOUND);
       switch (pos->HashTable->pTable[index].flags) {
 
       case HFALPHA:

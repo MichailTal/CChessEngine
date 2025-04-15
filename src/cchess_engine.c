@@ -35,9 +35,6 @@ int main(int argc, char *argv[]) {
     } else if (!strcmp(argv[i], "-uci")) {
       UCI_Loop(pos, info);
       return 0;
-    } else if (!strcmp(argv[i], "-console")) {
-      Console_Loop(pos, info);
-      return 0;
     }
   }
 
@@ -61,10 +58,6 @@ int main(int argc, char *argv[]) {
     } else if (!strncmp(line, "xboard", 6)) {
       XBoard_Loop(pos, info);
       if (info->quit == TRUE)
-        break;
-    } else if (!strncmp(line, "console", 7)) {
-      Console_Loop(pos, info);
-      if (info->quit)
         break;
     } else if (!strncmp(line, "quit", 4)) {
       break;
