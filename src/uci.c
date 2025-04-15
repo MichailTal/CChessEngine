@@ -164,7 +164,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       ClearHashTable(HashTable);
       ParsePosition("position startpos\n", pos);
     } else if (!strncmp(line, "run", 3)) {
-      ParseFen(START_FEN, pos);
+      ParseFen(WAC_2, pos);
       ParseGo("go infinte", info, pos, HashTable);
     } else if (!strncmp(line, "quit", 4)) {
       info->quit = TRUE;

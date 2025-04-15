@@ -84,6 +84,7 @@ void InitHashTable(S_HASHTABLE *table, const int MB) {
   int HashSize = 0x100000 * MB;
   table->numEntries = HashSize / sizeof(S_HASHENTRY);
   table->numEntries -= 2; // Prevent Out of Bound by indexing
+  table -> numEntries = 1000000;
 
   if (table->pTable != NULL) {
     free(table->pTable); // Free potential memory from left over PTable
@@ -167,7 +168,7 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
     if(test_key != table->pTable[index].smp_key) printf("Error with test key");
 
     VerifyEntrySMP(&table->pTable[index]);
-    
+
 
     *move = table->pTable[index].move;
     if (table->pTable[index].depth >= depth) {

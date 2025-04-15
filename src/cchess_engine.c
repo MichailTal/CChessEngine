@@ -26,6 +26,10 @@ int main(int argc, char *argv[]) {
   board_representation *pos = GenBoard();
   S_SEARCHINFO info[1];
   info->quit = FALSE;
+  
+  HashTable->pTable = NULL;
+
+  InitHashTable(HashTable, 64);
 
   // Mode selection
   for (int i = 1; i < argc; i++) {

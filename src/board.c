@@ -321,10 +321,6 @@ void ResetBoard(board_representation *pos, S_HASHTABLE *table) {
   pos->castlePermission = 0;
 
   pos->posKey = 0ULL;
-
-  table->pTable = NULL;
-
-  InitHashTable(table, 64);
 }
 
 void PrintBoard(const board_representation *pos) {
