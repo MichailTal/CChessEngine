@@ -50,5 +50,4 @@ extern S_HASHTABLE HashTable[1];
 
 extern thrd_t MainSearchThread;
 
-
 #endif
