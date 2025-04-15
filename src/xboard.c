@@ -5,8 +5,6 @@
 #include "stdio.h"
 #include "string.h"
 
-thrd_t MainSearchThread;
-
 int ThreeFoldRep(const board_representation *pos) {
   int i = 0;
   int r = 0;

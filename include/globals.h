@@ -2,6 +2,7 @@
 #define GLOB_H
 
 #include "definitions.h"
+#include "tinycthread.h"
 
 extern int SQUARE120TOSQUARE64[BRD_SQ_NUM];
 extern int SQUARE64TOSQUARE120[64];
@@ -46,5 +47,8 @@ extern const U64 Random64Poly[781];
 
 extern S_OPTIONS EngineOptions[1];
 extern S_HASHTABLE HashTable[1];
+
+extern thrd_t MainSearchThread;
+
 
 #endif

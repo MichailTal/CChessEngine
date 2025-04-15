@@ -8,8 +8,6 @@
 
 #define INPUTBUFFER 400 * 6
 
-thrd_t MainSearchThread;
-
 thrd_t LaunchSearchThread(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table) {
   S_SEARCH_THREAD_DATA *pSearchData = malloc(sizeof(S_SEARCH_THREAD_DATA));
 
@@ -165,7 +163,7 @@ void UCI_Loop(board_representation *pos, S_SEARCHINFO *info) {
       ParseFen(START_FEN, pos);
       ParseGo("go infinte", info, pos, HashTable);
     } else if (!strncmp(line, "quit", 4)) {
-      info -> quit = TRUE;
+        info -> quit = TRUE;
       JoinSearchThread(info);
       break;
     } else if (!strncmp(line, "stop", 4)) {
