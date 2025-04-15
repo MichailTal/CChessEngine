@@ -88,7 +88,7 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
     replace = TRUE;
   } else {
     if (table->pTable[index].age < table->currentage ||
-        table->pTable[index].depth < depth) {
+        table->pTable[index].depth <= depth) {
       replace = TRUE;
     }
   }
