@@ -162,6 +162,13 @@ int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,
   ASSERT(pos->ply >= 0 && pos->ply <= MAXDEPTH);
 
   if (table->pTable[index].posKey == pos->posKey) {
+
+    U64 test_key = table -> pTable[index].posKey ^ table->pTable[index].smp_data;
+    if(test_key != table->pTable[index].smp_key) printf("Error with test key");
+
+    VerifyEntrySMP(&table->pTable[index]);
+    
+
     *move = table->pTable[index].move;
     if (table->pTable[index].depth >= depth) {
       table->hit++;
