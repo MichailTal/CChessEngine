@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
   // Mode selection
   for (int i = 1; i < argc; i++) {
     if (!strcmp(argv[i], "-xboard")) {
-      XBoard_Loop(pos, info);
+      XBoard_Loop(pos, info, HashTable);
       return 0;
     } else if (!strcmp(argv[i], "-uci")) {
       UCI_Loop(pos, info);
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
       if (info->quit == TRUE)
         break;
     } else if (!strncmp(line, "xboard", 6)) {
-      XBoard_Loop(pos, info);
+      XBoard_Loop(pos, info, HashTable);
       if (info->quit == TRUE)
         break;
     } else if (!strncmp(line, "quit", 4)) {

@@ -2,6 +2,7 @@
 #define INIT_H
 
 #include "definitions.h"
+#include "tinycthread.h"
 
 void AllInit(const char *filePath);
 void PrintBitBoard(U64 bb);
@@ -46,7 +47,7 @@ void InitMvvLa(void);
 board_representation *GenBoard(void);
 void GenerateAllCaps(const board_representation *pos, move_list *list);
 void UCI_Loop(board_representation *pos, S_SEARCHINFO *info);
-void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info);
+void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table);
 void MirrorBoard(board_representation *pos, S_HASHTABLE *table);
 void TakeNullMove(board_representation *pos);
 void MakeNullMove(board_representation *pos);
@@ -57,5 +58,7 @@ int GetBookMoves(board_representation *board);
 void CleanPolyBook(void);
 void InitPolyBook(const char *filePath);
 int SearchPositionThread(void *data);
+thrd_t LaunchSearchThread(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table);
+void JoinSearchThread(S_SEARCHINFO *info);
 
 #endif // INIT_H

@@ -5,6 +5,8 @@
 #include "stdio.h"
 #include "string.h"
 
+thrd_t MainSearchThread;
+
 int ThreeFoldRep(const board_representation *pos) {
   int i = 0;
   int r = 0;
@@ -96,7 +98,7 @@ void PrintOptions(void) {
   printf("feature done=1\n");
 }
 
-void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
+void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info, S_HASHTABLE *table) {
 
   info->GAME_MODE = XBOARDMODE;
   info->POST_THINKING = TRUE;
@@ -142,7 +144,8 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
           "time:%d start:%d stop:%d depth:%d timeset:%d movestogo:%d mps:%d\n",
           time, info->starttime, info->stoptime, info->depth, info->timeset,
           movestogo[pos->side], mps);
-      SearchPosition(pos, info, HashTable);
+      //SearchPosition(pos, info, HashTable);
+      MainSearchThread = LaunchSearchThread(pos, info, table);
 
       if (mps != 0) {
         movestogo[pos->side ^ 1]--;
@@ -165,6 +168,7 @@ void XBoard_Loop(board_representation *pos, S_SEARCHINFO *info) {
 
     if (!strcmp(command, "quit")) {
       info->quit = TRUE;
+      JoinSearchThread(info);
       break;
     }
 
