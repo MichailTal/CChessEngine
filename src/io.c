@@ -17,7 +17,7 @@ char *PrintSquare(const int square) {
 }
 
 char *PrintMove(const int move) {
-  static char MvStr[6];
+  static char MvStr[7];
   int filefrom = FilesBrd[FROMSQ(move)];
   int rankfrom = RanksBrd[FROMSQ(move)];
   int fileto = FilesBrd[TOSQ(move)];
