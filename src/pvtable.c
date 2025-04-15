@@ -11,10 +11,29 @@
 #define EXTRACT_FLAGS(x) ((x >> 23) & 0x3)
 #define EXTRACT_MOVE(x) ((int)(x >> 25))
 
-#define FOLD_DATA(score, depth, flag, move) ( (score + INF_BOUND) | (depth << 16) | (flag << 23)  | ((U64)move << 25))
+#define FOLD_DATA(score, depth, flag, move)                                    \
+  ((score + INF_BOUND) | (depth << 16) | (flag << 23) | ((U64)move << 25))
 
 S_HASHTABLE HashTable[1];
-thrd_t MainSearchThread;
+
+void VerifyEntrySMP(S_HASHENTRY *entry) {
+  U64 data = FOLD_DATA(entry->score, entry->depth, entry->flags, entry->move);
+  U64 key = entry->posKey ^ data;
+
+  if(data != entry -> smp_data) {printf("data error"); exit(1);}
+  if(key != entry -> smp_key) {printf("key error"); exit(1);}
+
+  int move = EXTRACT_MOVE(data);
+  int flag = EXTRACT_FLAGS(data);
+  int depth = EXTRACT_DEPTH(data);
+  int score = EXTRACT_SCORE(data);
+
+  if(move != entry -> move) {printf("move error %s", PrintMove(move)); exit(1);}
+  if(flag != entry -> flags) {printf("flag error %d", flag); exit(1);}
+  if(depth != entry -> depth) {printf("depth error %d", depth); exit(1);}
+  if(score != entry -> score) {printf("score error %d", score); exit(1);}
+  
+}
 
 int GetPvLine(const int depth, board_representation *pos,
               const S_HASHTABLE *table) {
@@ -54,6 +73,8 @@ void ClearHashTable(S_HASHTABLE *table) {
     tableEntry->score = 0;
     tableEntry->flags = 0;
     tableEntry->age = 0;
+    tableEntry->smp_data = 0ULL;
+    tableEntry->smp_key = 0ULL;
   }
   table->newWrite = 0;
   table->currentage = 0;
@@ -111,12 +132,20 @@ void StoreHashEntry(board_representation *pos, S_HASHTABLE *table,
   else if (score < -ISMATE)
     score -= pos->ply;
 
+  U64 smp_data = FOLD_DATA(score, depth, flags, move);
+  U64 smp_key = pos -> posKey ^ smp_data;
+
   table->pTable[index].move = move;
   table->pTable[index].posKey = pos->posKey;
   table->pTable[index].flags = flags;
   table->pTable[index].score = score;
   table->pTable[index].depth = depth;
   table->pTable[index].age = table->currentage;
+  table->pTable[index].smp_data = smp_data;
+  table->pTable[index].smp_key = smp_key;
+
+  VerifyEntrySMP(&table -> pTable[index]);
+
 }
 
 int ProbeHashEntry(board_representation *pos, S_HASHTABLE *table, int *move,

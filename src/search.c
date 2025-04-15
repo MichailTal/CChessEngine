@@ -308,8 +308,8 @@ void SearchPosition(board_representation *pos, S_SEARCHINFO *info,
   if (bestMove == NOMOVE) {
     for (currentDepth = 1; currentDepth <= info->depth; ++currentDepth) {
 
-      bestScore = AlphaBeta(-AB_BOUND, AB_BOUND, currentDepth, pos, info,
-                            table, TRUE);
+      bestScore =
+          AlphaBeta(-AB_BOUND, AB_BOUND, currentDepth, pos, info, table, TRUE);
 
       if (info->stopped == TRUE) {
         break;

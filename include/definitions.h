@@ -156,6 +156,8 @@ typedef struct {
   int depth;
   int flags;
   int age;
+  U64 smp_data;
+  U64 smp_key;
 } S_HASHENTRY;
 
 typedef struct {
